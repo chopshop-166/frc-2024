@@ -5,8 +5,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
-
 public class RobotMap {
 
     public SwerveDriveMap getDriveMap() {
