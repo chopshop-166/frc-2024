@@ -5,15 +5,14 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 import com.chopshop166.chopshoplib.drive.MockSwerveModule;
 import com.chopshop166.chopshoplib.drive.SwerveModule;
+import com.chopshop166.chopshoplib.logging.LoggableMap;
 import com.chopshop166.chopshoplib.sensors.gyro.MockGyro;
 import com.chopshop166.chopshoplib.sensors.gyro.SmartGyro;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.util.DrivePID;
 
 /**
  * A hardware map suitable for a swerve drive.
@@ -22,11 +21,20 @@ import frc.robot.util.DrivePID;
  */
 public record SwerveDriveMap(SwerveModule frontLeft, SwerveModule frontRight, SwerveModule rearLeft,
         SwerveModule rearRight, double maxDriveSpeedMetersPerSecond,
-        double maxRotationRadianPerSecond, SmartGyro gyro, DrivePID pid, Transform3d cameraPosition,
-        String cameraName) {
+        double maxRotationRadianPerSecond, SmartGyro gyro) implements LoggableMap<SwerveDriveMap.Data> {
 
     /** A distance to use for default values. */
     private static final double DEFAULT_DISTANCE_FROM_CENTER = 0.381;
+
+    @Override
+    public void updateData(Data data) {
+        data.frontLeft.update(this.frontLeft);
+        data.frontRight.update(this.frontRight);
+        data.rearLeft.update(this.rearLeft);
+        data.rearRight.update(this.rearRight);
+
+        data.gyroYawPositionDegrees = this.gyro.getAngle();
+    }
 
     /** Construct a map that uses mocks for everything. */
     public SwerveDriveMap() {
@@ -48,16 +56,7 @@ public record SwerveDriveMap(SwerveModule frontLeft, SwerveModule frontRight, Sw
                 // Max rotation (rad/s)
                 Math.PI,
                 // Gyro
-                new MockGyro(), new DrivePID(), new Transform3d(), "");
-    }
-
-    public void updateInputs(Data io) {
-        io.frontLeft.update(this.frontLeft);
-        io.frontRight.update(this.frontRight);
-        io.rearLeft.update(this.rearLeft);
-        io.rearRight.update(this.rearRight);
-
-        io.gyroYawPositionDegrees = this.gyro.getAngle();
+                new MockGyro());
     }
 
     public static class Data implements LoggableInputs {

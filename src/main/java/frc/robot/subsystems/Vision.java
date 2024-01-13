@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.maps.SwerveDriveMap;
 import frc.robot.util.Field;
 import frc.robot.util.PoseFilter;
+
 public class Vision {
 
     SwerveDriveMap driveMap;
@@ -63,7 +65,7 @@ public class Vision {
     }
 
     public void setPose(Pose2d pose) {
-        estimator.resetPosition(Rotation2d.fromDegrees(driveMap.gyro().getAngle() - 180), getModulePositions(), pose);
+        estimator.resetPosition(Rotation2d.fromDegrees(driveMap.gyro().getAngle()), getModulePositions(), pose);
     }
 
     // Estimated pose from a combination of vision and odometry
@@ -124,21 +126,17 @@ public class Vision {
         // driveMap.gyro().getRotation2d(), getModulePositions()));
         prevPose = filter.calculate(estimator.getEstimatedPosition());
         estimator.update(Rotation2d.fromDegrees(driveMap.gyro().getAngle()),
-
                 getModulePositions());
-        Logger.getInstance().recordOutput("estimatedPose", estimator.getEstimatedPosition());
-        Logger.getInstance().recordOutput("odometryPose", odometry.getPoseMeters());
         return prevPose;
     }
 
     // Get every swerve module state
     private SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
-                new SwerveModulePosition(-driveMap.frontLeft().getDistance(), driveMap.frontLeft().getAngle()),
-                new SwerveModulePosition(-driveMap.frontRight().getDistance(), driveMap.frontRight().getAngle()),
-                new SwerveModulePosition(-driveMap.rearLeft().getDistance(), driveMap.rearLeft().getAngle()),
-                new SwerveModulePosition(-driveMap.rearRight().getDistance(), driveMap.rearRight().getAngle()),
+                new SwerveModulePosition(driveMap.frontLeft().getDistance(), driveMap.frontLeft().getAngle()),
+                new SwerveModulePosition(driveMap.frontRight().getDistance(), driveMap.frontRight().getAngle()),
+                new SwerveModulePosition(driveMap.rearLeft().getDistance(), driveMap.rearLeft().getAngle()),
+                new SwerveModulePosition(driveMap.rearRight().getDistance(), driveMap.rearRight().getAngle()),
         };
     }
 }
-

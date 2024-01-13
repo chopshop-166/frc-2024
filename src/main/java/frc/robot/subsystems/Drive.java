@@ -2,38 +2,29 @@ package frc.robot.subsystems;
 
 import java.util.function.DoubleSupplier;
 
-import frc.robot.maps.SwerveDriveMap.Data;
-
-import org.littletonrobotics.junction.Logger;
 import com.chopshop166.chopshoplib.RobotUtils;
-import com.chopshop166.chopshoplib.commands.SmartSubsystemBase;
-import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
+import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.util.DrivePID;
-import frc.robot.util.RotationPIDController;
+import frc.robot.maps.SwerveDriveMap;
+import frc.robot.maps.SwerveDriveMap.Data;
 
-public class Drive extends SmartSubsystemBase {
+public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
 
-    private final SwerveDriveMap map;
-    Data io;
+    Pose2d pose;
     public final SwerveDriveKinematics kinematics;
 
-    private Pose2d pose = new Pose2d();
-    private final DrivePID drivePID;
-
-    boolean isBlue = false;
+    boolean isBlue = true;
     double maxDriveSpeedMetersPerSecond;
     double maxRotationRadiansPerSecond;
     double speedCoef = 1;
@@ -52,30 +43,18 @@ public class Drive extends SmartSubsystemBase {
 
     private Vision vision;
 
-    // Used for automatic alignment while driving
-    private final RotationPIDController rotationPID;
-    // Used for rotation correction while driving
-    private final RotationPIDController correctionPID;
-
-    private double latestAngle = 0;
-
     public Drive(SwerveDriveMap map) {
-        this.map = map;
-        this.map.gyro().reset();
-        io = new Data();
+
+        super(new Data(), map);
+
+        getMap().gyro().reset();
         kinematics = new SwerveDriveKinematics(map.frontLeft().getLocation(), map.frontRight().getLocation(),
                 map.rearLeft().getLocation(), map.rearRight().getLocation());
         maxDriveSpeedMetersPerSecond = map.maxDriveSpeedMetersPerSecond();
         maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond();
-        drivePID = map.pid();
-        correctionPID = new RotationPIDController(0.01, 0.00001, 0.0);
-        rotationPID = drivePID.copyRotationPidController();
-        kinematics = new SwerveDriveKinematics(map.frontLeft().getLocation(), map.frontRight().getLocation(),
-                map.rearLeft().getLocation(), map.rearRight().getLocation());
-        // AutoBuilder.configureHolonomic(this::getPose, vision::setPose,
-        // this::getSpeeds,this::move, // Method that will drive the robot given ROBOT
-        // RELATIVE ChassisSpeeds
-        // HoloPath, this);
+        AutoBuilder.configureHolonomic(() -> pose, vision::setPose,
+                this::getSpeeds, this::move, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                HoloPath, () -> isBlue, this);
     }
 
     private void deadbandMove(final double xSpeed, final double ySpeed,
@@ -87,35 +66,16 @@ public class Drive extends SmartSubsystemBase {
         double xInput = deadband.applyAsDouble(xSpeed);
         double yInput = deadband.applyAsDouble(ySpeed);
 
-        SmartDashboard.putNumber("Rotation Correction Error", latestAngle - map.gyro().getAngle());
-
-        if (Math.abs(rotationInput) < 0.1
-                && !(Math.abs(xInput) < 0.1 && Math.abs(yInput) < 0.1)) {
-            rotationInput = correctionPID.calculate(map.gyro().getAngle(), latestAngle);
-            rotationInput = (Math.abs(rotationInput) > 0.02) ? rotationInput : 0;
-            Logger.recordOutput("pidOutput", rotationInput);
-            Logger.recordOutput("pidError", correctionPID.getError());
-        } else {
-            latestAngle = map.gyro().getAngle();
-        }
-        Logger.recordOutput("latestAngle", latestAngle);
-        Logger.recordOutput("robotAngle", map.gyro().getAngle());
-
         final double translateXSpeed = xInput
                 * maxDriveSpeedMetersPerSecond * speedCoef;
         final double translateYSpeed = yInput
                 * maxDriveSpeedMetersPerSecond * speedCoef;
         final double rotationSpeed = rotationInput
                 * maxRotationRadiansPerSecond * rotationCoef;
-        _move(translateXSpeed, translateYSpeed, rotationSpeed, isRobotCentric);
+        move(translateXSpeed, translateYSpeed, rotationSpeed, isRobotCentric);
     }
 
-    public void move(final double xSpeed, final double ySpeed,
-            final double rotation) {
-        _move(xSpeed, ySpeed, rotation, false);
-    }
-
-    private void _move(final double xSpeed, final double ySpeed,
+    private void move(final double xSpeed, final double ySpeed,
             final double rotation, boolean isRobotCentric) {
 
         // rotationOffset is temporary and startingRotation is set at the start
@@ -125,7 +85,7 @@ public class Drive extends SmartSubsystemBase {
         } else {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed,
                     rotation,
-                    Rotation2d.fromDegrees(io.gyroYawPositionDegrees));
+                    Rotation2d.fromDegrees(getData().gyroYawPositionDegrees));
         }
 
         move(speeds);
@@ -140,23 +100,24 @@ public class Drive extends SmartSubsystemBase {
         //
 
         // Front left module state
-        io.frontLeft.desiredState = moduleStates[0];
+        getData().frontLeft.desiredState = moduleStates[0];
 
         // Front right module state
-        io.frontRight.desiredState = moduleStates[1];
+        getData().frontRight.desiredState = moduleStates[1];
 
         // Back left module state
-        io.rearLeft.desiredState = moduleStates[2];
+        getData().rearLeft.desiredState = moduleStates[2];
 
         // Back right module state
-        io.rearRight.desiredState = moduleStates[3];
+        getData().rearRight.desiredState = moduleStates[3];
 
         // All the states
     }
 
     public ChassisSpeeds getSpeeds() {
-        return kinematics.toChassisSpeeds(io.frontLeft.getModuleStates(),
-                io.frontRight.getModuleStates(), io.rearLeft.getModuleStates(), io.rearRight.getModuleStates());
+        return kinematics.toChassisSpeeds(getData().frontLeft.getModuleStates(),
+                getData().frontRight.getModuleStates(), getData().rearLeft.getModuleStates(),
+                getData().rearRight.getModuleStates());
     }
 
     // Yes! Actual manual drive
@@ -173,14 +134,13 @@ public class Drive extends SmartSubsystemBase {
     public Command resetGyroCommand() {
         return cmd().onInitialize(() -> {
             resetGyro();
-            resetTag();
         }).runsUntil(() -> {
             return true;
         }).runsWhenDisabled(true);
     }
 
-    public void resetTag() {
-        vision.sawTag = false;
+    public Command setPose(Pose2d pose) {
+        return runOnce(() -> vision.setPose(pose));
     }
 
     @Override
@@ -195,16 +155,12 @@ public class Drive extends SmartSubsystemBase {
 
     @Override
     public void periodic() {
-        isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
         // This method will be called once per scheduler run
         // Use this for any background processing
-        Logger.processInputs(getName(), io);
         pose = vision.update(isBlue);
-        Logger.recordOutput("robotPose", pose);
     }
 
     public void resetGyro() {
-        map.gyro().reset();
-        latestAngle = 0;
+        getMap().gyro().reset();
     }
 }
