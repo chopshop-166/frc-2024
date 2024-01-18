@@ -35,7 +35,7 @@ public class Robot extends CommandRobot {
     @Autonomous(name = "No Auto", defaultAuto = true)
     public Command noAuto = Commands.none();
 
-    private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+    // private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
 
     @Override
     public void robotInit() {
@@ -69,7 +69,8 @@ public class Robot extends CommandRobot {
      */
     @Override
     public Command getAutoCommand() {
-        return autoChooser.getSelected();
+        // return autoChooser.getSelected();
+        return super.getAutoCommand();
     }
 
     @Override

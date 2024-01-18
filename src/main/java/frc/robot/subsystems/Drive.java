@@ -41,7 +41,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
             new ReplanningConfig() // Default path replanning config. See the API for the options here
     );
 
-    private Vision vision;
+    // private Vision vision;
 
     public Drive(SwerveDriveMap map) {
 
@@ -52,9 +52,10 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
                 map.rearLeft().getLocation(), map.rearRight().getLocation());
         maxDriveSpeedMetersPerSecond = map.maxDriveSpeedMetersPerSecond();
         maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond();
-        AutoBuilder.configureHolonomic(() -> pose, vision::setPose,
-                this::getSpeeds, this::move, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                HoloPath, () -> isBlue, this);
+        // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        // AutoBuilder.configureHolonomic(() -> pose, vision::setPose,
+        // this::getSpeeds, this::move,
+        // HoloPath, () -> isBlue, this);
     }
 
     private void deadbandMove(final double xSpeed, final double ySpeed,
@@ -132,15 +133,13 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
     }
 
     public Command resetGyroCommand() {
-        return cmd().onInitialize(() -> {
-            resetGyro();
-        }).runsUntil(() -> {
-            return true;
-        }).runsWhenDisabled(true);
+        return cmd().onInitialize(this::resetGyro).runsUntil(() -> true).runsWhenDisabled(true);
     }
 
     public Command setPose(Pose2d pose) {
-        return runOnce(() -> vision.setPose(pose));
+        return runOnce(() -> {
+            // vision.setPose(pose)
+        });
     }
 
     @Override
@@ -157,7 +156,8 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
     public void periodic() {
         // This method will be called once per scheduler run
         // Use this for any background processing
-        pose = vision.update(isBlue);
+        super.periodic();
+        // pose = vision.update(isBlue);
     }
 
     public void resetGyro() {
