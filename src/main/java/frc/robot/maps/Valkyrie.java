@@ -106,22 +106,6 @@ public class Valkyrie extends RobotMap {
     }
 
     @Override
-    public IntakeMap getIntakeMap() {
-        CSSparkMax topRoller = new CSSparkMax(11, MotorType.kBrushless);
-        CSSparkMax bottomRoller = new CSSparkMax(9, MotorType.kBrushless);
-        bottomRoller.getMotorController().follow(topRoller.getMotorController(), true);
-        return new IntakeMap(topRoller);
-    }
-
-    @Override
-    public ShooterMap getShooterMap() {
-        CSSparkMax rightWheel = new CSSparkMax(10, MotorType.kBrushless);
-        CSSparkMax leftWheel = new CSSparkMax(12, MotorType.kBrushless);
-        rightWheel.getMotorController().follow(leftWheel.getMotorController(), true);
-        return new ShooterMap(leftWheel);
-    }
-
-    @Override
     public void setupLogging() {
         Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables

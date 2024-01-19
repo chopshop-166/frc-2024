@@ -58,10 +58,9 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
                 map.rearLeft().getLocation(), map.rearRight().getLocation());
         maxDriveSpeedMetersPerSecond = map.maxDriveSpeedMetersPerSecond();
         maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond();
-        // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        // AutoBuilder.configureHolonomic(() -> pose, vision::setPose,
-        // this::getSpeeds, this::move,
-        // HoloPath, () -> isBlue, this);
+        AutoBuilder.configureHolonomic(() -> pose, this::setPoseCommand,
+                this::getSpeeds, this::move, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                HoloPath, () -> isBlue, this);
     }
 
     public void setPose(Pose2d pose) {
@@ -157,12 +156,6 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
 
     public Command resetGyroCommand() {
         return cmd().onInitialize(this::resetGyro).runsUntil(() -> true).runsWhenDisabled(true);
-    }
-
-    public Command setPose(Pose2d pose) {
-        return runOnce(() -> {
-            // vision.setPose(pose)
-        });
     }
 
     @Override
