@@ -1,18 +1,24 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.wpilibj2.command.Commands.race;
+
 import java.util.function.DoubleSupplier;
 
 import com.chopshop166.chopshoplib.RobotUtils;
+import com.chopshop166.chopshoplib.commands.FunctionalWaitCommand;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,7 +47,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
             new ReplanningConfig() // Default path replanning config. See the API for the options here
     );
 
-    // private Vision vision;
+    SwerveDrivePoseEstimator estimator;
 
     public Drive(SwerveDriveMap map) {
 
@@ -56,6 +62,17 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         // AutoBuilder.configureHolonomic(() -> pose, vision::setPose,
         // this::getSpeeds, this::move,
         // HoloPath, () -> isBlue, this);
+    }
+
+    public void setPose(Pose2d pose) {
+        estimator.resetPosition(Rotation2d.fromDegrees(getMap().gyro().getAngle()),
+                getModulePositions(), pose);
+    }
+
+    public Command setPoseCommand(Pose2d pose) {
+        return runOnce(() -> {
+            setPose(pose);
+        });
     }
 
     private void deadbandMove(final double xSpeed, final double ySpeed,
@@ -115,10 +132,16 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         // All the states
     }
 
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] { getData().frontLeft.getModulePosition(),
+                getData().frontRight.getModulePosition(), getData().rearLeft.getModulePosition(),
+                getData().rearRight.getModulePosition() };
+    }
+
     public ChassisSpeeds getSpeeds() {
-        return kinematics.toChassisSpeeds(getData().frontLeft.getModuleStates(),
-                getData().frontRight.getModuleStates(), getData().rearLeft.getModuleStates(),
-                getData().rearRight.getModuleStates());
+        return kinematics.toChassisSpeeds(getData().frontLeft.getModuleState(),
+                getData().frontRight.getModuleState(), getData().rearLeft.getModuleState(),
+                getData().rearRight.getModuleState());
     }
 
     // Yes! Actual manual drive

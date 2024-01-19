@@ -12,6 +12,7 @@ import com.chopshop166.chopshoplib.sensors.gyro.SmartGyro;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 /**
@@ -135,9 +136,13 @@ public record SwerveDriveMap(SwerveModule frontLeft, SwerveModule frontRight, Sw
                 // this.speeds = module.ChassisSpeeds.get(); (probably remove)
             }
 
-            public SwerveModuleState getModuleStates() {
+            public SwerveModuleState getModuleState() {
                 return new SwerveModuleState(velocityMetersPerSec, Rotation2d.fromDegrees(podAngle));
             } // Added during season ^
+
+            public SwerveModulePosition getModulePosition() {
+                return new SwerveModulePosition(drivePositionMeters, Rotation2d.fromDegrees(podAngle));
+            }
         }
 
         public SwerveModuleData frontLeft = new SwerveModuleData("FrontLeft");

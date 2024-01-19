@@ -16,6 +16,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -72,11 +73,25 @@ public class Robot extends CommandRobot {
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing
-        driveController.start().onTrue(drive.setPose(new Pose2d(1.5, 3.5, Rotation2d.fromDegrees(0))));
+        driveController.start().onTrue(drive.setPoseCommand(new Pose2d(1.5, 3.5, Rotation2d.fromDegrees(0))));
+        copilotController.b().whileTrue(intake.spinIn());
+        copilotController.x().onTrue(shooter.slowSpin());
+        copilotController.a().onTrue(shooter.spinDown());
+        copilotController.y().onTrue(shooter.fullPower());
     }
 
     @Override
     public void populateDashboard() {
+        Shuffleboard.getTab("Pit Test");
+        Shuffleboard.getTab("Pit Test").add("Drive Backward", drive.moveForDirectional(0, 1, 3)).withPosition(1, 2);
+        Shuffleboard.getTab("Pit Test").add("Drive Left", drive.moveForDirectional(-1, 0, 3)).withPosition(0, 1);
+        Shuffleboard.getTab("Pit Test").add("Drive Right", drive.moveForDirectional(1, 0, 3)).withPosition(2, 1);
+        Shuffleboard.getTab("Pit Test").add("Drive Forward", drive.moveForDirectional(0, -1, 3)).withPosition(1, 0);
+        Shuffleboard.getTab("Pit Test").add("Stop", drive.moveForDirectional(0, 0, 0)).withPosition(1, 1);
+        Shuffleboard.getTab("Pit Test").add("Foward Right", drive.moveForDirectional(1, -1, 3)).withPosition(2, 0);
+        Shuffleboard.getTab("Pit Test").add("Foward Left", drive.moveForDirectional(-1, 1, 3)).withPosition(0, 0);
+        Shuffleboard.getTab("Pit Test").add("Back Right", drive.moveForDirectional(1, 1, 3)).withPosition(2, 2);
+        Shuffleboard.getTab("Pit Test").add("Back Left", drive.moveForDirectional(-1, 1, 3)).withPosition(0, 2);
     }
 
     /**

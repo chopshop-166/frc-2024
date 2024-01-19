@@ -64,10 +64,6 @@ public class Vision {
 
     }
 
-    public void setPose(Pose2d pose) {
-        estimator.resetPosition(Rotation2d.fromDegrees(driveMap.gyro().getAngle()), getModulePositions(), pose);
-    }
-
     // Estimated pose from a combination of vision and odometry
     public Pose2d update(boolean isBlue) {
         PhotonPipelineResult result = camera.getLatestResult();
@@ -104,7 +100,7 @@ public class Vision {
                                     Rotation2d.fromDegrees(driveMap.gyro().getAngle() - 180),
                                     getModulePositions(), pose);
 
-                            setPose(pose);
+                            // setPose(pose);
                         }
 
                         Logger.recordOutput("visionPose", pose);
@@ -125,8 +121,6 @@ public class Vision {
         // prevPose = filter.calculate(odometry.update(
         // driveMap.gyro().getRotation2d(), getModulePositions()));
         prevPose = filter.calculate(estimator.getEstimatedPosition());
-        estimator.update(Rotation2d.fromDegrees(driveMap.gyro().getAngle()),
-                getModulePositions());
         return prevPose;
     }
 
