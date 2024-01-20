@@ -193,6 +193,8 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         estimator.update(getMap().gyro().getRotation2d(),
                 getModulePositions());
         Logger.recordOutput("pose", estimator.getEstimatedPosition());
+        Logger.recordOutput("Angle", getMap().gyro().getAngle());
+        Logger.recordOutput("rotation", getMap().gyro().getRotation2d());
     }
 
     public void resetGyro() {

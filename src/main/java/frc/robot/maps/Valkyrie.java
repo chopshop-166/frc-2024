@@ -31,6 +31,7 @@ public class Valkyrie extends RobotMap {
 
         final double MODULE_OFFSET_XY = Units.inchesToMeters(12.375);
         final PigeonGyro pigeonGyro = new PigeonGyro(new PigeonIMU(0));
+        pigeonGyro.setInverted(true);
 
         final CSSparkMax frontLeftSteer = new CSSparkMax(4, MotorType.kBrushless);
         final CSSparkMax frontRightSteer = new CSSparkMax(8, MotorType.kBrushless);
