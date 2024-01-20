@@ -11,20 +11,25 @@ import com.chopshop166.chopshoplib.commands.CommandRobot;
 import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.maps.Henry;
 import frc.robot.maps.RobotMap;
+import frc.robot.maps.Valkyrie;
 import frc.robot.subsystems.Drive;
 
 public class Robot extends CommandRobot {
 
-    private RobotMap map = getRobotMap(RobotMap.class, new RobotMap());
+    // private RobotMap map = getRobotMap(RobotMap.class, new RobotMap());
+    private RobotMap map = new Henry();
     private ButtonXboxController driveController = new ButtonXboxController(0);
     private ButtonXboxController copilotController = new ButtonXboxController(1);
 
@@ -35,7 +40,7 @@ public class Robot extends CommandRobot {
     @Autonomous(name = "No Auto", defaultAuto = true)
     public Command noAuto = Commands.none();
 
-    // private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+    private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
 
     @Override
     public void robotInit() {
@@ -66,17 +71,38 @@ public class Robot extends CommandRobot {
         // Start logging! No more data receivers, replay sources, or metadata values may
         // be added.
         Logger.start();
+
     }
 
     @Override
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing
-        driveController.start().onTrue(drive.setPose(new Pose2d(1.5, 3.5, Rotation2d.fromDegrees(0))));
+        driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
     }
 
     @Override
     public void populateDashboard() {
+        Shuffleboard.getTab("Pit Test");
+        Shuffleboard.getTab("Pit Test").add("Drive Backward",
+                drive.moveInDirection(0, -1, 3)).withPosition(1, 2);
+        Shuffleboard.getTab("Pit Test").add("Drive Left",
+                drive.moveInDirection(-1, 0, 3)).withPosition(0, 1);
+        Shuffleboard.getTab("Pit Test").add("Drive Right",
+                drive.moveInDirection(1, 0, 3)).withPosition(2, 1);
+        Shuffleboard.getTab("Pit Test").add("Drive Forward",
+                drive.moveInDirection(0, 1, 3)).withPosition(1, 0);
+        Shuffleboard.getTab("Pit Test").add("Stop", drive.moveInDirection(0, 0,
+                0)).withPosition(1, 1);
+        Shuffleboard.getTab("Pit Test").add("Foward Right",
+                drive.moveInDirection(1, -1, 3)).withPosition(2, 0);
+        Shuffleboard.getTab("Pit Test").add("Foward Left",
+                drive.moveInDirection(-1, 1, 3)).withPosition(0, 0);
+        Shuffleboard.getTab("Pit Test").add("Back Right", drive.moveInDirection(1,
+                1, 3)).withPosition(2, 2);
+        Shuffleboard.getTab("Pit Test").add("Back Left", drive.moveInDirection(-1,
+                1, 3)).withPosition(0, 2);
+        Shuffleboard.getTab("AutoBuilder").add("Auto", autoChooser);
     }
 
     /**
@@ -86,8 +112,7 @@ public class Robot extends CommandRobot {
      */
     @Override
     public Command getAutoCommand() {
-        // return autoChooser.getSelected();
-        return super.getAutoCommand();
+        return autoChooser.getSelected();
     }
 
     @Override

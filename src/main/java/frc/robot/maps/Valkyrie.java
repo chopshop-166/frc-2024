@@ -56,7 +56,7 @@ public class Valkyrie extends RobotMap {
         final CANcoder encoderFL = new CANcoder(2);
         CANcoderConfiguration encoderFLConfig = new CANcoderConfiguration();
         encoderFLConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-        encoderFLConfig.MagnetSensor.MagnetOffset = 144.229;
+        encoderFLConfig.MagnetSensor.MagnetOffset = 0.396;
         encoderFL.getConfigurator().apply(encoderFLConfig);
         final SDSSwerveModule frontLeft = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, MODULE_OFFSET_XY),
                 new CtreEncoder(encoderFL), frontLeftSteer, new CSSparkMax(3, MotorType.kBrushless),
@@ -66,7 +66,7 @@ public class Valkyrie extends RobotMap {
         final CANcoder encoderFR = new CANcoder(4);
         CANcoderConfiguration encoderFRConfig = new CANcoderConfiguration();
         encoderFRConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-        encoderFRConfig.MagnetSensor.MagnetOffset = 283.607;
+        encoderFRConfig.MagnetSensor.MagnetOffset = 0.789;
         encoderFR.getConfigurator().apply(encoderFRConfig);
         final SDSSwerveModule frontRight = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
                 new CtreEncoder(encoderFR), frontRightSteer, new CSSparkMax(7,
@@ -77,7 +77,7 @@ public class Valkyrie extends RobotMap {
         final CANcoder encoderRL = new CANcoder(1);
         CANcoderConfiguration encoderRLConfig = new CANcoderConfiguration();
         encoderRLConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-        encoderRLConfig.MagnetSensor.MagnetOffset = 70.566;
+        encoderRLConfig.MagnetSensor.MagnetOffset = 0.209;
         encoderRL.getConfigurator().apply(encoderRLConfig);
         final SDSSwerveModule rearLeft = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, MODULE_OFFSET_XY),
                 new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkMax(1,
@@ -88,7 +88,7 @@ public class Valkyrie extends RobotMap {
         final CANcoder encoderRR = new CANcoder(3);
         CANcoderConfiguration encoderRRConfig = new CANcoderConfiguration();
         encoderRRConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-        encoderRRConfig.MagnetSensor.MagnetOffset = -29.707;
+        encoderRRConfig.MagnetSensor.MagnetOffset = 0.918;
         encoderRR.getConfigurator().apply(encoderRRConfig);
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
                 new CtreEncoder(encoderRR), rearRightSteer, new CSSparkMax(5,

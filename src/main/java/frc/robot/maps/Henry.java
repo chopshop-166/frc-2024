@@ -22,20 +22,20 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
-@RobotMapFor("FrostBite")
-public class FrostBiteMap extends RobotMap {
+@RobotMapFor("Henry")
+public class Henry extends RobotMap {
 
     @Override
     public SwerveDriveMap getDriveMap() {
 
-        final double FLOFFSET = 80.7;
-        final double FROFFSET = -136.9;
-        final double RLOFFSET = -52.8;
-        final double RROFFSET = -107;
+        final double FLOFFSET = -0.276;
+        final double FROFFSET = -0.88;  
+        final double RLOFFSET = -0.048;
+        final double RROFFSET = -0.396;
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
 
-        final double MODULE_OFFSET_XY = Units.inchesToMeters(9.89);
+        final double MODULE_OFFSET_XY = Units.inchesToMeters(13.33); // Frostbites was 9.89
         final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(1);
 
         final CSSparkMax frontLeftSteer = new CSSparkMax(4, MotorType.kBrushless);
@@ -73,29 +73,29 @@ public class FrostBiteMap extends RobotMap {
         CANcoderConfiguration encoderFRConfig = new CANcoderConfiguration();
         encoderFRConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         encoderFRConfig.MagnetSensor.MagnetOffset = FROFFSET;
-        encoderFL.getConfigurator().apply(encoderFRConfig);
+        encoderFR.getConfigurator().apply(encoderFRConfig);
         final SDSSwerveModule frontRight = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
                 new CtreEncoder(encoderFR), frontRightSteer, new CSSparkMax(7,
                         MotorType.kBrushless),
                 MK4i_L2);
 
         // Rear Left Module
-        final CANcoder encoderRL = new CANcoder(1);
+        final CANcoder encoderRL = new CANcoder(3);
         CANcoderConfiguration encoderRLConfig = new CANcoderConfiguration();
         encoderRLConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         encoderRLConfig.MagnetSensor.MagnetOffset = RLOFFSET;
-        encoderFL.getConfigurator().apply(encoderRLConfig);
+        encoderRL.getConfigurator().apply(encoderRLConfig);
         final SDSSwerveModule rearLeft = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, MODULE_OFFSET_XY),
                 new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkMax(1,
                         MotorType.kBrushless),
                 MK4i_L2);
 
         // Rear Right Module
-        final CANcoder encoderRR = new CANcoder(3);
+        final CANcoder encoderRR = new CANcoder(1);
         CANcoderConfiguration encoderRRConfig = new CANcoderConfiguration();
         encoderRRConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         encoderRRConfig.MagnetSensor.MagnetOffset = RROFFSET;
-        encoderFL.getConfigurator().apply(encoderRRConfig);
+        encoderRR.getConfigurator().apply(encoderRRConfig);
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
                 new CtreEncoder(encoderRR), rearRightSteer, new CSSparkMax(5,
                         MotorType.kBrushless),

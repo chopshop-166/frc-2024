@@ -1,18 +1,26 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.wpilibj2.command.Commands.race;
+
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.chopshop166.chopshoplib.RobotUtils;
+import com.chopshop166.chopshoplib.commands.FunctionalWaitCommand;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,10 +29,9 @@ import frc.robot.maps.SwerveDriveMap.Data;
 
 public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
 
-    Pose2d pose;
     public final SwerveDriveKinematics kinematics;
 
-    boolean isBlue = true;
+    boolean isBlue = false;
     double maxDriveSpeedMetersPerSecond;
     double maxRotationRadiansPerSecond;
     double speedCoef = 1;
@@ -35,13 +42,13 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
             new PIDConstants(0.2, 0.0, 0.05), // Translation PID constants (OFF_AXIS)
             new PIDConstants(0.001, 0.0, 0.0), // Rotation PID constants (OFF_AXIS)
             2.0, // Max module speed, in m/s
-            0.381,
+            0.3429,
             // Drive base radius (OFF_AXIS) in meters. Distance from robot center to
             // furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
     );
 
-    // private Vision vision;
+    SwerveDrivePoseEstimator estimator;
 
     public Drive(SwerveDriveMap map) {
 
@@ -52,10 +59,28 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
                 map.rearLeft().getLocation(), map.rearRight().getLocation());
         maxDriveSpeedMetersPerSecond = map.maxDriveSpeedMetersPerSecond();
         maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond();
-        // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        // AutoBuilder.configureHolonomic(() -> pose, vision::setPose,
-        // this::getSpeeds, this::move,
-        // HoloPath, () -> isBlue, this);
+
+        estimator = new SwerveDrivePoseEstimator(kinematics, getMap().gyro().getRotation2d(),
+                getModulePositions(), new Pose2d(),
+                VecBuilder.fill(0.02, 0.02, 0.01),
+                VecBuilder.fill(0.1, 0.1, 0.01));
+
+        AutoBuilder.configureHolonomic(estimator::getEstimatedPosition, this::setPose,
+                this::getSpeeds, this::move, // Method that will drive the robot given ROBOT
+                // RELATIVE ChassisSpeeds
+                HoloPath, () -> isBlue, this);
+
+    }
+
+    public void setPose(Pose2d pose) {
+        estimator.resetPosition(Rotation2d.fromDegrees(getMap().gyro().getAngle()),
+                getModulePositions(), pose);
+    }
+
+    public Command setPoseCommand(Pose2d pose) {
+        return runOnce(() -> {
+            setPose(pose);
+        });
     }
 
     private void deadbandMove(final double xSpeed, final double ySpeed,
@@ -115,10 +140,16 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         // All the states
     }
 
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] { getData().frontLeft.getModulePosition(),
+                getData().frontRight.getModulePosition(), getData().rearLeft.getModulePosition(),
+                getData().rearRight.getModulePosition() };
+    }
+
     public ChassisSpeeds getSpeeds() {
-        return kinematics.toChassisSpeeds(getData().frontLeft.getModuleStates(),
-                getData().frontRight.getModuleStates(), getData().rearLeft.getModuleStates(),
-                getData().rearRight.getModuleStates());
+        return kinematics.toChassisSpeeds(getData().frontLeft.getModuleState(),
+                getData().frontRight.getModuleState(), getData().rearLeft.getModuleState(),
+                getData().rearRight.getModuleState());
     }
 
     // Yes! Actual manual drive
@@ -136,10 +167,12 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         return cmd().onInitialize(this::resetGyro).runsUntil(() -> true).runsWhenDisabled(true);
     }
 
-    public Command setPose(Pose2d pose) {
-        return runOnce(() -> {
-            // vision.setPose(pose)
-        });
+    public Command moveInDirection(double xSpeed, double ySpeed, double seconds) {
+        return race(
+                run(() -> {
+                    move(xSpeed, ySpeed, 0, false);
+                }),
+                new FunctionalWaitCommand(() -> seconds)).andThen(safeStateCmd());
     }
 
     @Override
@@ -157,7 +190,9 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         // This method will be called once per scheduler run
         // Use this for any background processing
         super.periodic();
-        // pose = vision.update(isBlue);
+        estimator.update(Rotation2d.fromDegrees(getMap().gyro().getAngle()),
+                getModulePositions());
+        Logger.recordOutput("pose", estimator.getEstimatedPosition());
     }
 
     public void resetGyro() {
