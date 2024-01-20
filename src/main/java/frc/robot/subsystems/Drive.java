@@ -4,6 +4,8 @@ import static edu.wpi.first.wpilibj2.command.Commands.race;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.chopshop166.chopshoplib.RobotUtils;
 import com.chopshop166.chopshoplib.commands.FunctionalWaitCommand;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
@@ -27,10 +29,9 @@ import frc.robot.maps.SwerveDriveMap.Data;
 
 public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
 
-    Pose2d pose;
     public final SwerveDriveKinematics kinematics;
 
-    boolean isBlue = true;
+    boolean isBlue = false;
     double maxDriveSpeedMetersPerSecond;
     double maxRotationRadiansPerSecond;
     double speedCoef = 1;
@@ -64,7 +65,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
                 VecBuilder.fill(0.02, 0.02, 0.01),
                 VecBuilder.fill(0.1, 0.1, 0.01));
 
-        AutoBuilder.configureHolonomic(() -> pose, this::setPoseCommand,
+        AutoBuilder.configureHolonomic(estimator::getEstimatedPosition, this::setPose,
                 this::getSpeeds, this::move, // Method that will drive the robot given ROBOT
                 // RELATIVE ChassisSpeeds
                 HoloPath, () -> isBlue, this);
@@ -193,6 +194,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         super.periodic();
         estimator.update(Rotation2d.fromDegrees(getMap().gyro().getAngle()),
                 getModulePositions());
+        Logger.recordOutput("pose", estimator.getEstimatedPosition());
     }
 
     public void resetGyro() {

@@ -11,6 +11,7 @@ import com.chopshop166.chopshoplib.commands.CommandRobot;
 import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,11 +22,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.maps.RobotMap;
+import frc.robot.maps.Valkyrie;
 import frc.robot.subsystems.Drive;
 
 public class Robot extends CommandRobot {
 
-    private RobotMap map = getRobotMap(RobotMap.class, new RobotMap());
+    // private RobotMap map = getRobotMap(RobotMap.class, new RobotMap());
+    private RobotMap map = new Valkyrie();
     private ButtonXboxController driveController = new ButtonXboxController(0);
     private ButtonXboxController copilotController = new ButtonXboxController(1);
 
@@ -43,22 +46,22 @@ public class Robot extends CommandRobot {
         super.robotInit();
 
         // Record metadata
-        // Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-        // Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-        // Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-        // Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
-        // Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-        // switch (BuildConstants.DIRTY) {
-        // case 0:
-        // Logger.recordMetadata("GitDirty", "All changes committed");
-        // break;
-        // case 1:
-        // Logger.recordMetadata("GitDirty", "Uncomitted changes");
-        // break;
-        // default:
-        // Logger.recordMetadata("GitDirty", "Unknown");
-        // break;
-        // }
+        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+        switch (BuildConstants.DIRTY) {
+            case 0:
+                Logger.recordMetadata("GitDirty", "All changes committed");
+                break;
+            case 1:
+                Logger.recordMetadata("GitDirty", "Uncomitted changes");
+                break;
+            default:
+                Logger.recordMetadata("GitDirty", "Unknown");
+                break;
+        }
 
         map.setupLogging();
         if (!isReal()) {
@@ -68,35 +71,36 @@ public class Robot extends CommandRobot {
         // be added.
         Logger.start();
     }
-
+    
     @Override
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing
-        driveController.start().onTrue(drive.setPoseCommand(new Pose2d(1.5, 3.5, Rotation2d.fromDegrees(0))));
+        driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
     }
 
     @Override
     public void populateDashboard() {
-        // Shuffleboard.getTab("Pit Test");
-        // Shuffleboard.getTab("Pit Test").add("Drive Backward",
-        // drive.moveForDirectional(0, 1, 3)).withPosition(1, 2);
-        // Shuffleboard.getTab("Pit Test").add("Drive Left",
-        // drive.moveForDirectional(-1, 0, 3)).withPosition(0, 1);
-        // Shuffleboard.getTab("Pit Test").add("Drive Right",
-        // drive.moveForDirectional(1, 0, 3)).withPosition(2, 1);
-        // Shuffleboard.getTab("Pit Test").add("Drive Forward",
-        // drive.moveForDirectional(0, -1, 3)).withPosition(1, 0);
-        // Shuffleboard.getTab("Pit Test").add("Stop", drive.moveForDirectional(0, 0,
-        // 0)).withPosition(1, 1);
-        // Shuffleboard.getTab("Pit Test").add("Foward Right",
-        // drive.moveForDirectional(1, -1, 3)).withPosition(2, 0);
-        // Shuffleboard.getTab("Pit Test").add("Foward Left",
-        // drive.moveForDirectional(-1, 1, 3)).withPosition(0, 0);
-        // Shuffleboard.getTab("Pit Test").add("Back Right", drive.moveForDirectional(1,
-        // 1, 3)).withPosition(2, 2);
-        // Shuffleboard.getTab("Pit Test").add("Back Left", drive.moveForDirectional(-1,
-        // 1, 3)).withPosition(0, 2);
+        Shuffleboard.getTab("Pit Test");
+        Shuffleboard.getTab("Pit Test").add("Drive Backward",
+                drive.moveForDirectional(0, -1, 3)).withPosition(1, 2);
+        Shuffleboard.getTab("Pit Test").add("Drive Left",
+                drive.moveForDirectional(-1, 0, 3)).withPosition(0, 1);
+        Shuffleboard.getTab("Pit Test").add("Drive Right",
+                drive.moveForDirectional(1, 0, 3)).withPosition(2, 1);
+        Shuffleboard.getTab("Pit Test").add("Drive Forward",
+                drive.moveForDirectional(0, 1, 3)).withPosition(1, 0);
+        Shuffleboard.getTab("Pit Test").add("Stop", drive.moveForDirectional(0, 0,
+                0)).withPosition(1, 1);
+        Shuffleboard.getTab("Pit Test").add("Foward Right",
+                drive.moveForDirectional(1, -1, 3)).withPosition(2, 0);
+        Shuffleboard.getTab("Pit Test").add("Foward Left",
+                drive.moveForDirectional(-1, 1, 3)).withPosition(0, 0);
+        Shuffleboard.getTab("Pit Test").add("Back Right", drive.moveForDirectional(1,
+                1, 3)).withPosition(2, 2);
+        Shuffleboard.getTab("Pit Test").add("Back Left", drive.moveForDirectional(-1,
+                1, 3)).withPosition(0, 2);
+        Shuffleboard.getTab("AutoBuilder").add("Auto", autoChooser);
     }
 
     /**
