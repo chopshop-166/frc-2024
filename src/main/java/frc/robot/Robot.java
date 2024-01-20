@@ -26,6 +26,7 @@ import frc.robot.maps.RobotMap;
 import frc.robot.maps.Valkyrie;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class Robot extends CommandRobot {
 
@@ -36,6 +37,7 @@ public class Robot extends CommandRobot {
 
     private Drive drive = new Drive(map.getDriveMap());
     private Intake intake = new Intake(map.getIntakeMap());
+    private Shooter shooter = new Shooter(map.getShooterMap());
 
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
 
