@@ -70,6 +70,8 @@ public class Robot extends CommandRobot {
         // Start logging! No more data receivers, replay sources, or metadata values may
         // be added.
         Logger.start();
+
+
     }
     
     @Override

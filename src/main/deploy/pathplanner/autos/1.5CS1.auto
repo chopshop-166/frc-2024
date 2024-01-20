@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.38,
-      "y": 5.55
+      "x": 1.3,
+      "y": 5.51
     },
     "rotation": 0
   },
@@ -15,12 +15,6 @@
           "type": "path",
           "data": {
             "pathName": "Pickup 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Speaker"
           }
         }
       ]
