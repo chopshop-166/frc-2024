@@ -28,10 +28,10 @@ public class Henry extends RobotMap {
     @Override
     public SwerveDriveMap getDriveMap() {
 
-        final double FLOFFSET = -0.276;
-        final double FROFFSET = -0.88;  
-        final double RLOFFSET = -0.048;
-        final double RROFFSET = -0.396;
+        final double FLOFFSET = -0.776;
+        final double FROFFSET = -0.38;  
+        final double RLOFFSET = 0.448;
+        final double RROFFSET = -0.891;
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
 

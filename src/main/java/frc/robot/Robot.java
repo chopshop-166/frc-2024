@@ -79,6 +79,8 @@ public class Robot extends CommandRobot {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing
         driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
+        driveController.a().whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
+                        () -> -driveController.getRightX()));
     }
 
     @Override
