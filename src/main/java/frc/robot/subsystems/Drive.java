@@ -42,7 +42,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
             new PIDConstants(0.2, 0.0, 0.05), // Translation PID constants (OFF_AXIS)
             new PIDConstants(0.001, 0.0, 0.0), // Rotation PID constants (OFF_AXIS)
             2.0, // Max module speed, in m/s
-            0.381,
+            0.3429,
             // Drive base radius (OFF_AXIS) in meters. Distance from robot center to
             // furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here

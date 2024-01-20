@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.maps.Henry;
 import frc.robot.maps.RobotMap;
 import frc.robot.maps.Valkyrie;
 import frc.robot.subsystems.Drive;
@@ -28,7 +29,7 @@ import frc.robot.subsystems.Drive;
 public class Robot extends CommandRobot {
 
     // private RobotMap map = getRobotMap(RobotMap.class, new RobotMap());
-    private RobotMap map = new Valkyrie();
+    private RobotMap map = new Henry();
     private ButtonXboxController driveController = new ButtonXboxController(0);
     private ButtonXboxController copilotController = new ButtonXboxController(1);
 
