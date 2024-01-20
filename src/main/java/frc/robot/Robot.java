@@ -29,7 +29,7 @@ import frc.robot.subsystems.Drive;
 public class Robot extends CommandRobot {
 
     // private RobotMap map = getRobotMap(RobotMap.class, new RobotMap());
-    private RobotMap map = new Henry();
+    private RobotMap map = new Valkyrie();
     private ButtonXboxController driveController = new ButtonXboxController(0);
     private ButtonXboxController copilotController = new ButtonXboxController(1);
 
