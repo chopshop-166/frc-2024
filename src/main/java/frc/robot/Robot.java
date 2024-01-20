@@ -25,6 +25,7 @@ import frc.robot.maps.Henry;
 import frc.robot.maps.RobotMap;
 import frc.robot.maps.Valkyrie;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 
 public class Robot extends CommandRobot {
 
@@ -34,6 +35,7 @@ public class Robot extends CommandRobot {
     private ButtonXboxController copilotController = new ButtonXboxController(1);
 
     private Drive drive = new Drive(map.getDriveMap());
+    private Intake intake = new Intake(map.getIntakeMap());
 
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
 
