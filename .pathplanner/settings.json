@@ -1,8 +1,11 @@
 {
-  "robotWidth": 0.76,
-  "robotLength": 0.76,
+  "robotWidth": 0.66,
+  "robotLength": 0.66,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Scoring Locations",
+    "Pickups"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 2.0,
   "defaultMaxAccel": 2.0,
