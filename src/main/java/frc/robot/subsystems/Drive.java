@@ -167,7 +167,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         return cmd().onInitialize(this::resetGyro).runsUntil(() -> true).runsWhenDisabled(true);
     }
 
-    public Command moveForDirectional(double xSpeed, double ySpeed, double seconds) {
+    public Command moveInDirection(double xSpeed, double ySpeed, double seconds) {
         return race(
                 run(() -> {
                     move(xSpeed, ySpeed, 0, false);
@@ -189,8 +189,6 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
     public void periodic() {
         // This method will be called once per scheduler run
         // Use this for any background processing
-        super.periodic();
-        // pose = vision.update(isBlue);
         super.periodic();
         estimator.update(Rotation2d.fromDegrees(getMap().gyro().getAngle()),
                 getModulePositions());
