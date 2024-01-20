@@ -58,9 +58,17 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
                 map.rearLeft().getLocation(), map.rearRight().getLocation());
         maxDriveSpeedMetersPerSecond = map.maxDriveSpeedMetersPerSecond();
         maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond();
+
+        estimator = new SwerveDrivePoseEstimator(kinematics, getMap().gyro().getRotation2d(),
+                getModulePositions(), new Pose2d(),
+                VecBuilder.fill(0.02, 0.02, 0.01),
+                VecBuilder.fill(0.1, 0.1, 0.01));
+
         AutoBuilder.configureHolonomic(() -> pose, this::setPoseCommand,
-                this::getSpeeds, this::move, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                this::getSpeeds, this::move, // Method that will drive the robot given ROBOT
+                // RELATIVE ChassisSpeeds
                 HoloPath, () -> isBlue, this);
+
     }
 
     public void setPose(Pose2d pose) {
@@ -158,6 +166,14 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         return cmd().onInitialize(this::resetGyro).runsUntil(() -> true).runsWhenDisabled(true);
     }
 
+    public Command moveForDirectional(double xSpeed, double ySpeed, double seconds) {
+        return race(
+                run(() -> {
+                    move(xSpeed, ySpeed, 0, false);
+                }),
+                new FunctionalWaitCommand(() -> seconds)).andThen(safeStateCmd());
+    }
+
     @Override
     public void reset() {
         // Nothing to reset here
@@ -174,6 +190,9 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         // Use this for any background processing
         super.periodic();
         // pose = vision.update(isBlue);
+        super.periodic();
+        estimator.update(Rotation2d.fromDegrees(getMap().gyro().getAngle()),
+                getModulePositions());
     }
 
     public void resetGyro() {
