@@ -73,7 +73,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
     }
 
     public void setPose(Pose2d pose) {
-        estimator.resetPosition(Rotation2d.fromDegrees(getMap().gyro().getAngle()),
+        estimator.resetPosition(getMap().gyro().getRotation2d(),
                 getModulePositions(), pose);
     }
 
@@ -111,7 +111,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         } else {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed,
                     rotation,
-                    Rotation2d.fromDegrees(getData().gyroYawPositionDegrees));
+                    getData().gyroYawPositionDegrees);
         }
 
         move(speeds);
@@ -190,7 +190,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         // This method will be called once per scheduler run
         // Use this for any background processing
         super.periodic();
-        estimator.update(Rotation2d.fromDegrees(getMap().gyro().getAngle()),
+        estimator.update(getMap().gyro().getRotation2d(),
                 getModulePositions());
         Logger.recordOutput("pose", estimator.getEstimatedPosition());
     }

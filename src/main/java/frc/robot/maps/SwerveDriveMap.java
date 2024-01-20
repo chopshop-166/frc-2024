@@ -34,7 +34,7 @@ public record SwerveDriveMap(SwerveModule frontLeft, SwerveModule frontRight, Sw
         data.rearLeft.update(this.rearLeft);
         data.rearRight.update(this.rearRight);
 
-        data.gyroYawPositionDegrees = this.gyro.getAngle();
+        data.gyroYawPositionDegrees = this.gyro.getRotation2d();
     }
 
     /** Construct a map that uses mocks for everything. */
@@ -150,7 +150,7 @@ public record SwerveDriveMap(SwerveModule frontLeft, SwerveModule frontRight, Sw
         public SwerveModuleData rearLeft = new SwerveModuleData("rearLeft");
         public SwerveModuleData rearRight = new SwerveModuleData("rearRight");
 
-        public double gyroYawPositionDegrees = 0.0;
+        public Rotation2d gyroYawPositionDegrees = Rotation2d.fromDegrees(0);
 
         @Override
         public void toLog(LogTable table) {
