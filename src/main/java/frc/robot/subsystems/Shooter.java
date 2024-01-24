@@ -18,53 +18,39 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
     private final double HALF_SPEED = .50;
     private final double THREE_QUARTER = .75;
 
+    public enum Speeds {
+        FULL_SPEED(1.00),
+
+        HALF_SPEED(.50),
+
+        SLOW_SPEED(.25),
+
+        THREE_QUARTER_SPEED(.75),
+
+        OFF(0);
+
+        private double speed;
+
+        private Speeds(double speed) {
+            this.speed = speed;
+        }
+
+        public double getSpeed() {
+            return speed;
+        }
+    }
+
     public Shooter(ShooterMap shooterMap) {
         super(new Data(), shooterMap);
     }
 
-    public Command spinOut() {
-        return runEnd(
-                () -> {
-                    getData().setPoint = RELEASE_SPEED;
-                }, () -> {
-                    getData().setPoint = 0;
-                });
-    }
-
-    public Command Charge() {
+    public Command setSpeed(Speeds speed) {
         return runOnce(
                 () -> {
-                    getData().setPoint = RELEASE_SPEED;
-                    waitSeconds(1); // Wait is temporary
+                    getData().setPoint = speed.getSpeed();
+
                 });
-    }
 
-    public Command ampSpin() {
-        return startEnd(
-                () -> {
-                    getData().setPoint = AMP_SPEED;
-                }, () -> {
-                    getData().setPoint = 0;
-                });
-    }
-
-    public Command fullPower() {
-        return runOnce(
-                () -> {
-                    getData().setPoint = RELEASE_SPEED;
-                });
-    }
-
-    public Command slowSpin() {
-        return runOnce(() -> {
-            getData().setPoint = THREE_QUARTER;
-        });
-    }
-
-    public Command spinDown() {
-        return runOnce(() -> {
-            getData().setPoint = 0;
-        });
     }
 
     @Override

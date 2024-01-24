@@ -21,6 +21,9 @@ public class ShooterMap implements LoggableMap<ShooterMap.Data> {
     @Override
     public void updateData(Data data) {
         motor.set(data.setPoint);
+        data.velocityRotationsPerSec = motor.getEncoder().getRate();
+        data.currentAmps = motor.getCurrentAmps();
+        data.tempCelcius = motor.getTemperatureC();
     }
 
     public static class Data implements LoggableInputs {
