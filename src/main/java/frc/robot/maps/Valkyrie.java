@@ -25,6 +25,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.maps.subsystems.IntakeMap;
+import frc.robot.maps.subsystems.ShooterMap;
 
 @RobotMapFor("Valkyrie")
 public class Valkyrie extends RobotMap {
@@ -115,6 +116,14 @@ public class Valkyrie extends RobotMap {
         CSSparkMax bottomRoller = new CSSparkMax(9, MotorType.kBrushless);
         bottomRoller.getMotorController().follow(topRoller.getMotorController(), true);
         return new IntakeMap(topRoller);
+    }
+
+    @Override
+    public ShooterMap getShooterMap() {
+        CSSparkMax rightWheel = new CSSparkMax(10, MotorType.kBrushless);
+        CSSparkMax leftWheel = new CSSparkMax(12, MotorType.kBrushless);
+        leftWheel.getMotorController().follow(rightWheel.getMotorController(), true);
+        return new ShooterMap(rightWheel);
     }
 
     @Override
