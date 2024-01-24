@@ -30,7 +30,6 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     final double MANUAL_LOWER_SPEED_COEF = 0.0;
     final double SLOW_DOWN_COEF = 0.0;
     final double DESCEND_SPEED = -0.0;
-    final double NO_FALL = 0.0;
     private double armLength = 0.0;
 
     public enum ArmPresets {
@@ -76,9 +75,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
             if (rotationSpeed.getAsDouble() < 0) {
                 speedCoef = MANUAL_LOWER_SPEED_COEF;
             }
-            // For when we add limits: getData().setPoint =
-            // limits(rotationSpeed.getAsDouble() *
-            // speedCoef);
+            getData().setPoint = limits(rotationSpeed.getAsDouble() * speedCoef);
         });
     }
 
@@ -90,11 +87,11 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         return cmd("Move To Set Angle").onInitialize(() -> {
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
         }).onExecute(() -> {
-            getData().setPoint = pid.calculate(getArmAngle(), new State(angle, 0), rotateConstraints) + NO_FALL;
+            getData().setPoint = pid.calculate(getArmAngle(), new State(angle, 0), rotateConstraints);
             Logger.getInstance().recordOutput("getPositionErrors", pid.getPositionError());
 
         }).runsUntil(setPointPersistenceCheck).onEnd(() -> {
-            getData().setPoint = NO_FALL;
+            getData().setPoint = 0;
         });
     }
 
@@ -108,6 +105,23 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
      * Limits
      * 
      */
+
+    private double limits(double speed) {
+        Logger.recordOutput("speed", speed);
+        if (getArmAngle() < 0 && speed < 0) {
+            return 0;
+        }
+        if ((getArmAngle() > getMap().hardMaxAngle && speed > 0) ||
+                (getArmAngle() < getMap().hardMinAngle && speed < 0)) {
+            return getData().setPoint = 0;
+        }
+        if ((getArmAngle() > getMap().softMaxAngle && speed > 0) ||
+                (getArmAngle() < getMap().softMinAngle && speed < 0)) {
+            return (speed * SLOW_DOWN_COEF);
+        }
+
+        return speed;
+    }
 
     @Override
     public void reset() {
