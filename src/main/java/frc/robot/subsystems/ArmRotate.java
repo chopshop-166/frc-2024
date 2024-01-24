@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
-
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
@@ -12,8 +10,6 @@ import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.maps.subsystems.ArmRotateMap;
 import frc.robot.maps.subsystems.ArmRotateMap.Data;
@@ -22,15 +18,13 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
     // Intake Position: 0 degrees <- base everything else off of it
 
-    private boolean useAbsolute = true;
     final ProfiledPIDController pid;
     // Set to zero until able to test
-    final double PIVOT_HEIGHT = 0.0;
     final double RAISE_SPEED = 0.0;
     final double MANUAL_LOWER_SPEED_COEF = 0.0;
     final double SLOW_DOWN_COEF = 0.0;
     final double DESCEND_SPEED = -0.0;
-    private double armLength = 0.0;
+    private Constraints rotateConstraints = new Constraints(150, 200);
 
     public enum ArmPresets {
         INTAKE(0),
@@ -55,17 +49,13 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         }
     }
 
-    NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
-
-    DoublePublisher anglePub = ntinst.getDoubleTopic("Arm/Angle").publish();
-
     public ArmRotate(ArmRotateMap armRotateMap) {
         super(new Data(), armRotateMap);
         pid = armRotateMap.pid;
     }
 
     private double getArmAngle() {
-        return useAbsolute ? (getData().rotatingAbsAngleDegrees) : getData().degrees;
+        return (getData().rotatingAbsAngleDegrees);
     }
 
     // Manual rotation control
@@ -88,7 +78,6 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
         }).onExecute(() -> {
             getData().setPoint = pid.calculate(getArmAngle(), new State(angle, 0), rotateConstraints);
-            Logger.getInstance().recordOutput("getPositionErrors", pid.getPositionError());
 
         }).runsUntil(setPointPersistenceCheck).onEnd(() -> {
             getData().setPoint = 0;
@@ -97,7 +86,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
     // Move to enum preset using angle-input command
     public Command moveTo(ArmPresets level) {
-        return moveToAngle(level.getAngle(), new Constraints(150, 200));
+        return moveToAngle(level.getAngle(), rotateConstraints);
     }
 
     /*
@@ -136,7 +125,6 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     @Override
     public void periodic() {
         super.periodic();
-        anglePub.set(getArmAngle());
     }
 
 }

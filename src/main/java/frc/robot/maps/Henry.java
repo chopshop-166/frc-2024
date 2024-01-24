@@ -125,17 +125,19 @@ public class Henry extends RobotMap {
         leftMotor.getMotorController().setInverted(false);
         leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
         leftMotor.getMotorController().setSmartCurrentLimit(40);
-        CSEncoder encoder = new CSEncoder(0, 0, true);
-        encoder.setDistancePerPulse(0 / 0);
-        CSDutyCycleEncoder absEncoder = new CSDutyCycleEncoder(0);
-        absEncoder.setDutyCycleRange(0 / 0, 0 / 0);
+        rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
+        rightMotor.getMotorController().setSmartCurrentLimit(40);
+        CSEncoder encoder = new CSEncoder(2, 3, true);
+        encoder.setDistancePerPulse(360.0 / 2048.0);
+        CSDutyCycleEncoder absEncoder = new CSDutyCycleEncoder(4);
+        absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
         absEncoder.setDistancePerRotation(-360);
         // Adjust this to move the encoder zero point to the retracted position
         absEncoder.setPositionOffset(0);
         ProfiledPIDController pid = new ProfiledPIDController(0.0, 0.0, 0.0, new Constraints(0, 0));
         pid.setTolerance(0);
 
-        return new ArmRotateMap(leftMotor, pid, encoder, 0, 0, 0, 0, 0, 0) {
+        return new ArmRotateMap(leftMotor, pid, encoder, 0, 0, 0, 0) {
 
             public void setBrake() {
                 leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);

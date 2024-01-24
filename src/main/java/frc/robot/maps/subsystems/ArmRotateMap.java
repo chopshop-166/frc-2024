@@ -20,20 +20,17 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
     public final double softMinAngle;
     public double hardMaxAngle;
     public double hardMinAngle;
-    public double armPivotHeight;
-    public double armStartLength;
     private double previousRate = 0;
 
     public ArmRotateMap() {
         this(new SmartMotorController(), new ProfiledPIDController(0, 0, 0,
                 new Constraints(0, 0)), new MockEncoder(), 0,
-                0, 0, 0, 0, 0);
+                0, 0, 0);
     }
 
     public ArmRotateMap(SmartMotorController motor, ProfiledPIDController pid, IEncoder encoder,
             double softMaxAngle, double softMinAngle,
-            double hardMaxAngle, double hardMinAngle,
-            double armPivotHeight, double armStartLength) {
+            double hardMaxAngle, double hardMinAngle) {
         this.motor = motor;
         this.pid = pid;
         this.encoder = encoder;
@@ -41,9 +38,6 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
         this.softMinAngle = softMinAngle;
         this.hardMaxAngle = hardMaxAngle;
         this.hardMinAngle = hardMinAngle;
-        this.armPivotHeight = armPivotHeight;
-        this.armStartLength = armStartLength;
-
     }
 
     @Override
