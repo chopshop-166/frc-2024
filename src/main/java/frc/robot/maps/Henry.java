@@ -8,19 +8,25 @@ import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
 import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
+import com.chopshop166.chopshoplib.sensors.CSDutyCycleEncoder;
+import com.chopshop166.chopshoplib.sensors.CSEncoder;
 import com.chopshop166.chopshoplib.sensors.CtreEncoder;
 import com.chopshop166.chopshoplib.sensors.gyro.PigeonGyro2;
 import com.chopshop166.chopshoplib.states.PIDValues;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import frc.robot.maps.subsystems.ArmRotateMap;
 
 @RobotMapFor("Henry")
 public class Henry extends RobotMap {
@@ -29,7 +35,7 @@ public class Henry extends RobotMap {
     public SwerveDriveMap getDriveMap() {
 
         final double FLOFFSET = -0.776;
-        final double FROFFSET = -0.38;  
+        final double FROFFSET = -0.38;
         final double RLOFFSET = 0.448;
         final double RROFFSET = -0.891;
         // Value taken from CAD as offset from center of module base pulley to center
@@ -109,6 +115,38 @@ public class Henry extends RobotMap {
                 maxDriveSpeedMetersPerSecond,
                 maxRotationRadianPerSecond, pigeonGyro2);
 
+    }
+
+    @Override
+    public ArmRotateMap getArmRotateMap() {
+        CSSparkMax leftMotor = new CSSparkMax(0, MotorType.kBrushless);
+        CSSparkMax rightMotor = new CSSparkMax(0, MotorType.kBrushless);
+        rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
+        leftMotor.getMotorController().setInverted(false);
+        leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
+        leftMotor.getMotorController().setSmartCurrentLimit(40);
+        CSEncoder encoder = new CSEncoder(0, 0, true);
+        encoder.setDistancePerPulse(0 / 0);
+        CSDutyCycleEncoder absEncoder = new CSDutyCycleEncoder(0);
+        absEncoder.setDutyCycleRange(0 / 0, 0 / 0);
+        absEncoder.setDistancePerRotation(-360);
+        // Adjust this to move the encoder zero point to the retracted position
+        absEncoder.setPositionOffset(0);
+        ProfiledPIDController pid = new ProfiledPIDController(0.0, 0.0, 0.0, new Constraints(0, 0));
+        pid.setTolerance(0);
+
+        return new ArmRotateMap(leftMotor, pid, encoder, 0, 0, 0, 0, 0, 0) {
+
+            public void setBrake() {
+                leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
+                System.out.println("Setting brake mode");
+            }
+
+            public void setCoast() {
+                leftMotor.getMotorController().setIdleMode(IdleMode.kCoast);
+                System.out.println("Setting coast mode");
+            }
+        };
     }
 
     @Override

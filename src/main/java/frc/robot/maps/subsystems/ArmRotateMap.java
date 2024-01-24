@@ -56,9 +56,9 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
         data.acceleration = data.velocityDegreesPerSecond - previousRate;
         previousRate = data.velocityDegreesPerSecond;
         data.rotatingAbsAngleDegrees = encoder.getAbsolutePosition();
-        data.rotatingRelativeAngleDegrees = encoder.getDistance();
         data.rotatingAngleVelocity = encoder.getRate();
-
+        data.positionError = pid.getPositionError();
+        data.velocityError = pid.getVelocityError();
     }
 
     public static class Data implements LoggableInputs {
@@ -70,8 +70,9 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
         public double[] currentAmps = new double[0];
         public double[] tempCelcius = new double[0];
         public double rotatingAbsAngleDegrees;
-        public double rotatingRelativeAngleDegrees;
         public double rotatingAngleVelocity;
+        public double positionError;
+        public double velocityError;
 
         // Logs the values of the variables
         @Override
@@ -83,8 +84,9 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
             table.put("MotorCurrentAmps", currentAmps);
             table.put("MotorAcceleration", acceleration);
             table.put("rotatingAbsAngleDegrees", rotatingAbsAngleDegrees);
-            table.put("rotatingRelativeAngleDegrees", rotatingRelativeAngleDegrees);
             table.put("rotatingAngleVelocity", rotatingAngleVelocity);
+            table.put("PIDPositionError", positionError);
+            table.put("PIDVelocityError", velocityError);
         }
 
         // Retrieves the values of the variables
@@ -97,8 +99,9 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
             this.tempCelcius = table.get("MotorTempCelcius", tempCelcius);
             this.acceleration = table.get("MotorAcceleration", acceleration);
             this.rotatingAbsAngleDegrees = table.get("rotatingAbsAngleDegrees", rotatingAbsAngleDegrees);
-            this.rotatingRelativeAngleDegrees = table.get("rotatingRelativeAngleDegrees", rotatingRelativeAngleDegrees);
             this.rotatingAngleVelocity = table.get("rotatingAngleVelocity", rotatingAngleVelocity);
+            this.positionError = table.get("PIDPositionError", positionError);
+            this.velocityError = table.get("PIDVelocityError", velocityError);
         }
 
     }
