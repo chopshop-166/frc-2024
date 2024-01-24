@@ -1,10 +1,6 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
-
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
-import com.chopshop166.chopshoplib.motors.CSSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.maps.subsystems.ShooterMap;
@@ -45,12 +41,9 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
     }
 
     public Command setSpeed(Speeds speed) {
-        return runOnce(
-                () -> {
-                    getData().setPoint = speed.getSpeed();
-
-                });
-
+        return runOnce(() -> {
+            getData().motor.setpoint = speed.getSpeed();
+        });
     }
 
     @Override
@@ -60,7 +53,7 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
 
     @Override
     public void safeState() {
-        getData().setPoint = 0;
+        getData().motor.setpoint = 0;
     }
 
     @Override

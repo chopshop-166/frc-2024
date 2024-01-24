@@ -22,7 +22,7 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
     public Command spinIn() {
         return runEnd(
                 () -> {
-                    getData().setPoint = GRAB_SPEED;
+                    getData().roller.setpoint = GRAB_SPEED;
 
                 }, this::safeState);
     }
@@ -30,21 +30,21 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
     public Command spinOut() {
         return runEnd(
                 () -> {
-                    getData().setPoint = RELEASE_SPEED;
+                    getData().roller.setpoint = RELEASE_SPEED;
                 }, this::safeState);
     }
 
     public Command intakeGamepiece() {
         return runEnd(
                 () -> {
-                    getData().setPoint = GRAB_SPEED;
+                    getData().roller.setpoint = GRAB_SPEED;
                 }, this::safeState).until(() -> getData().gamePieceDetected);
     }
 
     public Command feedShooter() {
         return run(
                 () -> {
-                    getData().setPoint = FEED_SPEED;
+                    getData().roller.setpoint = FEED_SPEED;
                 }).until(() -> !getData().gamePieceDetected).andThen(waitSeconds(FEED_DELAY), runOnce(this::safeState));
     }
 
@@ -55,7 +55,7 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
 
     @Override
     public void safeState() {
-        getData().setPoint = 0;
+        getData().roller.setpoint = 0;
     }
 
     @Override
