@@ -7,6 +7,7 @@ package frc.robot;
 import org.littletonrobotics.junction.Logger;
 
 import com.chopshop166.chopshoplib.Autonomous;
+import com.chopshop166.chopshoplib.RobotUtils;
 import com.chopshop166.chopshoplib.commands.CommandRobot;
 import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -61,6 +62,7 @@ public class Robot extends CommandRobot {
                 Logger.recordMetadata("GitDirty", "Unknown");
                 break;
         }
+        Logger.recordMetadata("MACAddress", RobotUtils.getMACAddress());
 
         map.setupLogging();
         if (!isReal()) {
