@@ -78,6 +78,8 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
         }).onExecute(() -> {
             getData().setPoint = pid.calculate(getArmAngle(), new State(angle, 0), rotateConstraints);
+            getData().setPoint += getMap().armFeedforward.calculate(pid.getSetpoint().position,
+                    pid.getSetpoint().velocity);
 
         }).runsUntil(setPointPersistenceCheck).onEnd(() -> {
             getData().setPoint = 0;

@@ -10,6 +10,7 @@ import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
 import com.chopshop166.chopshoplib.sensors.CSDutyCycleEncoder;
 import com.chopshop166.chopshoplib.sensors.CSEncoder;
+import com.chopshop166.chopshoplib.sensors.CSFusedEncoder;
 import com.chopshop166.chopshoplib.sensors.CtreEncoder;
 import com.chopshop166.chopshoplib.sensors.gyro.PigeonGyro2;
 import com.chopshop166.chopshoplib.states.PIDValues;
@@ -20,6 +21,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -119,8 +121,8 @@ public class Henry extends RobotMap {
 
     @Override
     public ArmRotateMap getArmRotateMap() {
-        CSSparkMax leftMotor = new CSSparkMax(0, MotorType.kBrushless);
-        CSSparkMax rightMotor = new CSSparkMax(0, MotorType.kBrushless);
+        CSSparkMax leftMotor = new CSSparkMax(9, MotorType.kBrushless);
+        CSSparkMax rightMotor = new CSSparkMax(10, MotorType.kBrushless);
         rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
         leftMotor.getMotorController().setInverted(false);
         leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
@@ -128,27 +130,18 @@ public class Henry extends RobotMap {
         rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
         rightMotor.getMotorController().setSmartCurrentLimit(40);
         CSEncoder encoder = new CSEncoder(2, 3, true);
-        encoder.setDistancePerPulse(360.0 / 2048.0);
+        encoder.setDistancePerPulse(360.0 / 2048.0 / 2);
         CSDutyCycleEncoder absEncoder = new CSDutyCycleEncoder(4);
         absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
-        absEncoder.setDistancePerRotation(-360);
+        absEncoder.setDistancePerRotation(-360 / 2);
         // Adjust this to move the encoder zero point to the retracted position
         absEncoder.setPositionOffset(0);
-        ProfiledPIDController pid = new ProfiledPIDController(0.0, 0.0, 0.0, new Constraints(0, 0));
+        CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
+        ProfiledPIDController pid = new ProfiledPIDController(0.0, 0.0, 0.0, new Constraints(45, 2025));
         pid.setTolerance(0);
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.39, 3.74, 0);
 
-        return new ArmRotateMap(leftMotor, pid, encoder, 0, 0, 0, 0) {
-
-            public void setBrake() {
-                leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
-                System.out.println("Setting brake mode");
-            }
-
-            public void setCoast() {
-                leftMotor.getMotorController().setIdleMode(IdleMode.kCoast);
-                System.out.println("Setting coast mode");
-            }
-        };
+        return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, 100, 0, 120, 0);
     }
 
     @Override

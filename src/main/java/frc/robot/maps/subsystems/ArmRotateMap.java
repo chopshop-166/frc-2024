@@ -8,6 +8,7 @@ import com.chopshop166.chopshoplib.motors.SmartMotorController;
 import com.chopshop166.chopshoplib.sensors.IEncoder;
 import com.chopshop166.chopshoplib.sensors.MockEncoder;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
@@ -15,6 +16,7 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
 
     public final SmartMotorController motor;
     public final ProfiledPIDController pid;
+    public final ArmFeedforward armFeedforward;
     public final IEncoder encoder;
     public final double softMaxAngle;
     public final double softMinAngle;
@@ -24,15 +26,17 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
 
     public ArmRotateMap() {
         this(new SmartMotorController(), new ProfiledPIDController(0, 0, 0,
-                new Constraints(0, 0)), new MockEncoder(), 0,
+                new Constraints(0, 0)), new ArmFeedforward(0, 0, 0, 0), new MockEncoder(), 0,
                 0, 0, 0);
     }
 
-    public ArmRotateMap(SmartMotorController motor, ProfiledPIDController pid, IEncoder encoder,
+    public ArmRotateMap(SmartMotorController motor, ProfiledPIDController pid, ArmFeedforward armFeedforward,
+            IEncoder encoder,
             double softMaxAngle, double softMinAngle,
             double hardMaxAngle, double hardMinAngle) {
         this.motor = motor;
         this.pid = pid;
+        this.armFeedforward = armFeedforward;
         this.encoder = encoder;
         this.softMaxAngle = softMaxAngle;
         this.softMinAngle = softMinAngle;
