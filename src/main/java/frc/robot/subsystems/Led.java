@@ -34,4 +34,34 @@ public class Led extends LEDSubsystem {
         return setPattern("Shooter", new SpinPattern(), "Spinning");
     }
 
+    public Command grabbedPiece() {
+        return setPattern("Balance Status", new SolidColorPattern(Color.kGreen), "Green");
+    }
+
+    public Command atPreset() {
+        return setPattern("Arm Rotate", new SolidColorPattern(new Color(0, 0, 0)), "At Preset");
+    }
+
+    public Command stowing() {
+        return setPattern("Arm Rotate", new SolidColorPattern(new Color(255, 82, 174)), "Stowing");
+    }
+
+    public Command coopButton() {
+        return setPattern(getSubsystem(), new SolidColorPattern(new Color(255, 191, 0)), "Activate Coop");
+    }
+
+    // Auto Leds
+
+    public Command toPiece() {
+        return setPattern("Auto", new SolidColorPattern(new Color(0, 0, 0)), "To Piece");
+    }
+
+    public Command toSpeaker() {
+        return setPattern("Auto", new SolidColorPattern(new Color(0, 0, 0)), "To Piece");
+    }
+
+    public Command atSpeaker() {
+        return setPattern("Auto", new SolidColorPattern(new Color(0, 0, 0)), "To Piece");
+    }
+
 }
