@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import frc.robot.maps.subsystems.ArmRotateMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 
@@ -12,6 +13,10 @@ public class RobotMap {
 
     public SwerveDriveMap getDriveMap() {
         return new SwerveDriveMap();
+    }
+
+    public ArmRotateMap getArmRotateMap() {
+        return new ArmRotateMap();
     }
 
     public IntakeMap getIntakeMap() {
