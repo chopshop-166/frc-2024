@@ -61,34 +61,30 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     // Manual rotation control
     public Command move(DoubleSupplier rotationSpeed) {
         return run(() -> {
+            double speed = rotationSpeed.getAsDouble();
             double speedCoef = RAISE_SPEED;
-            if (rotationSpeed.getAsDouble() < 0) {
+            if (speed < 0) {
                 speedCoef = MANUAL_LOWER_SPEED_COEF;
             }
-            getData().setPoint = limits(rotationSpeed.getAsDouble() * speedCoef);
+            getData().setPoint = limits(speed * speedCoef);
         });
     }
 
     // Automatic rotation control (angle input)
-    public Command moveToAngle(double angle, Constraints rotateConstraints) {
+    public Command moveTo(ArmPresets level) {
         // When executed the arm will move. The encoder will update until the desired
         // value is reached, then the command will end.
         PersistenceCheck setPointPersistenceCheck = new PersistenceCheck(20, pid::atGoal);
         return cmd("Move To Set Angle").onInitialize(() -> {
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
         }).onExecute(() -> {
-            getData().setPoint = pid.calculate(getArmAngle(), new State(angle, 0), rotateConstraints);
+            getData().setPoint = pid.calculate(getArmAngle(), new State(level.getAngle(), 0));
             getData().setPoint += getMap().armFeedforward.calculate(pid.getSetpoint().position,
                     pid.getSetpoint().velocity);
 
         }).runsUntil(setPointPersistenceCheck).onEnd(() -> {
             getData().setPoint = 0;
         });
-    }
-
-    // Move to enum preset using angle-input command
-    public Command moveTo(ArmPresets level) {
-        return moveToAngle(level.getAngle(), rotateConstraints);
     }
 
     /*
