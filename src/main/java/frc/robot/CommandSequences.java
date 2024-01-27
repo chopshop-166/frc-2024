@@ -1,13 +1,12 @@
 package frc.robot;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmRotate;
+import frc.robot.subsystems.ArmRotate.ArmPresets;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ArmRotate.ArmPresets;
 import frc.robot.subsystems.Shooter.Speeds;
 
 public class CommandSequences {
