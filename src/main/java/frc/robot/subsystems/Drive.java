@@ -21,7 +21,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -60,7 +59,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond();
 
         estimator = new SwerveDrivePoseEstimator(kinematics, getMap().gyro().getRotation2d(),
-                getModulePositions(), new Pose2d(),
+                getData().getModulePositions(),
+                new Pose2d(),
                 VecBuilder.fill(0.02, 0.02, 0.01),
                 VecBuilder.fill(0.1, 0.1, 0.01));
 
@@ -73,7 +73,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
     public void setPose(Pose2d pose) {
         estimator.resetPosition(getMap().gyro().getRotation2d(),
-                getModulePositions(), pose);
+                getData().getModulePositions(), pose);
     }
 
     public Command setPoseCommand(Pose2d pose) {
@@ -127,16 +127,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         getData().setDesiredStates(moduleStates);
     }
 
-    public SwerveModulePosition[] getModulePositions() {
-        return new SwerveModulePosition[] { getData().frontLeft.getModulePosition(),
-                getData().frontRight.getModulePosition(), getData().rearLeft.getModulePosition(),
-                getData().rearRight.getModulePosition() };
-    }
-
     public ChassisSpeeds getSpeeds() {
-        return kinematics.toChassisSpeeds(getData().frontLeft.getModuleState(),
-                getData().frontRight.getModuleState(), getData().rearLeft.getModuleState(),
-                getData().rearRight.getModuleState());
+        return kinematics.toChassisSpeeds(getData().getModuleStates());
     }
 
     // Yes! Actual manual drive
@@ -177,7 +169,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         // This method will be called once per scheduler run
         // Use this for any background processing
         super.periodic();
-        estimator.update(getMap().gyro().getRotation2d(), getModulePositions());
+        estimator.update(getMap().gyro().getRotation2d(), getData().getModulePositions());
         Logger.recordOutput("pose", estimator.getEstimatedPosition());
         Logger.recordOutput("Angle", getMap().gyro().getAngle());
         Logger.recordOutput("rotation", getMap().gyro().getRotation2d());
