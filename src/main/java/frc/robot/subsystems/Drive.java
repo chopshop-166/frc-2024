@@ -9,6 +9,8 @@ import org.littletonrobotics.junction.Logger;
 import com.chopshop166.chopshoplib.RobotUtils;
 import com.chopshop166.chopshoplib.commands.FunctionalWaitCommand;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
+import com.chopshop166.chopshoplib.logging.data.SwerveDriveData;
+import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -17,17 +19,14 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.maps.SwerveDriveMap;
-import frc.robot.maps.SwerveDriveMap.Data;
 
-public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
+public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
     public final SwerveDriveKinematics kinematics;
 
@@ -52,7 +51,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
 
     public Drive(SwerveDriveMap map) {
 
-        super(new Data(), map);
+        super(new SwerveDriveData(), map);
 
         getMap().gyro().reset();
         kinematics = new SwerveDriveKinematics(map.frontLeft().getLocation(), map.frontRight().getLocation(),
@@ -111,7 +110,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         } else {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed,
                     rotation,
-                    getData().gyroYawPositionDegrees);
+                    getData().gyroYawPosition);
         }
 
         move(speeds);
@@ -123,21 +122,9 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         // Now use this in our kinematics
         final SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, maxDriveSpeedMetersPerSecond);
-        //
-
-        // Front left module state
-        getData().frontLeft.desiredState = moduleStates[0];
-
-        // Front right module state
-        getData().frontRight.desiredState = moduleStates[1];
-
-        // Back left module state
-        getData().rearLeft.desiredState = moduleStates[2];
-
-        // Back right module state
-        getData().rearRight.desiredState = moduleStates[3];
 
         // All the states
+        getData().setDesiredStates(moduleStates);
     }
 
     public SwerveModulePosition[] getModulePositions() {
@@ -164,7 +151,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
     }
 
     public Command resetGyroCommand() {
-        return cmd().onInitialize(this::resetGyro).runsUntil(() -> true).runsWhenDisabled(true);
+        return runOnce(this::resetGyro).ignoringDisable(true);
     }
 
     public Command moveInDirection(double xSpeed, double ySpeed, double seconds) {
@@ -172,7 +159,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
                 run(() -> {
                     move(xSpeed, ySpeed, 0, false);
                 }),
-                new FunctionalWaitCommand(() -> seconds)).andThen(safeStateCmd());
+                new FunctionalWaitCommand(seconds)).andThen(safeStateCmd());
     }
 
     @Override
@@ -182,7 +169,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
 
     @Override
     public void safeState() {
-
+        move(0.0, 0.0, 0.0, false);
     }
 
     @Override
@@ -190,8 +177,7 @@ public class Drive extends LoggedSubsystem<Data, SwerveDriveMap> {
         // This method will be called once per scheduler run
         // Use this for any background processing
         super.periodic();
-        estimator.update(getMap().gyro().getRotation2d(),
-                getModulePositions());
+        estimator.update(getMap().gyro().getRotation2d(), getModulePositions());
         Logger.recordOutput("pose", estimator.getEstimatedPosition());
         Logger.recordOutput("Angle", getMap().gyro().getAngle());
         Logger.recordOutput("rotation", getMap().gyro().getRotation2d());
