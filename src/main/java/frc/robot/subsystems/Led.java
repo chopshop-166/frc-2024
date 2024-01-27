@@ -55,11 +55,11 @@ public class Led extends LEDSubsystem {
     }
     
     public Command AmpActivate() {
-        return setPattern(getSubsytem(), new Color(133, 19, 79), "Activate AMP");
+        return setPattern(getSubsystem(), new Color(133, 19, 79), "Activate AMP");
     }
 
     public Command VisonAlinged() {
-        return setPattern(getSubsytem(), new FlashPattern(48, 102, 53), "Vison Activated");
+        return setPattern("Vison Activate", new FlashPattern(new Color(48, 102, 53), 0.5), "To preset");
     }
 
 
