@@ -33,26 +33,35 @@ public class Led extends LEDSubsystem {
     public Command shooterSpinning() {
         return setPattern("Shooter", new SpinPattern(new Color(57, 32, 144)), "Spinning");
     }
-
+    
     public Command grabbedPiece() {
-        return setPattern("Balance Status", Color.kGreen, "Green");
+        return setPattern("Intake", Color.kGreen, "Green");
     }
-
+    
     public Command atPreset() {
         return setPattern("Arm Rotate", new Color(255, 147, 69), "At Preset");
     }
-
+    
     public Command toPreset() {
         return setPattern("Arm Rotate", new FlashPattern(new Color(112, 255, 248), 0.5), "To preset");
     }
-
+    
     public Command stowing() {
         return setPattern("Arm Rotate", new Color(255, 82, 174), "Stowing");
     }
-
+    
     public Command coopButton() {
-        return setPattern(getSubsystem(), new Color(255, 191, 0), "Activate Coop");
+        return setPattern("HP signal", new Color(255, 191, 0), "Activate Coop");
     }
+    
+    public Command AmpActivate() {
+        return setPattern("HP signal", new Color(133, 19, 79), "Activate AMP");
+    }
+
+    public Command VisonAligned() {
+        return setPattern("Vison", new FlashPattern(new Color(48, 102, 53), 0.5), "To preset");
+    }
+
 
     // Auto Leds
 
@@ -67,5 +76,6 @@ public class Led extends LEDSubsystem {
     public Command atSpeaker() {
         return setPattern("Auto", new Color(253, 63, 236), "To Piece");
     }
+
 
 }
