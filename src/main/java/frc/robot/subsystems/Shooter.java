@@ -37,10 +37,10 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
 
     public Command setSpeed(Speeds speed) {
         PersistenceCheck speedPersistenceCheck = new PersistenceCheck(5,
-                () -> Math.abs(getData().velocityRotationsPerSec) > speed.getSpeed());
+                () -> Math.abs(getData().motor.velocityInchesPerSec) > speed.getSpeed());
         return run(
                 () -> {
-                    getData().setPoint = speed.getSpeed();
+                    getData().motor.setpoint = speed.getSpeed();
 
                 }).until(speedPersistenceCheck);
 
