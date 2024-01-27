@@ -35,7 +35,7 @@ public class Led extends LEDSubsystem {
     }
     
     public Command grabbedPiece() {
-        return setPattern("Balance Status", Color.kGreen, "Green");
+        return setPattern("Intake", Color.kGreen, "Green");
     }
     
     public Command atPreset() {
@@ -51,15 +51,15 @@ public class Led extends LEDSubsystem {
     }
     
     public Command coopButton() {
-        return setPattern(getSubsystem(), new Color(255, 191, 0), "Activate Coop");
+        return setPattern("HP signal", new Color(255, 191, 0), "Activate Coop");
     }
     
     public Command AmpActivate() {
-        return setPattern(getSubsystem(), new Color(133, 19, 79), "Activate AMP");
+        return setPattern("HP signal", new Color(133, 19, 79), "Activate AMP");
     }
 
-    public Command VisonAlinged() {
-        return setPattern("Vison Activate", new FlashPattern(new Color(48, 102, 53), 0.5), "To preset");
+    public Command VisonAligned() {
+        return setPattern("Vison", new FlashPattern(new Color(48, 102, 53), 0.5), "To preset");
     }
 
 
