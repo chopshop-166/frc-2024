@@ -7,6 +7,7 @@ package frc.robot;
 import org.littletonrobotics.junction.Logger;
 
 import com.chopshop166.chopshoplib.Autonomous;
+import com.chopshop166.chopshoplib.RobotUtils;
 import com.chopshop166.chopshoplib.commands.CommandRobot;
 import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -86,7 +87,12 @@ public class Robot extends CommandRobot {
                 .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
                         () -> -driveController.getRightX()));
         copilotController.back().onTrue(intake.safeStateCmd());
-        copilotController.a().onTrue(intake.intakeGamepiece());
+        copilotController.a().onTrue(commandSequences.intake());
+        copilotController.b().onTrue(commandSequences.shooter());
+        copilotController.x().onTrue(intake.spinOut());
+        copilotController.povUp().whileTrue(commandSequences.moveToAmp());
+        copilotController.povDown().whileTrue(commandSequences.moveToIntake());
+        copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
     }
 
     @Override
@@ -128,5 +134,6 @@ public class Robot extends CommandRobot {
         drive.setDefaultCommand(
                 drive.drive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
                         () -> -driveController.getRightX()));
+        armRotate.setDefaultCommand(armRotate.move(RobotUtils.deadbandAxis(.1, () -> -copilotController.getLeftY())));
     }
 }
