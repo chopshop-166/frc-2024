@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.Logger;
 import com.chopshop166.chopshoplib.Autonomous;
 import com.chopshop166.chopshoplib.commands.CommandRobot;
 import com.chopshop166.chopshoplib.controls.ButtonXboxController;
+import com.chopshop166.chopshoplib.maps.LedMap;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.maps.RobotMap;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Shooter;
 
 public class Robot extends CommandRobot {
@@ -32,6 +34,8 @@ public class Robot extends CommandRobot {
     private Drive drive = new Drive(map.getDriveMap());
     private Intake intake = new Intake(map.getIntakeMap());
     private Shooter shooter = new Shooter(map.getShooterMap());
+    private Led led = new Led(map.getLedMap());
+    private CommandSequences commandSequences = new CommandSequences(drive, intake, shooter, led);
 
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
 
