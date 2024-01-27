@@ -30,6 +30,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.maps.subsystems.ArmRotateMap;
+import frc.robot.maps.subsystems.IntakeMap;
+import frc.robot.maps.subsystems.ShooterMap;
 
 @RobotMapFor("Henry")
 public class Henry extends RobotMap {
@@ -122,8 +124,8 @@ public class Henry extends RobotMap {
 
     @Override
     public ArmRotateMap getArmRotateMap() {
-        CSSparkMax leftMotor = new CSSparkMax(9, MotorType.kBrushless);
-        CSSparkMax rightMotor = new CSSparkMax(10, MotorType.kBrushless);
+        CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
+        CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
         rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
         leftMotor.getMotorController().setInverted(false);
         leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
@@ -143,6 +145,22 @@ public class Henry extends RobotMap {
         ArmFeedforward feedForward = new ArmFeedforward(0, 0.39, 3.74, 0);
 
         return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, 100, 0, 120, 0);
+    }
+
+    @Override
+    public ShooterMap getShooterMap() {
+        CSSparkMax topWheels = new CSSparkMax(10, MotorType.kBrushless);
+        CSSparkMax bottomWheels = new CSSparkMax(12, MotorType.kBrushless);
+        bottomWheels.getMotorController().follow(topWheels.getMotorController(), true);
+        return new ShooterMap(topWheels);
+    }
+
+    @Override
+    public IntakeMap getIntakeMap() {
+        CSSparkMax topRoller = new CSSparkMax(11, MotorType.kBrushless);
+        CSSparkMax bottomRoller = new CSSparkMax(9, MotorType.kBrushless);
+        bottomRoller.getMotorController().follow(topRoller.getMotorController(), true);
+        return new IntakeMap(topRoller, () -> false);
     }
 
     @Override

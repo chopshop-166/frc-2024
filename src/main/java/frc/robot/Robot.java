@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.maps.RobotMap;
+import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Shooter;
 
 public class Robot extends CommandRobot {
@@ -32,6 +34,9 @@ public class Robot extends CommandRobot {
     private Drive drive = new Drive(map.getDriveMap());
     private Intake intake = new Intake(map.getIntakeMap());
     private Shooter shooter = new Shooter(map.getShooterMap());
+    private Led led = new Led(map.getLedMap());
+    private ArmRotate armRotate = new ArmRotate(map.getArmRotateMap());
+    private CommandSequences commandSequences = new CommandSequences(drive, intake, shooter, led, armRotate);
 
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
 

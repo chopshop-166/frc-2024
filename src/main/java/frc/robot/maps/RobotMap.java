@@ -8,6 +8,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 
 import frc.robot.maps.subsystems.ArmRotateMap;
+import com.chopshop166.chopshoplib.maps.LedMap;
+
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 
@@ -27,6 +29,10 @@ public class RobotMap {
 
     public ShooterMap getShooterMap() {
         return new ShooterMap();
+    }
+
+    public LedMap getLedMap() {
+        return new LedMap();
     }
 
     public void setupLogging() {
