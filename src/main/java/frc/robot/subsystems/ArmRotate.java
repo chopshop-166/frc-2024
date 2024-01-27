@@ -72,7 +72,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     }
 
     private double getArmAngle() {
-        return (getData().rotatingAbsAngleDegrees);
+        return getData().rotatingAbsAngleDegrees;
     }
 
     // Manual rotation control
@@ -87,9 +87,9 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
             }
             if (Math.abs(speed) > 0) {
                 level = ArmPresets.OFF;
-                getData().setPoint = limits(speed * speedCoef);
+                getData().setSetpoint(limits(speed * speedCoef));
             } else if (level == ArmPresets.OFF) {
-                getData().setPoint = 0;
+                getData().setSetpoint(0.0);
             }
 
         });
@@ -98,7 +98,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     public Command moveToZero() {
         return startEnd(
                 () -> {
-                    getData().setPoint = LOWER_SPEED;
+                    getData().setSetpoint(LOWER_SPEED);
                     level = ArmPresets.OFF;
                 }, this::safeState).until(() -> {
                     return getArmAngle() < ArmPresets.INTAKE.getAngle();
@@ -124,10 +124,11 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     }
 
     private double limits(double speed) {
-
-        speed = getMap().hardLimits.filterSpeed(getArmAngle(), speed);
-
-        speed = getMap().softLimits.scaleSpeed(getArmAngle(), speed, SLOW_DOWN_COEF);
+        double angle = getArmAngle();
+        // If we're at the hard limits, don't allow it to go any further
+        speed = getMap().hardLimits.filterSpeed(angle, speed);
+        // If we're at the soft limits, take it slow
+        speed = getMap().softLimits.scaleSpeed(angle, speed, SLOW_DOWN_COEF);
 
         return speed;
     }
@@ -139,7 +140,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
     @Override
     public void safeState() {
-        getData().setPoint = 0;
+        getData().setSetpoint(0.0);
     }
 
     @Override
@@ -147,10 +148,11 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         super.periodic();
 
         if (level != ArmPresets.OFF) {
-            getData().setPoint = pid.calculate(getArmAngle(), new State(level.getAngle(), 0));
-            getData().setPoint += getMap().armFeedforward.calculate(
-                    Units.Degrees.of(pid.getSetpoint().position - 3.4).in(Units.Radians),
+            double setpoint = pid.calculate(getArmAngle(), new State(level.getAngle(), 0));
+            setpoint += getMap().armFeedforward.calculate(
+                    Units.Degrees.of(pid.getSetpoint().position).in(Units.Radians),
                     Units.DegreesPerSecond.of(pid.getSetpoint().velocity).in(Units.RadiansPerSecond));
+            getData().setSetpoint(setpoint);
         }
         Logger.recordOutput("armPreset", level);
     }
