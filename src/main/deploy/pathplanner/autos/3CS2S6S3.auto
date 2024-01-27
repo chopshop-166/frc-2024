@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.38,
+      "x": 1.4,
       "y": 5.55
     },
-    "rotation": 0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -40,10 +40,34 @@
           "data": {
             "name": "Shoot Game Piece"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 6 - CS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker from 6 - CS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
         }
       ]
     }
   },
-  "folder": "2 Piece - Center Start",
+  "folder": "3 Piece - Center Start",
   "choreoAuto": false
 }

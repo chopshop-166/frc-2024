@@ -1,0 +1,97 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.65,
+      "y": 6.7
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 3 - TS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker from 3 - TS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 4 - TS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker from 4 - TS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 6 - TS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker from 6 - TS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4 Piece - Top Start",
+  "choreoAuto": false
+}

@@ -3,28 +3,28 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.32,
-        "y": 5.51
+        "x": 0.65,
+        "y": 4.35
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2906286353538716,
-        "y": 5.5246856823230654
+        "x": 1.5735854011958479,
+        "y": 4.082619685811823
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.309243119380694,
-        "y": 5.507130871149041
+        "x": 2.263812470379861,
+        "y": 4.097305368134887
       },
       "prevControl": {
-        "x": 1.3094769678253282,
-        "y": 5.507925955860798
+        "x": 1.8379276830110016,
+        "y": 4.126676732781016
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     }
   ],
@@ -32,18 +32,18 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Scoring Locations",
+  "folder": "Pickups - Bottom Speaker",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.65,
+        "y": 5.75
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.0100350647928495,
+        "y": 7.063813197393838
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.65,
+        "y": 6.7
+      },
+      "prevControl": {
+        "x": 3.4386670562249897,
+        "y": 5.712730423671939
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Scoring Locations - Top Speaker",
+  "previewStartingState": null,
+  "useDefaultConstraints": true
+}

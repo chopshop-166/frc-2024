@@ -11,6 +11,7 @@ import com.chopshop166.chopshoplib.RobotUtils;
 import com.chopshop166.chopshoplib.commands.CommandRobot;
 import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -48,6 +49,9 @@ public class Robot extends CommandRobot {
     public Command noAuto = Commands.none();
 
     private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+    private final SendableChooser<Command> TwoPieceCenterMain = AutoBuilder.buildAutoChooser("2CS2S1");
+    private final SendableChooser<Command> ThreePieceCenterMain = AutoBuilder.buildAutoChooser("3CS6S2S3");
+    private final SendableChooser<Command> FourPieceCenterMain = AutoBuilder.buildAutoChooser("4CS1S2S3S3");
 
     @Override
     public void robotInit() {
@@ -79,6 +83,16 @@ public class Robot extends CommandRobot {
         // be added.
         Logger.start();
 
+        // Register named commands. These are all set as the reset gyro command, please
+        // input actual commands once all subsystems are merged with main. Do this
+        // correctly, as the names are already in PathPlanner. We should probably make
+        // sequences in this code if needed (like adding arm rotation to shoot) so that
+        // PathPlanner doesn't get too complicated. You might need to add wait
+        // commands into PathPlanner.
+        NamedCommands.registerCommand("Intake Game Piece", drive.resetGyroCommand());
+        NamedCommands.registerCommand("Feed Shooter", drive.resetGyroCommand());
+        NamedCommands.registerCommand("Shoot Game Piece", drive.resetGyroCommand());
+        NamedCommands.registerCommand("Shoot Game Piece In Amp", drive.resetGyroCommand());
     }
 
     @Override
@@ -126,6 +140,10 @@ public class Robot extends CommandRobot {
         Shuffleboard.getTab("Pit Test").add("Back Left", drive.moveInDirection(-1,
                 1, 3)).withPosition(0, 2);
         Shuffleboard.getTab("AutoBuilder").add("Auto", autoChooser);
+        Shuffleboard.getTab("AutoBuilder").add("TwoPieceMain", TwoPieceCenterMain);
+        Shuffleboard.getTab("AutoBuilder").add("ThreePieceMain", ThreePieceCenterMain);
+        Shuffleboard.getTab("AutoBuilder").add("FourPieceMain", FourPieceCenterMain);
+
     }
 
     /**

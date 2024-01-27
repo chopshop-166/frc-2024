@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.38,
-      "y": 5.55
+      "x": 0.65,
+      "y": 4.35
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup 2 - CS"
+            "pathName": "Pickup 1 - BS"
           }
         },
         {
@@ -32,7 +32,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker from 2 - CS"
+            "pathName": "Speaker from 1 - BS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 7 - BS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker from 7 - BS"
           }
         },
         {
@@ -44,6 +68,6 @@
       ]
     }
   },
-  "folder": "2 Piece - Center Start",
+  "folder": "3 Piece - Bottom Start",
   "choreoAuto": false
 }
