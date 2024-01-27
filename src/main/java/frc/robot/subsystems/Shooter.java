@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.chopshop166.chopshoplib.PersistenceCheck;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -8,20 +9,14 @@ import frc.robot.maps.subsystems.ShooterMap.Data;
 
 public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
 
-    private final double RELEASE_SPEED = 1.00;
-    private final double AMP_SPEED = .50;
-    private final double SLOW_SPEED = .25;
-    private final double HALF_SPEED = .50;
-    private final double THREE_QUARTER = .75;
-
     public enum Speeds {
-        FULL_SPEED(1.00),
+        FULL_SPEED(4500),
 
-        HALF_SPEED(.50),
+        HALF_SPEED(2250),
 
-        SLOW_SPEED(.25),
+        SLOW_SPEED(1125),
 
-        THREE_QUARTER_SPEED(.75),
+        THREE_QUARTER_SPEED(3375),
 
         OFF(0);
 
@@ -41,9 +36,14 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
     }
 
     public Command setSpeed(Speeds speed) {
-        return runOnce(() -> {
-            getData().motor.setpoint = speed.getSpeed();
-        });
+        PersistenceCheck speedPersistenceCheck = new PersistenceCheck(5,
+                () -> Math.abs(getData().velocityRotationsPerSec) > speed.getSpeed());
+        return run(
+                () -> {
+                    getData().setPoint = speed.getSpeed();
+
+                }).until(speedPersistenceCheck);
+
     }
 
     @Override
