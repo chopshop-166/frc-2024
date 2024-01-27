@@ -18,11 +18,12 @@ public class CommandSequences {
     Led led;
     ArmRotate armRotate;
 
-    public CommandSequences(Drive drive, Intake intake, Shooter shooter, Led led) {
+    public CommandSequences(Drive drive, Intake intake, Shooter shooter, Led led, ArmRotate armRotate) {
         this.drive = drive;
         this.intake = intake;
         this.shooter = shooter;
         this.led = led;
+        this.armRotate = armRotate;
     }
 
     // make sequences for intake and shooter.

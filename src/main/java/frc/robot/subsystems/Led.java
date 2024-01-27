@@ -4,7 +4,6 @@ import com.chopshop166.chopshoplib.leds.LEDSubsystem;
 import com.chopshop166.chopshoplib.leds.patterns.AlliancePattern;
 import com.chopshop166.chopshoplib.leds.patterns.ColdFirePattern;
 import com.chopshop166.chopshoplib.leds.patterns.FlashPattern;
-import com.chopshop166.chopshoplib.leds.patterns.SolidColorPattern;
 import com.chopshop166.chopshoplib.leds.patterns.SpinPattern;
 import com.chopshop166.chopshoplib.maps.LedMap;
 
