@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.maps.Henry;
 import frc.robot.maps.RobotMap;
 import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.Drive;
@@ -28,7 +29,7 @@ import frc.robot.subsystems.Shooter;
 
 public class Robot extends CommandRobot {
 
-    private RobotMap map = getRobotMap(RobotMap.class, new RobotMap());
+    private RobotMap map = new Henry();
     private ButtonXboxController driveController = new ButtonXboxController(0);
     private ButtonXboxController copilotController = new ButtonXboxController(1);
 
@@ -88,9 +89,10 @@ public class Robot extends CommandRobot {
                 .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
                         () -> -driveController.getRightX()));
         copilotController.back().onTrue(intake.safeStateCmd());
-        copilotController.a().onTrue(commandSequences.intake());
+        // copilotController.a().onTrue(commandSequences.intake());
+        copilotController.a().whileTrue(intake.spinIn());
         copilotController.b().onTrue(commandSequences.shooter());
-        copilotController.x().onTrue(intake.spinOut());
+        copilotController.x().whileTrue(intake.spinOut());
         copilotController.povUp().whileTrue(commandSequences.moveToAmp());
         copilotController.povDown().whileTrue(commandSequences.moveToIntake());
         copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
