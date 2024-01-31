@@ -133,9 +133,9 @@ public class Henry extends RobotMap {
     // leftMotor.getMotorController().setSmartCurrentLimit(40);
     // rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
     // rightMotor.getMotorController().setSmartCurrentLimit(40);
-    // CSEncoder encoder = new CSEncoder(5, 6, true);
+    // CSEncoder encoder = new CSEncoder(6, 7, true);
     // encoder.setDistancePerPulse(360.0 / 2048.0 / 2);
-    // CSDutyCycleEncoder absEncoder = new CSDutyCycleEncoder(7);
+    // CSDutyCycleEncoder absEncoder = new CSDutyCycleEncoder(8);
     // absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
     // absEncoder.setDistancePerRotation(-360 / 2);
     // // Adjust this to move the encoder zero point to the retracted position
@@ -162,7 +162,9 @@ public class Henry extends RobotMap {
     public IntakeMap getIntakeMap() {
         CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
         topRoller.getMotorController().setInverted(true);
-        CSDigitalInput sensor = new CSDigitalInput(8);
+        topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
+        CSDigitalInput sensor = new CSDigitalInput(9);
+        sensor.setInverted(true);
         return new IntakeMap(topRoller, sensor::get);
     }
 

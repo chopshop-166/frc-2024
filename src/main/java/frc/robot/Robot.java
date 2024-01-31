@@ -90,9 +90,8 @@ public class Robot extends CommandRobot {
                 .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
                         () -> -driveController.getRightX()));
         copilotController.back().onTrue(intake.safeStateCmd());
-        // copilotController.a().onTrue(commandSequences.intake());
-        copilotController.a().whileTrue(intake.spinIn());
-        // copilotController.b().onTrue(commandSequences.shooter());
+        copilotController.a().onTrue(commandSequences.intake());
+        copilotController.b().onTrue(commandSequences.shooter());
         copilotController.b().onTrue(shooter.setSpeed(Speeds.SLOW_SPEED));
         copilotController.y().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.x().whileTrue(intake.spinOut());
