@@ -84,6 +84,7 @@ public class Robot extends CommandRobot {
         // Magic numbers for auto testing
         driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
         driveController.a()
+
                 .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
                         () -> -driveController.getRightX()));
         copilotController.back().onTrue(intake.safeStateCmd());
@@ -93,6 +94,7 @@ public class Robot extends CommandRobot {
         copilotController.povUp().whileTrue(commandSequences.moveToAmp());
         copilotController.povDown().whileTrue(commandSequences.moveToIntake());
         copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
+
     }
 
     @Override
@@ -132,8 +134,19 @@ public class Robot extends CommandRobot {
     @Override
     public void setDefaultCommands() {
         drive.setDefaultCommand(
-                drive.drive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
-                        () -> -driveController.getRightX()));
+                drive.drive(() -> {
+                    return scaleDrive(-driveController.getLeftX());
+                }, () -> {
+                    return scaleDrive(-driveController.getLeftY());
+                }, () -> {
+                    return scaleDrive(-driveController.getRightX());
+                }));
         armRotate.setDefaultCommand(armRotate.move(RobotUtils.deadbandAxis(.1, () -> -copilotController.getLeftY())));
+    }
+
+    public double scaleDrive(double speed) {
+        double trigger = driveController.getTriggers();
+        double modifier = trigger / 4.0 + 0.75;
+        return modifier * speed;
     }
 }
