@@ -19,6 +19,7 @@ import com.chopshop166.chopshoplib.states.PIDValues;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
@@ -154,7 +155,12 @@ public class Henry extends RobotMap {
     public ShooterMap getShooterMap() {
         CSSparkMax topWheels = new CSSparkMax(11, MotorType.kBrushless);
         CSSparkMax bottomWheels = new CSSparkMax(10, MotorType.kBrushless);
-        bottomWheels.getMotorController().follow(topWheels.getMotorController(), true);
+        bottomWheels.getMotorController().follow(topWheels.getMotorController(), false);
+        topWheels.setControlType(ControlType.kVelocity);
+        topWheels.getPidController().setP(0);
+        topWheels.getPidController().setI(0);
+        topWheels.getPidController().setD(0);
+        topWheels.getPidController().setFF(0.002);
         return new ShooterMap(topWheels);
     }
 
