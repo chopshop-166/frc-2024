@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.ArmRotate.ArmPresets;
@@ -34,6 +36,11 @@ public class CommandSequences {
     public Command shooter() {
         return led.shooterSpinning().andThen(shooter.setSpeed(Speeds.FULL_SPEED), intake.feedShooter(),
                 led.colorAlliance());
+    }
+
+    public Command feedShoot() {
+        return shooter.setSpeed(Speeds.THREE_QUARTER_SPEED).andThen(waitSeconds(.5), intake.feedShooter(),
+                shooter.setSpeed(Speeds.OFF));
     }
 
     public Command moveToIntake() {

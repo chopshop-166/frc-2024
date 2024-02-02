@@ -91,15 +91,22 @@ public class Robot extends CommandRobot {
                         () -> -driveController.getRightX()));
         copilotController.back().onTrue(intake.safeStateCmd());
         copilotController.a().onTrue(commandSequences.intake());
-        copilotController.b().onTrue(commandSequences.shooter());
-        copilotController.b().onTrue(shooter.setSpeed(Speeds.SLOW_SPEED));
+        // copilotController.b().onTrue(commandSequences.shooter());
+        copilotController.b().onTrue(commandSequences.feedShoot());
+        // copilotController.povUp().onTrue(shooter.setSpeed(Speeds.FULL_SPEED));
+        // copilotController.povRight().onTrue(shooter.setSpeed(Speeds.HALF_SPEED));
+        // copilotController.povDown().onTrue(shooter.setSpeed(Speeds.SLOW_SPEED));
+        // copilotController.povLeft().onTrue(shooter.setSpeed(Speeds.THREE_QUARTER_SPEED));
+        copilotController.povRight().onTrue(shooter.setSpeed(Speeds.SIXTY));
+        copilotController.povUp().onTrue(shooter.setSpeed(Speeds.SIXTY_FIVE));
+        copilotController.povDown().onTrue(shooter.setSpeed(Speeds.FIFTY_FIVE));
+        copilotController.povLeft().onTrue(shooter.setSpeed(Speeds.THREE_QUARTER_SPEED));
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.y().onTrue(intake.feedShooter());
         copilotController.x().whileTrue(intake.spinOut());
-        copilotController.povUp().whileTrue(commandSequences.moveToAmp());
-        copilotController.povDown().whileTrue(commandSequences.moveToIntake());
-        copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
-
+        // copilotController.povUp().whileTrue(commandSequences.moveToAmp());
+        // copilotController.povDown().whileTrue(commandSequences.moveToIntake());
+        // copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
     }
 
     @Override
