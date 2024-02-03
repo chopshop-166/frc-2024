@@ -33,13 +33,9 @@ public class CommandSequences {
         return led.intakeSpinning().andThen(intake.intakeGamepiece(), led.grabbedPiece());
     }
 
-    public Command shooter() {
-        return led.shooterSpinning().andThen(shooter.setSpeed(Speeds.FULL_SPEED), intake.feedShooter(),
-                led.colorAlliance());
-    }
-
     public Command feedShoot() {
-        return shooter.setSpeed(Speeds.THREE_QUARTER_SPEED).andThen(waitSeconds(.5), intake.feedShooter(),
+        return shooter.setSpeed(Speeds.THREE_QUARTER_SPEED).andThen(led.shooterAtSpeed(), waitSeconds(.5),
+                intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF));
     }
 
@@ -53,7 +49,7 @@ public class CommandSequences {
 
     public Command scoreAmp() {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_AMP), led.atPreset(), led.shooterSpinning(),
-                shooter.setSpeed(Speeds.SLOW_SPEED), intake.feedShooter(),
+                shooter.setSpeed(Speeds.SLOW_SPEED), led.shooterAtSpeed(), intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF), led.colorAlliance());
     }
 
@@ -63,7 +59,8 @@ public class CommandSequences {
 
     public Command scoreSpeaker() {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset(),
-                led.shooterSpinning(), shooter.setSpeed(Speeds.THREE_QUARTER_SPEED), intake.feedShooter(),
+                led.shooterSpinning(), shooter.setSpeed(Speeds.THREE_QUARTER_SPEED), led.shooterAtSpeed(),
+                intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF), led.colorAlliance());
     }
 

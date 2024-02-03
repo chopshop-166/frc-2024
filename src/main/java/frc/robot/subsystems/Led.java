@@ -39,6 +39,10 @@ public class Led extends LEDSubsystem {
         return setPattern("Shooter", new SpinPattern(new Color(57, 32, 144)), "Spinning");
     }
 
+    public Command shooterAtSpeed() {
+        return setPattern("Shooter", new FlashPattern(new Color(57, 32, 144), .5), "At Speed");
+    }
+
     public Command grabbedPiece() {
         return setPattern("Intake", Color.kGreen, "Green");
     }
