@@ -31,7 +31,7 @@ import frc.robot.subsystems.Shooter.Speeds;
 
 public class Robot extends CommandRobot {
 
-    private RobotMap map = new Henry();
+    private RobotMap map = getRobotMap(RobotMap.class, new RobotMap());
     private ButtonXboxController driveController = new ButtonXboxController(0);
     private ButtonXboxController copilotController = new ButtonXboxController(1);
 
@@ -94,21 +94,15 @@ public class Robot extends CommandRobot {
         driveController.y().onTrue(led.coloralliance());
 
         copilotController.back().onTrue(intake.safeStateCmd());
-        copilotController.a().onTrue(commandSequences.intake());
-        // copilotController.b().onTrue(commandSequences.shooter());
-        copilotController.b().onTrue(commandSequences.feedShoot());
-        // copilotController.povUp().onTrue(shooter.setSpeed(Speeds.FULL_SPEED));
-        copilotController.povUp().whileTrue(armRotate.moveTo(ArmPresets.SCORE_AMP));
-        // copilotController.povRight().onTrue(shooter.setSpeed(Speeds.HALF_SPEED));
-        copilotController.povRight().whileTrue(armRotate.moveTo(ArmPresets.INTAKE));
-        copilotController.povDown().onTrue(shooter.setSpeed(Speeds.SLOW_SPEED));
-        copilotController.povLeft().onTrue(shooter.setSpeed(Speeds.THREE_QUARTER_SPEED));
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
+        copilotController.a().onTrue(commandSequences.intake());
+        copilotController.b().onTrue(commandSequences.shooter());
         copilotController.y().onTrue(intake.feedShooter());
         copilotController.x().whileTrue(intake.spinOut());
-        // copilotController.povUp().whileTrue(commandSequences.moveToAmp());
-        // copilotController.povDown().whileTrue(commandSequences.moveToIntake());
-        // copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
+        copilotController.povUp().whileTrue(commandSequences.moveToAmp());
+        copilotController.povDown().whileTrue(commandSequences.moveToIntake());
+        copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
+        copilotController.povLeft().whileTrue(commandSequences.stow());
     }
 
     @Override
