@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.chopshop166.chopshoplib.PersistenceCheck;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
+import com.chopshop166.chopshoplib.motors.Modifier;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,9 +29,12 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     final double MANUAL_LOWER_SPEED_COEF = 0.1;
     final double SLOW_DOWN_COEF = 0.5;
     private Constraints rotateConstraints = new Constraints(150, 200);
+    ArmPresets level = ArmPresets.OFF;
 
     public enum ArmPresets {
         INTAKE(1),
+
+        OFF(Double.NaN),
 
         SCORE_AMP(90),
 
@@ -67,11 +71,16 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
     // Manual rotation control
     public Command move(DoubleSupplier rotationSpeed) {
+        Modifier deadband = Modifier.deadband(.1);
+
         return run(() -> {
-            double speed = rotationSpeed.getAsDouble();
+            double speed = deadband.applyAsDouble(rotationSpeed.getAsDouble());
             double speedCoef = RAISE_SPEED;
             if (speed < 0) {
                 speedCoef = MANUAL_LOWER_SPEED_COEF;
+            }
+            if (Math.abs(speed) > 0) {
+                level = ArmPresets.OFF;
             }
             getData().setPoint = limits(speed * speedCoef);
         });
@@ -86,11 +95,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
             Logger.recordOutput("State", "starting");
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
         }).onExecute(() -> {
-            getData().setPoint = pid.calculate(getArmAngle(), new State(level.getAngle(), 0));
             Logger.recordOutput("Pid setpoint", getData().setPoint);
-            getData().setPoint += getMap().armFeedforward.calculate(
-                    Units.DegreesPerSecond.of(pid.getSetpoint().position).in(Units.RadiansPerSecond),
-                    Units.DegreesPerSecond.of(pid.getSetpoint().velocity).in(Units.RadiansPerSecond));
             Logger.recordOutput("RotationVelocity", pid.getSetpoint().velocity);
             Logger.recordOutput("Pid at goal", pid.atGoal());
             Logger.recordOutput("State", "running");
@@ -130,6 +135,13 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     @Override
     public void periodic() {
         super.periodic();
+
+        if (level != ArmPresets.OFF) {
+            getData().setPoint = pid.calculate(getArmAngle(), new State(level.getAngle(), 0));
+            getData().setPoint += getMap().armFeedforward.calculate(
+                    Units.DegreesPerSecond.of(pid.getSetpoint().position).in(Units.RadiansPerSecond),
+                    Units.DegreesPerSecond.of(pid.getSetpoint().velocity).in(Units.RadiansPerSecond));
+        }
     }
 
 }
