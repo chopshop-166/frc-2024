@@ -89,10 +89,9 @@ public class Robot extends CommandRobot {
         // sequences in this code if needed (like adding arm rotation to shoot) so that
         // PathPlanner doesn't get too complicated. You might need to add wait
         // commands into PathPlanner.
-        NamedCommands.registerCommand("Intake Game Piece", drive.resetGyroCommand());
-        NamedCommands.registerCommand("Feed Shooter", drive.resetGyroCommand());
-        NamedCommands.registerCommand("Shoot Game Piece", drive.resetGyroCommand());
-        NamedCommands.registerCommand("Shoot Game Piece In Amp", drive.resetGyroCommand());
+        NamedCommands.registerCommand("Intake Game Piece", intake.intakeGamepiece());
+        NamedCommands.registerCommand("Shoot Game Piece", commandSequences.scoreSpeaker());
+        NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.scoreAmp());
     }
 
     @Override
@@ -105,17 +104,16 @@ public class Robot extends CommandRobot {
                 .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
                         () -> -driveController.getRightX()));
 
-        driveController.y().onTrue(led.coloralliance());
+        driveController.y().onTrue(led.flash());
 
         copilotController.back().onTrue(intake.safeStateCmd());
-        // copilotController.a().onTrue(commandSequences.intake());
-        copilotController.a().whileTrue(intake.spinIn());
+        copilotController.a().onTrue(commandSequences.intake());
         copilotController.b().onTrue(commandSequences.shooter());
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.x().whileTrue(intake.spinOut());
-        // copilotController.povUp().whileTrue(commandSequences.moveToAmp());
-        // copilotController.povDown().whileTrue(commandSequences.moveToIntake());
-        // copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
+        copilotController.povUp().whileTrue(commandSequences.scoreAmp());
+        copilotController.povDown().whileTrue(commandSequences.moveToIntake());
+        copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
     }
 
     @Override

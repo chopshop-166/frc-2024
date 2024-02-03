@@ -12,15 +12,33 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Pickup 1 - CS"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Speaker - CS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
           }
         },
         {
@@ -30,9 +48,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Speaker - CS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
           }
         },
         {
@@ -42,9 +72,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Speaker - CS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
           }
         }
       ]

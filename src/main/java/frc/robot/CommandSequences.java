@@ -30,7 +30,8 @@ public class CommandSequences {
     // make sequences for intake and shooter.
 
     public Command intake() {
-        return led.intakeSpinning().andThen(intake.intakeGamepiece(), led.grabbedPiece());
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.INTAKE), led.atPreset(), led.intakeSpinning(),
+                intake.intakeGamepiece(), led.grabbedPiece());
     }
 
     public Command shooter() {
