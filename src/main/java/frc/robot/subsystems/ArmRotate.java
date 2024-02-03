@@ -92,32 +92,18 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         // value is reached, then the command will end.
         PersistenceCheck setPointPersistenceCheck = new PersistenceCheck(30, pid::atGoal);
         return cmd("Move To Set Angle").onInitialize(() -> {
-            Logger.recordOutput("State", "starting");
+            this.level = level;
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
         }).onExecute(() -> {
-            Logger.recordOutput("Pid setpoint", getData().setPoint);
-            Logger.recordOutput("RotationVelocity", pid.getSetpoint().velocity);
             Logger.recordOutput("Pid at goal", pid.atGoal());
-            Logger.recordOutput("State", "running");
-        }).runsUntil(setPointPersistenceCheck).onEnd(() -> {
-            getData().setPoint = 0;
-            Logger.recordOutput("State", "Finished");
-        });
+        }).runsUntil(setPointPersistenceCheck);
     }
 
     private double limits(double speed) {
-        Logger.recordOutput("speed", speed);
-        if (getArmAngle() < 0 && speed < 0) {
-            return 0;
-        }
-        if ((getArmAngle() > getMap().hardMaxAngle && speed > 0) ||
-                (getArmAngle() < getMap().hardMinAngle && speed < 0)) {
-            return 0;
-        }
-        if ((getArmAngle() > getMap().softMaxAngle && speed > 0) ||
-                (getArmAngle() < getMap().softMinAngle && speed < 0)) {
-            return (speed * SLOW_DOWN_COEF);
-        }
+
+        speed = getMap().hardLimits.filterSpeed(getArmAngle(), speed);
+
+        speed = getMap().softLimits.scaleSpeed(getArmAngle(), speed, SLOW_DOWN_COEF);
 
         return speed;
     }
@@ -142,6 +128,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
                     Units.DegreesPerSecond.of(pid.getSetpoint().position).in(Units.RadiansPerSecond),
                     Units.DegreesPerSecond.of(pid.getSetpoint().velocity).in(Units.RadiansPerSecond));
         }
+        Logger.recordOutput("armPreset", level);
     }
 
 }

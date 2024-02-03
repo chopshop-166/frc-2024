@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.chopshop166.chopshoplib.ValueRange;
 import com.chopshop166.chopshoplib.digital.CSDigitalInput;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
@@ -149,8 +150,8 @@ public class Henry extends RobotMap {
         // Kv 3.74
         ArmFeedforward feedForward = new ArmFeedforward(0, 0.06, 0.3, 0);
 
-        return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, 75, 20,
-                90, 0.5);
+        return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, new ValueRange(.5, 90),
+                new ValueRange(20, 75));
     }
 
     @Override
