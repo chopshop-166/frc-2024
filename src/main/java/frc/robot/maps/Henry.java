@@ -10,7 +10,7 @@ import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
 import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
-import com.chopshop166.chopshoplib.sensors.CSDutyCycleEncoder;
+import com.chopshop166.chopshoplib.sensors.CSDutyCycleEncoderLocal;
 import com.chopshop166.chopshoplib.sensors.CSEncoder;
 import com.chopshop166.chopshoplib.sensors.CSFusedEncoder;
 import com.chopshop166.chopshoplib.sensors.CtreEncoder;
@@ -124,32 +124,32 @@ public class Henry extends RobotMap {
 
     }
 
-    // @Override
-    // public ArmRotateMap getArmRotateMap() {
-    // CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
-    // CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
-    // rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
-    // leftMotor.getMotorController().setInverted(false);
-    // leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
-    // leftMotor.getMotorController().setSmartCurrentLimit(40);
-    // rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
-    // rightMotor.getMotorController().setSmartCurrentLimit(40);
-    // CSEncoder encoder = new CSEncoder(6, 7, true);
-    // encoder.setDistancePerPulse(360.0 / 2048.0 / 2);
-    // CSDutyCycleEncoder absEncoder = new CSDutyCycleEncoder(8);
-    // absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
-    // absEncoder.setDistancePerRotation(-360 / 2);
-    // // Adjust this to move the encoder zero point to the retracted position
-    // absEncoder.setPositionOffset(0);
-    // CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
-    // ProfiledPIDController pid = new ProfiledPIDController(0.0, 0.0, 0.0, new
-    // Constraints(45, 2025));
-    // pid.setTolerance(0);
-    // ArmFeedforward feedForward = new ArmFeedforward(0, 0.39, 3.74, 0);
+    @Override
+    public ArmRotateMap getArmRotateMap() {
+        CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
+        CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
+        rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
+        leftMotor.getMotorController().setInverted(false);
+        leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
+        leftMotor.getMotorController().setSmartCurrentLimit(40);
+        rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
+        rightMotor.getMotorController().setSmartCurrentLimit(40);
+        CSEncoder encoder = new CSEncoder(6, 7, false);
+        encoder.setDistancePerPulse(360.0 / 2048.0 / 2);
+        CSDutyCycleEncoderLocal absEncoder = new CSDutyCycleEncoderLocal(8);
+        absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
+        absEncoder.setDistancePerRotation(-360 / 2);
+        // Adjust this to move the encoder zero point to the retracted position
+        absEncoder.setPositionOffset(1.4);
+        CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
+        ProfiledPIDController pid = new ProfiledPIDController(0.005, 0.0, 0.0, new Constraints(90, 500));
+        pid.setTolerance(1);
+        // Kv 3.74
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.06, 0.3, 0);
 
-    // return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, 100, 0,
-    // 120, 0);
-    // }
+        return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, 75, 20,
+                90, 0.5);
+    }
 
     @Override
     public ShooterMap getShooterMap() {

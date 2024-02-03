@@ -8,8 +8,12 @@ import com.chopshop166.chopshoplib.PersistenceCheck;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Unit;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.maps.subsystems.ArmRotateMap;
 import frc.robot.maps.subsystems.ArmRotateMap.Data;
@@ -20,18 +24,19 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
     final ProfiledPIDController pid;
     // Set to zero until able to test
-    final double RAISE_SPEED = 0.0;
-    final double MANUAL_LOWER_SPEED_COEF = 0.0;
-    final double SLOW_DOWN_COEF = 0.0;
-    final double DESCEND_SPEED = -0.0;
+    final double RAISE_SPEED = .25;
+    final double MANUAL_LOWER_SPEED_COEF = 0.1;
+    final double SLOW_DOWN_COEF = 0.5;
     private Constraints rotateConstraints = new Constraints(150, 200);
 
     public enum ArmPresets {
         INTAKE(0),
 
-        SCORE_AMP(0),
+        SCORE_AMP(90),
 
-        SCORE_SPEAKER_SUBWOOFER(0);
+        SCORE_SPEAKER_SUBWOOFER(10.5);
+
+        // podium angle maybe: 33.4
 
         private double absoluteAngle;
 
@@ -74,24 +79,24 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     public Command moveTo(ArmPresets level) {
         // When executed the arm will move. The encoder will update until the desired
         // value is reached, then the command will end.
-        PersistenceCheck setPointPersistenceCheck = new PersistenceCheck(20, pid::atGoal);
+        PersistenceCheck setPointPersistenceCheck = new PersistenceCheck(30, pid::atGoal);
         return cmd("Move To Set Angle").onInitialize(() -> {
+            Logger.recordOutput("State", "starting");
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
         }).onExecute(() -> {
             getData().setPoint = pid.calculate(getArmAngle(), new State(level.getAngle(), 0));
-            getData().setPoint += getMap().armFeedforward.calculate(pid.getSetpoint().position,
-                    pid.getSetpoint().velocity);
-
+            Logger.recordOutput("Pid setpoint", getData().setPoint);
+            getData().setPoint += getMap().armFeedforward.calculate(
+                    Units.DegreesPerSecond.of(pid.getSetpoint().position).in(Units.RadiansPerSecond),
+                    Units.DegreesPerSecond.of(pid.getSetpoint().velocity).in(Units.RadiansPerSecond));
+            Logger.recordOutput("RotationVelocity", pid.getSetpoint().velocity);
+            Logger.recordOutput("Pid at goal", pid.atGoal());
+            Logger.recordOutput("State", "running");
         }).runsUntil(setPointPersistenceCheck).onEnd(() -> {
             getData().setPoint = 0;
+            Logger.recordOutput("State", "Finished");
         });
     }
-
-    /*
-     * Need to input:
-     * Limits
-     * 
-     */
 
     private double limits(double speed) {
         Logger.recordOutput("speed", speed);
@@ -100,7 +105,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         }
         if ((getArmAngle() > getMap().hardMaxAngle && speed > 0) ||
                 (getArmAngle() < getMap().hardMinAngle && speed < 0)) {
-            return getData().setPoint = 0;
+            return 0;
         }
         if ((getArmAngle() > getMap().softMaxAngle && speed > 0) ||
                 (getArmAngle() < getMap().softMinAngle && speed < 0)) {

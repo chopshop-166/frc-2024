@@ -26,6 +26,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ArmRotate.ArmPresets;
 import frc.robot.subsystems.Shooter.Speeds;
 
 public class Robot extends CommandRobot {
@@ -94,12 +95,9 @@ public class Robot extends CommandRobot {
         // copilotController.b().onTrue(commandSequences.shooter());
         copilotController.b().onTrue(commandSequences.feedShoot());
         // copilotController.povUp().onTrue(shooter.setSpeed(Speeds.FULL_SPEED));
-        // copilotController.povRight().onTrue(shooter.setSpeed(Speeds.HALF_SPEED));
-        // copilotController.povDown().onTrue(shooter.setSpeed(Speeds.SLOW_SPEED));
-        // copilotController.povLeft().onTrue(shooter.setSpeed(Speeds.THREE_QUARTER_SPEED));
-        copilotController.povRight().onTrue(shooter.setSpeed(Speeds.SIXTY));
-        copilotController.povUp().onTrue(shooter.setSpeed(Speeds.SIXTY_FIVE));
-        copilotController.povDown().onTrue(shooter.setSpeed(Speeds.FIFTY_FIVE));
+        copilotController.povUp().whileTrue(armRotate.moveTo(ArmPresets.SCORE_AMP));
+        copilotController.povRight().onTrue(shooter.setSpeed(Speeds.HALF_SPEED));
+        copilotController.povDown().onTrue(shooter.setSpeed(Speeds.SLOW_SPEED));
         copilotController.povLeft().onTrue(shooter.setSpeed(Speeds.THREE_QUARTER_SPEED));
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.y().onTrue(intake.feedShooter());
