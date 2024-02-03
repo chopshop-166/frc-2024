@@ -4,12 +4,16 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.chopshop166.chopshoplib.ValueRange;
+import com.chopshop166.chopshoplib.digital.CSDigitalInput;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
+import com.chopshop166.chopshoplib.leds.SegmentConfig;
+import com.chopshop166.chopshoplib.maps.LedMap;
 import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
-import com.chopshop166.chopshoplib.sensors.CSDutyCycleEncoder;
+import com.chopshop166.chopshoplib.sensors.CSDutyCycleEncoderLocal;
 import com.chopshop166.chopshoplib.sensors.CSEncoder;
 import com.chopshop166.chopshoplib.sensors.CSFusedEncoder;
 import com.chopshop166.chopshoplib.sensors.CtreEncoder;
@@ -18,6 +22,7 @@ import com.chopshop166.chopshoplib.states.PIDValues;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
@@ -33,7 +38,7 @@ import frc.robot.maps.subsystems.ArmRotateMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 
-@RobotMapFor("Henry")
+@RobotMapFor("00:80:2F:17:F7:AF")
 public class Henry extends RobotMap {
 
     @Override
@@ -132,35 +137,57 @@ public class Henry extends RobotMap {
         leftMotor.getMotorController().setSmartCurrentLimit(40);
         rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
         rightMotor.getMotorController().setSmartCurrentLimit(40);
-        CSEncoder encoder = new CSEncoder(2, 3, true);
+        CSEncoder encoder = new CSEncoder(6, 7, false);
         encoder.setDistancePerPulse(360.0 / 2048.0 / 2);
-        CSDutyCycleEncoder absEncoder = new CSDutyCycleEncoder(4);
+        CSDutyCycleEncoderLocal absEncoder = new CSDutyCycleEncoderLocal(8);
         absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
         absEncoder.setDistancePerRotation(-360 / 2);
         // Adjust this to move the encoder zero point to the retracted position
-        absEncoder.setPositionOffset(0);
+        absEncoder.setPositionOffset(1.4);
         CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
-        ProfiledPIDController pid = new ProfiledPIDController(0.0, 0.0, 0.0, new Constraints(45, 2025));
-        pid.setTolerance(0);
-        ArmFeedforward feedForward = new ArmFeedforward(0, 0.39, 3.74, 0);
+        ProfiledPIDController pid = new ProfiledPIDController(0.005, 0.0, 0.0, new Constraints(90, 500));
+        pid.setTolerance(2);
+        // Kv 3.74
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.045, 0.3, 0);
 
-        return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, 100, 0, 120, 0);
+        return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, new ValueRange(.5, 90),
+                new ValueRange(20, 75));
     }
 
     @Override
     public ShooterMap getShooterMap() {
-        CSSparkMax topWheels = new CSSparkMax(10, MotorType.kBrushless);
-        CSSparkMax bottomWheels = new CSSparkMax(12, MotorType.kBrushless);
-        bottomWheels.getMotorController().follow(topWheels.getMotorController(), true);
-        return new ShooterMap(topWheels);
+        CSSparkMax topWheels = new CSSparkMax(11, MotorType.kBrushless);
+        CSSparkMax bottomWheels = new CSSparkMax(10, MotorType.kBrushless);
+        topWheels.setControlType(ControlType.kVelocity);
+        topWheels.getPidController().setP(0.0002);
+        topWheels.getPidController().setI(0);
+        topWheels.getPidController().setD(0);
+        topWheels.getPidController().setFF(0.00018);
+        bottomWheels.setControlType(ControlType.kVelocity);
+        bottomWheels.getPidController().setP(0.0002);
+        bottomWheels.getPidController().setI(0);
+        bottomWheels.getPidController().setD(0);
+        bottomWheels.getPidController().setFF(0.00018);
+        return new ShooterMap(topWheels, bottomWheels);
     }
 
     @Override
     public IntakeMap getIntakeMap() {
-        CSSparkMax topRoller = new CSSparkMax(11, MotorType.kBrushless);
-        CSSparkMax bottomRoller = new CSSparkMax(9, MotorType.kBrushless);
-        bottomRoller.getMotorController().follow(topRoller.getMotorController(), true);
-        return new IntakeMap(topRoller, () -> false);
+        CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
+        topRoller.getMotorController().setInverted(true);
+        topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
+        CSDigitalInput sensor = new CSDigitalInput(9);
+        sensor.setInverted(true);
+        return new IntakeMap(topRoller, sensor::get);
+    }
+
+    @Override
+    public LedMap getLedMap() {
+        var result = new LedMap(0, 59);
+        var leds = result.ledBuffer;
+
+        SegmentConfig underglow = leds.segment(59).tags("underglow");
+        return result;
     }
 
     @Override

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
-public class CSDutyCycleEncoder extends DutyCycleEncoder implements IAbsolutePosition {
+public class CSDutyCycleEncoderLocal extends DutyCycleEncoder implements IAbsolutePosition {
 
     private double distancePerRotation = 1.0;
     private double positionOffset = 0;
@@ -14,7 +14,7 @@ public class CSDutyCycleEncoder extends DutyCycleEncoder implements IAbsolutePos
      *
      * @param channel The channel the sensor is connected to.
      */
-    public CSDutyCycleEncoder(int channel) {
+    public CSDutyCycleEncoderLocal(int channel) {
         super(channel);
     }
 
@@ -23,7 +23,7 @@ public class CSDutyCycleEncoder extends DutyCycleEncoder implements IAbsolutePos
      *
      * @param dutyCycle The DutyCycle object.
      */
-    public CSDutyCycleEncoder(DutyCycle dutyCycle) {
+    public CSDutyCycleEncoderLocal(DutyCycle dutyCycle) {
         super(dutyCycle);
     }
 
@@ -32,7 +32,7 @@ public class CSDutyCycleEncoder extends DutyCycleEncoder implements IAbsolutePos
      *
      * @param source The Source object.
      */
-    public CSDutyCycleEncoder(DigitalSource source) {
+    public CSDutyCycleEncoderLocal(DigitalSource source) {
         super(source);
     }
 
@@ -44,7 +44,11 @@ public class CSDutyCycleEncoder extends DutyCycleEncoder implements IAbsolutePos
         if (distance == -this.positionOffset) {
             return 0;
         }
+        if (distance < -10) {
+            return distance + 180;
+        }
         return distance % 360.0;
+
     }
 
     @Override

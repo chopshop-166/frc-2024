@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.chopshop166.chopshoplib.PersistenceCheck;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 
@@ -12,11 +14,17 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
     public enum Speeds {
         FULL_SPEED(4500),
 
+        THREE_QUARTER_SPEED(3375),
+
         HALF_SPEED(2250),
 
         SLOW_SPEED(1125),
 
-        THREE_QUARTER_SPEED(3375),
+        SIXTY_FIVE(2925),
+
+        FIFTY_FIVE(2475),
+
+        SIXTY(2700),
 
         OFF(0);
 
@@ -37,10 +45,14 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
 
     public Command setSpeed(Speeds speed) {
         PersistenceCheck speedPersistenceCheck = new PersistenceCheck(5,
-                () -> Math.abs(getData().motor.velocityInchesPerSec) > speed.getSpeed());
+                () -> {
+                    return Math.abs(getData().topRoller.velocityInchesPerSec) > speed.getSpeed()
+                            && Math.abs(getData().bottomRoller.velocityInchesPerSec) > speed.getSpeed();
+                });
         return run(
                 () -> {
-                    getData().motor.setpoint = speed.getSpeed();
+                    getData().topRoller.setpoint = speed.getSpeed();
+                    getData().bottomRoller.setpoint = speed.getSpeed();
 
                 }).until(speedPersistenceCheck);
 
@@ -53,7 +65,8 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
 
     @Override
     public void safeState() {
-        getData().motor.setpoint = 0;
+        getData().topRoller.setpoint = 0;
+        getData().bottomRoller.setpoint = 0;
     }
 
     @Override

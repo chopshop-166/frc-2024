@@ -16,10 +16,15 @@ public class Led extends LEDSubsystem {
         super(map);
         // This one is length / 2 because the buffer has a mirrored other half
         ledBuffer.setPattern("Fire", new ColdFirePattern(ledBuffer.getLength() / 2));
+
     }
 
     public Command colorAlliance() {
         return setPattern("Alliance", new AlliancePattern(), "Alliance");
+    }
+
+    public Command coloralliance() {
+        return setGlobalPattern(new AlliancePattern());
     }
 
     public Command resetColor() {
@@ -33,35 +38,42 @@ public class Led extends LEDSubsystem {
     public Command shooterSpinning() {
         return setPattern("Shooter", new SpinPattern(new Color(57, 32, 144)), "Spinning");
     }
-    
+
+    public Command shooterAtSpeed() {
+        return setPattern("Shooter", new FlashPattern(new Color(57, 32, 144), .5), "At Speed");
+    }
+
     public Command grabbedPiece() {
         return setPattern("Intake", Color.kGreen, "Green");
     }
-    
+
     public Command atPreset() {
         return setPattern("Arm Rotate", new Color(255, 147, 69), "At Preset");
     }
-    
+
     public Command toPreset() {
         return setPattern("Arm Rotate", new FlashPattern(new Color(112, 255, 248), 0.5), "To preset");
     }
-    
+
     public Command stowing() {
         return setPattern("Arm Rotate", new Color(255, 82, 174), "Stowing");
     }
-    
+
     public Command coopButton() {
         return setPattern("HP signal", new Color(255, 191, 0), "Activate Coop");
     }
-    
-    public Command AmpActivate() {
+
+    public Command ampActivate() {
         return setPattern("HP signal", new Color(133, 19, 79), "Activate AMP");
     }
 
-    public Command VisonAligned() {
+    public Command visonAligned() {
         return setPattern("Vison", new FlashPattern(new Color(48, 102, 53), 0.5), "To preset");
     }
 
+    public Command awesome() {
+        return setPattern("underglow", new Color(0, 0, 255), "AWESOME");
+    }
 
     // Auto Leds
 
@@ -76,6 +88,5 @@ public class Led extends LEDSubsystem {
     public Command atSpeaker() {
         return setPattern("Auto", new Color(253, 63, 236), "To Piece");
     }
-
 
 }

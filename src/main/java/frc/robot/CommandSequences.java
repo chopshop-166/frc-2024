@@ -1,5 +1,7 @@
 package frc.robot;
 
+import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.ArmRotate.ArmPresets;
@@ -31,9 +33,15 @@ public class CommandSequences {
         return led.intakeSpinning().andThen(intake.intakeGamepiece(), led.grabbedPiece());
     }
 
-    public Command shooter() {
-        return led.shooterSpinning().andThen(shooter.setSpeed(Speeds.FULL_SPEED), intake.feedShooter(),
-                led.colorAlliance());
+    public Command moveAndIntake() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.INTAKE), led.atPreset(), led.intakeSpinning(),
+                intake.intakeGamepiece(), led.grabbedPiece());
+    }
+
+    public Command feedShoot() {
+        return shooter.setSpeed(Speeds.THREE_QUARTER_SPEED).andThen(led.shooterAtSpeed(), waitSeconds(.5),
+                intake.feedShooter(),
+                shooter.setSpeed(Speeds.OFF));
     }
 
     public Command moveToIntake() {
@@ -44,8 +52,24 @@ public class CommandSequences {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_AMP), led.atPreset());
     }
 
+    public Command scoreAmp() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_AMP), led.atPreset(), led.shooterSpinning(),
+                shooter.setSpeed(Speeds.SLOW_SPEED), led.shooterAtSpeed(), intake.feedShooter(),
+                shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+    }
+
     public Command moveToSpeaker() {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset());
     }
 
+    public Command scoreSpeaker() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset(),
+                led.shooterSpinning(), shooter.setSpeed(Speeds.THREE_QUARTER_SPEED), led.shooterAtSpeed(),
+                intake.feedShooter(),
+                shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+    }
+
+    public Command stow() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.STOW), led.atPreset());
+    }
 }
