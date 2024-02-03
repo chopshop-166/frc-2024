@@ -51,8 +51,23 @@ public class CommandSequences {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_AMP), led.atPreset());
     }
 
+    public Command scoreAmp() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_AMP), led.atPreset(), led.shooterSpinning(),
+                shooter.setSpeed(Speeds.SLOW_SPEED), intake.feedShooter(),
+                shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+    }
+
     public Command moveToSpeaker() {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset());
     }
 
+    public Command scoreSpeaker() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset(),
+                led.shooterSpinning(), shooter.setSpeed(Speeds.THREE_QUARTER_SPEED), intake.feedShooter(),
+                shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+    }
+
+    public Command stow() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.STOW), led.atPreset());
+    }
 }

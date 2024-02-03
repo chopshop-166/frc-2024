@@ -34,7 +34,9 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
         SCORE_AMP(90),
 
-        SCORE_SPEAKER_SUBWOOFER(10.5);
+        SCORE_SPEAKER_SUBWOOFER(10.5),
+
+        STOW(85);
 
         // podium angle maybe: 33.4
 
