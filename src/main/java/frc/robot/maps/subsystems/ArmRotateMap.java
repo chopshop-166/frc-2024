@@ -54,6 +54,7 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
         data.acceleration = data.velocityDegreesPerSecond - previousRate;
         previousRate = data.velocityDegreesPerSecond;
         data.rotatingAbsAngleDegrees = encoder.getAbsolutePosition();
+        data.jointEncPosition = encoder.getDistance();
         data.rotatingAngleVelocity = encoder.getRate();
         data.positionError = pid.getPositionError();
         data.velocityError = pid.getVelocityError();
@@ -71,6 +72,7 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
         public double rotatingAngleVelocity;
         public double positionError;
         public double velocityError;
+        public double jointEncPosition;
 
         // Logs the values of the variables
         @Override
@@ -85,6 +87,7 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
             table.put("rotatingAngleVelocity", rotatingAngleVelocity);
             table.put("PIDPositionError", positionError);
             table.put("PIDVelocityError", velocityError);
+            table.put("jointEncPosition", jointEncPosition);
         }
 
         // Retrieves the values of the variables
@@ -100,6 +103,7 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
             this.rotatingAngleVelocity = table.get("rotatingAngleVelocity", rotatingAngleVelocity);
             this.positionError = table.get("PIDPositionError", positionError);
             this.velocityError = table.get("PIDVelocityError", velocityError);
+            this.jointEncPosition = table.get("jointEncPosition", jointEncPosition);
         }
 
     }
