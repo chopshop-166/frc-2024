@@ -33,6 +33,11 @@ public class CommandSequences {
         return led.intakeSpinning().andThen(intake.intakeGamepiece(), led.grabbedPiece());
     }
 
+    public Command moveAndIntake() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.INTAKE), led.atPreset(), led.intakeSpinning(),
+                intake.intakeGamepiece(), led.grabbedPiece());
+    }
+
     public Command feedShoot() {
         return shooter.setSpeed(Speeds.THREE_QUARTER_SPEED).andThen(led.shooterAtSpeed(), waitSeconds(.5),
                 intake.feedShooter(),

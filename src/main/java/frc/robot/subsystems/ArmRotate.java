@@ -32,7 +32,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     ArmPresets level = ArmPresets.OFF;
 
     public enum ArmPresets {
-        INTAKE(1),
+        INTAKE(0),
 
         OFF(Double.NaN),
 
@@ -81,8 +81,9 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
             }
             if (Math.abs(speed) > 0) {
                 level = ArmPresets.OFF;
+                getData().setPoint = limits(speed * speedCoef);
             }
-            getData().setPoint = limits(speed * speedCoef);
+
         });
     }
 

@@ -146,9 +146,9 @@ public class Henry extends RobotMap {
         absEncoder.setPositionOffset(1.4);
         CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
         ProfiledPIDController pid = new ProfiledPIDController(0.005, 0.0, 0.0, new Constraints(90, 500));
-        pid.setTolerance(1);
+        pid.setTolerance(2);
         // Kv 3.74
-        ArmFeedforward feedForward = new ArmFeedforward(0, 0.06, 0.3, 0);
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.045, 0.3, 0);
 
         return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, new ValueRange(.5, 90),
                 new ValueRange(20, 75));
