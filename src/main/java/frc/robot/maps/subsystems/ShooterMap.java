@@ -7,23 +7,27 @@ import com.chopshop166.chopshoplib.motors.SmartMotorController;
 
 public class ShooterMap implements LoggableMap<ShooterMap.Data> {
 
-    public final SmartMotorController motor;
+    public final SmartMotorController topRoller;
+    public final SmartMotorController bottomRoller;
 
     public ShooterMap() {
-        this(new SmartMotorController());
+        this(new SmartMotorController(), new SmartMotorController());
     }
 
-    public ShooterMap(SmartMotorController motor) {
-        this.motor = motor;
+    public ShooterMap(SmartMotorController topRoller, SmartMotorController bottomRoller) {
+        this.topRoller = topRoller;
+        this.bottomRoller = bottomRoller;
     }
 
     @Override
     public void updateData(Data data) {
-        data.motor.updateData(motor);
+        data.topRoller.updateData(topRoller);
+        data.bottomRoller.updateData(bottomRoller);
     }
 
     public static class Data extends DataWrapper {
-        public MotorControllerData motor = new MotorControllerData("Roller");
+        public MotorControllerData topRoller = new MotorControllerData("Top Roller");
+        public MotorControllerData bottomRoller = new MotorControllerData("Bottom Roller");
 
         public Data() {
             super("Shooter");

@@ -157,13 +157,17 @@ public class Henry extends RobotMap {
     public ShooterMap getShooterMap() {
         CSSparkMax topWheels = new CSSparkMax(11, MotorType.kBrushless);
         CSSparkMax bottomWheels = new CSSparkMax(10, MotorType.kBrushless);
-        bottomWheels.getMotorController().follow(topWheels.getMotorController(), false);
         topWheels.setControlType(ControlType.kVelocity);
         topWheels.getPidController().setP(0.0002);
         topWheels.getPidController().setI(0);
         topWheels.getPidController().setD(0);
         topWheels.getPidController().setFF(0.00018);
-        return new ShooterMap(topWheels);
+        bottomWheels.setControlType(ControlType.kVelocity);
+        bottomWheels.getPidController().setP(0.0002);
+        bottomWheels.getPidController().setI(0);
+        bottomWheels.getPidController().setD(0);
+        bottomWheels.getPidController().setFF(0.00018);
+        return new ShooterMap(topWheels, bottomWheels);
     }
 
     @Override

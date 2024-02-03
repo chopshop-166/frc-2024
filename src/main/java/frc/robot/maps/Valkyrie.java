@@ -118,14 +118,6 @@ public class Valkyrie extends RobotMap {
     }
 
     @Override
-    public ShooterMap getShooterMap() {
-        CSSparkMax rightWheel = new CSSparkMax(10, MotorType.kBrushless);
-        CSSparkMax leftWheel = new CSSparkMax(12, MotorType.kBrushless);
-        leftWheel.getMotorController().follow(rightWheel.getMotorController(), true);
-        return new ShooterMap(rightWheel);
-    }
-
-    @Override
     public void setupLogging() {
         Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
