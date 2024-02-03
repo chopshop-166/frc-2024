@@ -30,7 +30,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     private Constraints rotateConstraints = new Constraints(150, 200);
 
     public enum ArmPresets {
-        INTAKE(0),
+        INTAKE(1),
 
         SCORE_AMP(90),
 
