@@ -44,7 +44,7 @@ public class CSDutyCycleEncoderLocal extends DutyCycleEncoder implements IAbsolu
         if (distance == -this.positionOffset) {
             return 0;
         }
-        if (distance < 0) {
+        if (distance < -10) {
             return distance + 180;
         }
         return distance % 360.0;
