@@ -90,6 +90,9 @@ public class Robot extends CommandRobot {
 
                 .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
                         () -> -driveController.getRightX()));
+
+        driveController.y().onTrue(led.coloralliance());
+
         copilotController.back().onTrue(intake.safeStateCmd());
         copilotController.a().onTrue(commandSequences.intake());
         // copilotController.b().onTrue(commandSequences.shooter());

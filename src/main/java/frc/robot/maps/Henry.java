@@ -7,6 +7,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.chopshop166.chopshoplib.digital.CSDigitalInput;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
+import com.chopshop166.chopshoplib.leds.SegmentConfig;
+import com.chopshop166.chopshoplib.maps.LedMap;
 import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
@@ -172,6 +174,15 @@ public class Henry extends RobotMap {
         CSDigitalInput sensor = new CSDigitalInput(9);
         sensor.setInverted(true);
         return new IntakeMap(topRoller, sensor::get);
+    }
+
+    @Override
+    public LedMap getLedMap() {
+        var result = new LedMap(0, 59);
+        var leds = result.ledBuffer;
+
+        SegmentConfig underglow = leds.segment(59).tags("underglow");
+        return result;
     }
 
     @Override
