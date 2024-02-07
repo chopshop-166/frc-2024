@@ -86,7 +86,7 @@ dependencies {
 
     implementation 'org.json:json:20211205'
     implementation 'com.google.guava:guava:33.0.0-jre'
-    implementation 'com.chopshop166:chopshoplib:2024.4.7'
+    implementation 'com.chopshop166:chopshoplib:2024.4.8'
 
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
