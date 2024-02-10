@@ -11,6 +11,7 @@ import com.chopshop166.chopshoplib.RobotUtils;
 import com.chopshop166.chopshoplib.commands.CommandRobot;
 import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -46,10 +47,33 @@ public class Robot extends CommandRobot {
 
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
 
+    public void registerNamedCommands() {
+        // Register named commands. These are all set as the reset gyro command, please
+        // input actual commands once all subsystems are merged with main. Do this
+        // correctly, as the names are already in PathPlanner. We should probably make
+        // sequences in this code if needed (like adding arm rotation to shoot) so that
+        // PathPlanner doesn't get too complicated. You might need to add wait
+        // commands into PathPlanner.
+        NamedCommands.registerCommand("Intake Game Piece", commandSequences.moveAndIntake());
+        NamedCommands.registerCommand("Shoot Game Piece", commandSequences.scoreSpeakerAuto());
+        NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.scoreAmp());
+        NamedCommands.registerCommand("Stop Shooter", shooter.setSpeed(Speeds.OFF));
+        NamedCommands.registerCommand("Rotate Speaker Sub.",
+                commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
+        NamedCommands.registerCommand("Rotate Speaker Pod.",
+                commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
+    }
+
     @Autonomous(name = "No Auto", defaultAuto = true)
     public Command noAuto = Commands.none();
 
-    private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+    private final SendableChooser<Command> autoChooser;
+
+    public Robot() {
+        super();
+        registerNamedCommands();
+        autoChooser = AutoBuilder.buildAutoChooser();
+    }
 
     @Override
     public void robotInit() {
@@ -80,7 +104,6 @@ public class Robot extends CommandRobot {
         // Start logging! No more data receivers, replay sources, or metadata values may
         // be added.
         Logger.start();
-
     }
 
     @Override
@@ -88,12 +111,13 @@ public class Robot extends CommandRobot {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing
         driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
-        driveController.a()
+        driveController.leftBumper()
 
                 .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
                         () -> -driveController.getRightX()));
 
-        driveController.y().onTrue(led.coloralliance());
+        driveController.y().onTrue(led.awesome());
+        driveController.rightBumper().onTrue(commandSequences.scoreAmp());
 
         copilotController.back().onTrue(intake.safeStateCmd());
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
@@ -101,10 +125,11 @@ public class Robot extends CommandRobot {
         copilotController.b().onTrue(commandSequences.scoreSpeaker());
         copilotController.y().onTrue(intake.feedShooter());
         copilotController.x().whileTrue(intake.spinOut());
+        copilotController.rightBumper().onTrue(commandSequences.scoreAmp());
+        copilotController.leftBumper().onTrue(commandSequences.podiumShot());
         copilotController.povUp().whileTrue(commandSequences.moveToAmp());
-        copilotController.povUpLeft().onTrue(shooter.setSpeed(Speeds.FULL_SPEED));
-        copilotController.povDown().whileTrue(commandSequences.moveToIntake());
-        copilotController.povRight().whileTrue(commandSequences.moveToSpeaker());
+        copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));
+        copilotController.povRight().whileTrue(commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
         copilotController.povLeft().whileTrue(commandSequences.stow());
     }
 
@@ -119,6 +144,8 @@ public class Robot extends CommandRobot {
                 drive.moveInDirection(1, 0, 3)).withPosition(2, 1);
         Shuffleboard.getTab("Pit Test").add("Drive Forward",
                 drive.moveInDirection(0, 1, 3)).withPosition(1, 0);
+        Shuffleboard.getTab("Pit Test").add("Drive Forward Faster",
+                drive.moveInDirection(0, 2, 3)).withPosition(4, 1);
         Shuffleboard.getTab("Pit Test").add("Stop", drive.moveInDirection(0, 0,
                 0)).withPosition(1, 1);
         Shuffleboard.getTab("Pit Test").add("Foward Right",
@@ -130,6 +157,7 @@ public class Robot extends CommandRobot {
         Shuffleboard.getTab("Pit Test").add("Back Left", drive.moveInDirection(-1,
                 1, 3)).withPosition(0, 2);
         Shuffleboard.getTab("AutoBuilder").add("Auto", autoChooser);
+
     }
 
     /**

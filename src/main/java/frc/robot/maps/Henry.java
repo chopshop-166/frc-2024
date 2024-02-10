@@ -44,6 +44,13 @@ import frc.robot.maps.subsystems.ShooterMap;
 @RobotMapFor("00:80:2F:17:F7:AF")
 public class Henry extends RobotMap {
 
+    private static void setStatusPeriods(CSSparkMax motor) {
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus4, 1000);
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus6, 1000);
+    }
+
     @Override
     public SwerveDriveMap getDriveMap() {
 
@@ -54,7 +61,7 @@ public class Henry extends RobotMap {
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
 
-        final double MODULE_OFFSET_XY = Units.inchesToMeters(13.33); // Frostbites was 9.89
+        final double MODULE_OFFSET_XY = Units.inchesToMeters(10.875); // Frostbites was 9.89
         final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(1);
 
         final CSSparkMax frontLeftSteer = new CSSparkMax(4, MotorType.kBrushless);
@@ -62,10 +69,10 @@ public class Henry extends RobotMap {
         final CSSparkMax rearLeftSteer = new CSSparkMax(2, MotorType.kBrushless);
         final CSSparkMax rearRightSteer = new CSSparkMax(6, MotorType.kBrushless);
 
-        frontLeftSteer.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
-        frontRightSteer.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
-        rearLeftSteer.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
-        rearRightSteer.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
+        setStatusPeriods(frontLeftSteer);
+        setStatusPeriods(frontRightSteer);
+        setStatusPeriods(rearLeftSteer);
+        setStatusPeriods(rearRightSteer);
 
         frontLeftSteer.getMotorController().setInverted(true);
         frontRightSteer.getMotorController().setInverted(true);
@@ -120,15 +127,15 @@ public class Henry extends RobotMap {
                         MotorType.kBrushless),
                 MK4i_L2);
 
-        final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(12);
+        final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(15);
 
         final double maxRotationRadianPerSecond = Math.PI;
 
         final HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(
                 // HolonomicPathFollowerConfig, this should likely live in your
                 // Constants class
-                new PIDConstants(0.2, 0.0, 0.05), // Translation PID constants (OFF_AXIS)
-                new PIDConstants(0.001, 0.0, 0.0), // Rotation PID constants (OFF_AXIS)
+                new PIDConstants(2, 0.0, 0.05), // Translation PID constants (OFF_AXIS)
+                new PIDConstants(1, 0.0, 0.0), // Rotation PID constants (OFF_AXIS)
                 2.0, // Max module speed, in m/s
                 0.3429,
                 // Drive base radius (OFF_AXIS) in meters. Distance from robot center to
@@ -147,6 +154,8 @@ public class Henry extends RobotMap {
     public ArmRotateMap getArmRotateMap() {
         CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
         CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
+        setStatusPeriods(leftMotor);
+        setStatusPeriods(rightMotor);
         rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
         leftMotor.getMotorController().setInverted(false);
         leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
@@ -158,13 +167,14 @@ public class Henry extends RobotMap {
         CSDutyCycleEncoderLocal absEncoder = new CSDutyCycleEncoderLocal(8);
         absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
         absEncoder.setDistancePerRotation(-360 / 2);
-        // Adjust this to move the encoder zero point to the retracted position
-        absEncoder.setPositionOffset(1.4);
+        // Adjust this to move the encoder zero point to the retracted position (can't
+        // be negative, do 360 - #)
+        absEncoder.setPositionOffset(0.7);
         CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
-        ProfiledPIDController pid = new ProfiledPIDController(0.005, 0.0, 0.0, new Constraints(90, 500));
+        ProfiledPIDController pid = new ProfiledPIDController(0.005, 0.0, 0.0, new Constraints(120, 500));
         pid.setTolerance(2);
         // Kv 3.74
-        ArmFeedforward feedForward = new ArmFeedforward(0, 0.045, 0.3, 0);
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.04, 0.3, 0);
 
         return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, new ValueRange(.5, 90),
                 new ValueRange(20, 75));
@@ -174,22 +184,25 @@ public class Henry extends RobotMap {
     public ShooterMap getShooterMap() {
         CSSparkMax topWheels = new CSSparkMax(11, MotorType.kBrushless);
         CSSparkMax bottomWheels = new CSSparkMax(10, MotorType.kBrushless);
+        setStatusPeriods(topWheels);
+        setStatusPeriods(bottomWheels);
         topWheels.setControlType(ControlType.kVelocity);
         topWheels.getPidController().setP(0.0002);
         topWheels.getPidController().setI(0);
         topWheels.getPidController().setD(0);
-        topWheels.getPidController().setFF(0.00018);
+        topWheels.getPidController().setFF(0.000185);
         bottomWheels.setControlType(ControlType.kVelocity);
         bottomWheels.getPidController().setP(0.0002);
         bottomWheels.getPidController().setI(0);
         bottomWheels.getPidController().setD(0);
-        bottomWheels.getPidController().setFF(0.00018);
+        bottomWheels.getPidController().setFF(0.000185);
         return new ShooterMap(topWheels, bottomWheels);
     }
 
     @Override
     public IntakeMap getIntakeMap() {
         CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
+        setStatusPeriods(topRoller);
         topRoller.getMotorController().setInverted(true);
         topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
         CSDigitalInput sensor = new CSDigitalInput(9);

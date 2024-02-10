@@ -1,0 +1,73 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.65,
+      "y": 4.35
+    },
+    "rotation": -60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 1 - BS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker from 1 - BS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 6 - BS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker from 6 - BS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "3 Piece - Bottom Start",
+  "choreoAuto": false
+}

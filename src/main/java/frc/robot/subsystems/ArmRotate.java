@@ -22,22 +22,27 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
     final ProfiledPIDController pid;
     // Set to zero until able to test
-    final double RAISE_SPEED = .25;
+    final double RAISE_SPEED = .85;
     final double MANUAL_LOWER_SPEED_COEF = 0.1;
     final double SLOW_DOWN_COEF = 0.5;
+    final double LOWER_SPEED = -0.05;
     private Constraints rotateConstraints = new Constraints(150, 200);
     ArmPresets level = ArmPresets.OFF;
 
     public enum ArmPresets {
-        INTAKE(0),
+        INTAKE(0.5),
 
         OFF(Double.NaN),
 
+        SCORE_SPEAKER_PODIUM(33.4),
+
         SCORE_AMP(90),
 
-        SCORE_SPEAKER_SUBWOOFER(10.5),
+        SCORE_SPEAKER_SUBWOOFER(11.5),
 
-        STOW(85);
+        SCORE_SPEAKER_CENTERLINE(28),
+
+        STOW(75);
 
         // podium angle maybe: 33.4
 
@@ -79,9 +84,20 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
             if (Math.abs(speed) > 0) {
                 level = ArmPresets.OFF;
                 getData().setPoint = limits(speed * speedCoef);
+            } else if (level == ArmPresets.OFF) {
+                getData().setPoint = 0;
             }
 
         });
+    }
+
+    public Command moveToZero() {
+        return runEnd(
+                () -> {
+                    getData().setPoint = LOWER_SPEED;
+                }, this::safeState).until(() -> {
+                    return getArmAngle() < ArmPresets.INTAKE.getAngle();
+                });
     }
 
     // Automatic rotation control (angle input)
@@ -123,7 +139,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         if (level != ArmPresets.OFF) {
             getData().setPoint = pid.calculate(getArmAngle(), new State(level.getAngle(), 0));
             getData().setPoint += getMap().armFeedforward.calculate(
-                    Units.DegreesPerSecond.of(pid.getSetpoint().position).in(Units.RadiansPerSecond),
+                    Units.Degrees.of(pid.getSetpoint().position - 3.4).in(Units.Radians),
                     Units.DegreesPerSecond.of(pid.getSetpoint().velocity).in(Units.RadiansPerSecond));
         }
         Logger.recordOutput("armPreset", level);

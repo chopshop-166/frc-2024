@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7351279067495533,
-        "y": 3.3336498873355533
+        "x": 2.572211799166814,
+        "y": 4.84627516661274
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.624086518298261,
-        "y": 0.7930268454454622
+        "x": 7.638772200621324,
+        "y": 2.4525089479517073
       },
       "prevControl": {
-        "x": 2.821868398656297,
-        "y": 0.939883668676104
+        "x": 5.171577570349162,
+        "y": 5.786158835288844
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 2.5,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Pickups",
+  "folder": "Pickups - Center Speaker",
   "previewStartingState": null,
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

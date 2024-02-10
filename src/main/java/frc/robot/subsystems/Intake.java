@@ -34,7 +34,7 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
                 }, this::safeState);
     }
 
-    public Command intakeGamepiece() {
+    public Command intakeGamePiece() {
         return runEnd(
                 () -> {
                     getData().roller.setpoint = GRAB_SPEED;
