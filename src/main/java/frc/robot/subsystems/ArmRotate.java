@@ -25,12 +25,15 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     final double RAISE_SPEED = .85;
     final double MANUAL_LOWER_SPEED_COEF = 0.1;
     final double SLOW_DOWN_COEF = 0.5;
-    final double LOWER_SPEED = -0.05;
+    final double LOWER_SPEED = -0.1;
+    final double NORMAL_TOLERANCE = 2;
+    final double INTAKE_TOLERANCE = 4;
+
     private Constraints rotateConstraints = new Constraints(150, 200);
     ArmPresets level = ArmPresets.OFF;
 
     public enum ArmPresets {
-        INTAKE(0.5),
+        INTAKE(0.25),
 
         OFF(Double.NaN),
 
@@ -92,9 +95,10 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     }
 
     public Command moveToZero() {
-        return runEnd(
+        return startEnd(
                 () -> {
                     getData().setPoint = LOWER_SPEED;
+                    level = ArmPresets.OFF;
                 }, this::safeState).until(() -> {
                     return getArmAngle() < ArmPresets.INTAKE.getAngle();
                 });
@@ -107,6 +111,11 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         PersistenceCheck setPointPersistenceCheck = new PersistenceCheck(30, pid::atGoal);
         return cmd("Move To Set Angle").onInitialize(() -> {
             this.level = level;
+            if (level == ArmPresets.INTAKE) {
+                pid.setTolerance(4);
+            } else {
+                pid.setTolerance(2);
+            }
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
         }).onExecute(() -> {
             Logger.recordOutput("Pid at goal", pid.atGoal());

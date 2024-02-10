@@ -74,7 +74,7 @@ public class CommandSequences {
     }
 
     public Command scoreAmp() {
-        return this.armRotatePreset(ArmPresets.SCORE_AMP).andThen(this.shooterSpeed(Speeds.AMP_SPEED),
+        return this.armRotatePreset(ArmPresets.SCORE_AMP).withTimeout(0.75).andThen(this.shooterSpeed(Speeds.AMP_SPEED),
                 intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF), led.colorAlliance());
     }

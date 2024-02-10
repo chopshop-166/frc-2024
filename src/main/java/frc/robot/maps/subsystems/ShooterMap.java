@@ -26,7 +26,7 @@ public class ShooterMap implements LoggableMap<ShooterMap.Data> {
     }
 
     public static class Data extends DataWrapper {
-        public MotorControllerData topRoller = new MotorControllerData();
-        public MotorControllerData bottomRoller = new MotorControllerData();
+        public MotorControllerData topRoller = new MotorControllerData(true);
+        public MotorControllerData bottomRoller = new MotorControllerData(true);
     }
 }
