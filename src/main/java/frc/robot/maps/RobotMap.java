@@ -12,6 +12,7 @@ import com.chopshop166.chopshoplib.maps.LedMap;
 
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
+import frc.robot.maps.subsystems.UndertakerMap;
 
 public class RobotMap {
 
@@ -33,6 +34,10 @@ public class RobotMap {
 
     public LedMap getLedMap() {
         return new LedMap();
+    }
+
+    public UndertakerMap getUndertakerMap() {
+        return new UndertakerMap();
     }
 
     public void setupLogging() {
