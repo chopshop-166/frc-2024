@@ -6,15 +6,12 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.chopshop166.chopshoplib.RobotUtils;
 import com.chopshop166.chopshoplib.commands.FunctionalWaitCommand;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 import com.chopshop166.chopshoplib.logging.data.SwerveDriveData;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
+import com.chopshop166.chopshoplib.motors.Modifier;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -34,17 +31,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     double maxRotationRadiansPerSecond;
     double speedCoef = 1;
     double rotationCoef = 1;
-    HolonomicPathFollowerConfig HoloPath = new HolonomicPathFollowerConfig(
-            // HolonomicPathFollowerConfig, this should likely live in your
-            // Constants class
-            new PIDConstants(0.2, 0.0, 0.05), // Translation PID constants (OFF_AXIS)
-            new PIDConstants(0.001, 0.0, 0.0), // Rotation PID constants (OFF_AXIS)
-            2.0, // Max module speed, in m/s
-            0.3429,
-            // Drive base radius (OFF_AXIS) in meters. Distance from robot center to
-            // furthest module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options here
-    );
 
     SwerveDrivePoseEstimator estimator;
 
@@ -67,7 +53,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         AutoBuilder.configureHolonomic(estimator::getEstimatedPosition, this::setPose,
                 this::getSpeeds, this::move, // Method that will drive the robot given ROBOT
                 // RELATIVE ChassisSpeeds
-                HoloPath, () -> isBlue, this);
+                map.pathFollower(), () -> isBlue, this);
 
     }
 
@@ -85,8 +71,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     private void deadbandMove(final double xSpeed, final double ySpeed,
             final double rotation, boolean isRobotCentric) {
 
-        var deadband = RobotUtils.scalingDeadband(
-                (DriverStation.isFMSAttached()) ? 0.05 : 0.15);
+        var deadband = Modifier.scalingDeadband(DriverStation.isFMSAttached() ? 0.05 : 0.15);
         double rotationInput = deadband.applyAsDouble(rotation);
         double xInput = deadband.applyAsDouble(xSpeed);
         double yInput = deadband.applyAsDouble(ySpeed);

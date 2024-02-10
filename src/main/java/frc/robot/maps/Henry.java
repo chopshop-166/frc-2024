@@ -22,6 +22,9 @@ import com.chopshop166.chopshoplib.states.PIDValues;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -121,9 +124,22 @@ public class Henry extends RobotMap {
 
         final double maxRotationRadianPerSecond = Math.PI;
 
+        final HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(
+                // HolonomicPathFollowerConfig, this should likely live in your
+                // Constants class
+                new PIDConstants(0.2, 0.0, 0.05), // Translation PID constants (OFF_AXIS)
+                new PIDConstants(0.001, 0.0, 0.0), // Rotation PID constants (OFF_AXIS)
+                2.0, // Max module speed, in m/s
+                0.3429,
+                // Drive base radius (OFF_AXIS) in meters. Distance from robot center to
+                // furthest module.
+                new ReplanningConfig() // Default path replanning config. See the API for the options here
+        );
+
         return new SwerveDriveMap(frontLeft, frontRight, rearLeft, rearRight,
                 maxDriveSpeedMetersPerSecond,
-                maxRotationRadianPerSecond, pigeonGyro2);
+                maxRotationRadianPerSecond, pigeonGyro2,
+                config);
 
     }
 

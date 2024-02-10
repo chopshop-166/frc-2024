@@ -29,14 +29,10 @@ public class IntakeMap implements LoggableMap<IntakeMap.Data> {
     }
 
     public static class Data extends DataWrapper {
-        public MotorControllerData roller = new MotorControllerData("Roller");
+        public MotorControllerData roller = new MotorControllerData();
 
         @LogName("Game Piece Detected")
         public boolean gamePieceDetected;
-
-        public Data() {
-            super("Intake");
-        }
     }
 
 }
