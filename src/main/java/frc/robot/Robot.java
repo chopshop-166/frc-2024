@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleUnaryOperator;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.chopshop166.chopshoplib.Autonomous;
@@ -75,6 +77,9 @@ public class Robot extends CommandRobot {
         registerNamedCommands();
         autoChooser = AutoBuilder.buildAutoChooser();
     }
+
+    // Helpers
+    final DoubleUnaryOperator driveScaler = getScaler(0.45, 0.25);
 
     @Override
     public void robotInit() {
@@ -178,18 +183,21 @@ public class Robot extends CommandRobot {
     public void setDefaultCommands() {
         drive.setDefaultCommand(
                 drive.drive(() -> {
-                    return scaleDrive(-driveController.getLeftX());
+                    return driveScaler.applyAsDouble(-driveController.getLeftX());
                 }, () -> {
-                    return scaleDrive(-driveController.getLeftY());
+                    return driveScaler.applyAsDouble(-driveController.getLeftY());
                 }, () -> {
-                    return scaleDrive(-driveController.getRightX());
+                    return driveScaler.applyAsDouble(-driveController.getRightX());
                 }));
         armRotate.setDefaultCommand(armRotate.move(RobotUtils.deadbandAxis(.1, () -> -copilotController.getLeftY())));
     }
 
-    public double scaleDrive(double speed) {
-        double trigger = driveController.getTriggers();
-        double modifier = trigger / 4.0 + 0.75;
-        return modifier * speed;
+    public DoubleUnaryOperator getScaler(double leftRange, double rightRange) {
+        return speed -> {
+            double leftTrigger = driveController.getLeftTriggerAxis();
+            double rightTrigger = driveController.getRightTriggerAxis();
+            double modifier = (rightRange * rightTrigger) - (leftRange * leftTrigger) + 0.75;
+            return modifier * speed;
+        };
     }
 }
