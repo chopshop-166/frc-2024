@@ -9,7 +9,6 @@ import com.chopshop166.chopshoplib.maps.LedMap;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Leds.NewFlashPattern;
 
 public class Led extends LEDSubsystem {
 
@@ -73,11 +72,11 @@ public class Led extends LEDSubsystem {
     }
 
     public Command awesome() {
-        return setPattern("underglow", new Color(255, 32, 82), "AWESOME");
+        return setPattern("underglow", new FlashPattern(new Color(255, 32, 82), 1), "AWESOME");
     }
 
     public Command flash() {
-        return setGlobalPattern(new NewFlashPattern(new Color(255, 32, 82), .5));
+        return setGlobalPattern(new FlashPattern(new Color(255, 32, 82), .5));
     }
 
     // Auto Leds
