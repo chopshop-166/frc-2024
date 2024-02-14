@@ -25,6 +25,8 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Undertaker;
+import frc.robot.subsystems.ArmRotate.ArmPresets;
 import frc.robot.subsystems.Shooter.Speeds;
 
 public class Robot extends CommandRobot {
@@ -38,7 +40,9 @@ public class Robot extends CommandRobot {
     private Shooter shooter = new Shooter(map.getShooterMap());
     private Led led = new Led(map.getLedMap());
     private ArmRotate armRotate = new ArmRotate(map.getArmRotateMap());
-    private CommandSequences commandSequences = new CommandSequences(drive, intake, shooter, led, armRotate);
+    private Undertaker undertaker = new Undertaker(map.getUndertakerMap());
+    private CommandSequences commandSequences = new CommandSequences(drive, intake, shooter, led, armRotate,
+            undertaker);
 
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
 

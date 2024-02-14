@@ -9,6 +9,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Undertaker;
 import frc.robot.subsystems.Shooter.Speeds;
 
 public class CommandSequences {
@@ -18,8 +19,10 @@ public class CommandSequences {
     Shooter shooter;
     Led led;
     ArmRotate armRotate;
+    Undertaker undertaker;
 
-    public CommandSequences(Drive drive, Intake intake, Shooter shooter, Led led, ArmRotate armRotate) {
+    public CommandSequences(Drive drive, Intake intake, Shooter shooter, Led led, ArmRotate armRotate,
+            Undertaker undertaker) {
         this.drive = drive;
         this.intake = intake;
         this.shooter = shooter;
