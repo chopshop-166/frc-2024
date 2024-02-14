@@ -1,7 +1,11 @@
 package frc.robot;
 
+import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
 
+import com.chopshop166.chopshoplib.controls.ButtonXboxController;
+
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.ArmRotate.ArmPresets;
@@ -79,11 +83,15 @@ public class CommandSequences {
                 shooter.setSpeed(Speeds.OFF), led.colorAlliance());
     }
 
-    public Command scoreSpeaker() {
+    public Command scoreSpeakerCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
         return this.shooterSpeed(Speeds.SUBWOOFER_SHOT).alongWith(
                 this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER)).andThen(
-                        intake.feedShooter(),
-                        shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+                        setRumble(controller1, 1), setRumble(controller2, 1));
+    }
+
+    public Command scoreSpeakerRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
+                setRumble(controller2, 0));
     }
 
     public Command scoreSpeakerAuto() {
@@ -94,9 +102,26 @@ public class CommandSequences {
     }
 
     public Command podiumShot() {
-        return this.shooterSpeed(Speeds.SUBWOOFER_SHOT)
-                .alongWith(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_CENTERLINE))
+        return this.shooterSpeed(Speeds.PODIUM_SHOT)
+                .alongWith(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM))
                 .andThen(intake.feedShooter(), shooterSpeed(Speeds.OFF));
     }
 
+    public Command setRumble(ButtonXboxController controller, int rumbleAmount) {
+        return runOnce(() -> {
+            controller.getHID().setRumble(RumbleType.kBothRumble, rumbleAmount);
+        });
+    }
+
+    public Command test(ButtonXboxController controller) {
+        return shooter.setSpeed(Speeds.HALF_SPEED).andThen(() -> {
+            this.setRumble(controller, 1);
+        });
+    }
+
+    public Command rumbleAndShoooterOff(ButtonXboxController controller) {
+        return shooter.setSpeed(Speeds.HALF_SPEED).andThen(() -> {
+            this.setRumble(controller, 0);
+        });
+    }
 }

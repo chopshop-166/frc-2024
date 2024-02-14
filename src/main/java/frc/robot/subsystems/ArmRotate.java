@@ -37,12 +37,13 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
         OFF(Double.NaN),
 
-        SCORE_SPEAKER_PODIUM(33.4),
+        SCORE_SPEAKER_PODIUM(28),
 
         SCORE_AMP(90),
 
         SCORE_SPEAKER_SUBWOOFER(11.5),
 
+        // Probs not correct
         SCORE_SPEAKER_CENTERLINE(28),
 
         STOW(75);

@@ -187,14 +187,14 @@ public class Henry extends RobotMap {
         setStatusPeriods(topWheels);
         setStatusPeriods(bottomWheels);
         topWheels.setControlType(ControlType.kVelocity);
-        topWheels.getPidController().setP(0.0003);
+        topWheels.getPidController().setP(0.000055);
         topWheels.getPidController().setI(0);
-        topWheels.getPidController().setD(0);
+        topWheels.getPidController().setD(0.0);
         topWheels.getPidController().setFF(0.000185);
         bottomWheels.setControlType(ControlType.kVelocity);
-        bottomWheels.getPidController().setP(0.0003);
+        bottomWheels.getPidController().setP(0.000055);
         bottomWheels.getPidController().setI(0);
-        bottomWheels.getPidController().setD(0);
+        bottomWheels.getPidController().setD(0.0);
         bottomWheels.getPidController().setFF(0.000185);
         return new ShooterMap(topWheels, bottomWheels);
     }
