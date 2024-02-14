@@ -72,7 +72,11 @@ public class Led extends LEDSubsystem {
     }
 
     public Command awesome() {
-        return setPattern("underglow", new Color(0, 0, 255), "AWESOME");
+        return setPattern("underglow", new FlashPattern(new Color(255, 32, 82), 1), "AWESOME");
+    }
+
+    public Command flash() {
+        return setGlobalPattern(new FlashPattern(new Color(255, 32, 82), .5));
     }
 
     // Auto Leds

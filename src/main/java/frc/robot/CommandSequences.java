@@ -1,7 +1,11 @@
 package frc.robot;
 
+import static edu.wpi.first.wpilibj2.command.Commands.runOnce;
 import static edu.wpi.first.wpilibj2.command.Commands.waitSeconds;
 
+import com.chopshop166.chopshoplib.controls.ButtonXboxController;
+
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.ArmRotate.ArmPresets;
@@ -33,16 +37,26 @@ public class CommandSequences {
     // make sequences for intake and shooter.
 
     public Command intake() {
-        return led.intakeSpinning().andThen(intake.intakeGamepiece(), led.grabbedPiece());
+        return led.intakeSpinning().andThen(intake.intakeGamePiece(), led.grabbedPiece());
+    }
+
+    public Command shooterSpeed(Speeds speed) {
+        return led.shooterSpinning().andThen(shooter.setSpeed(speed), led.shooterAtSpeed());
+    }
+
+    public Command armRotatePreset(ArmPresets presets) {
+        return armRotate.moveTo(presets);
+        // led.toPreset().andThen(
+        // , led.atPreset());
     }
 
     public Command moveAndIntake() {
-        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.INTAKE), led.atPreset(), led.intakeSpinning(),
-                intake.intakeGamepiece(), led.grabbedPiece());
+        return led.toPreset().andThen(this.intake().deadlineWith(
+                armRotate.moveTo(ArmPresets.INTAKE).andThen(armRotate.moveToZero())), led.grabbedPiece());
     }
 
     public Command feedShoot() {
-        return shooter.setSpeed(Speeds.THREE_QUARTER_SPEED).andThen(led.shooterAtSpeed(), waitSeconds(.5),
+        return shooterSpeed(Speeds.SUBWOOFER_SHOT).andThen(waitSeconds(.5),
                 intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF));
     }
@@ -55,24 +69,47 @@ public class CommandSequences {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_AMP), led.atPreset());
     }
 
-    public Command scoreAmp() {
-        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_AMP), led.atPreset(), led.shooterSpinning(),
-                shooter.setSpeed(Speeds.SLOW_SPEED), led.shooterAtSpeed(), intake.feedShooter(),
-                shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+    public Command stow() {
+        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.STOW), led.atPreset());
     }
 
     public Command moveToSpeaker() {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset());
     }
 
-    public Command scoreSpeaker() {
-        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset(),
-                led.shooterSpinning(), shooter.setSpeed(Speeds.THREE_QUARTER_SPEED), led.shooterAtSpeed(),
+    public Command scoreAmp() {
+        return this.armRotatePreset(ArmPresets.SCORE_AMP).withTimeout(0.75).andThen(this.shooterSpeed(Speeds.AMP_SPEED),
                 intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF), led.colorAlliance());
     }
 
-    public Command stow() {
-        return led.toPreset().andThen(armRotate.moveTo(ArmPresets.STOW), led.atPreset());
+    public Command scoreSpeakerCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
+        return this.shooterSpeed(Speeds.SUBWOOFER_SHOT).alongWith(
+                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER)).andThen(
+                        setRumble(controller1, 1), setRumble(controller2, 1));
+    }
+
+    public Command scoreSpeakerRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
+                setRumble(controller2, 0));
+    }
+
+    public Command scoreSpeakerAuto() {
+        return this.shooterSpeed(Speeds.SUBWOOFER_SHOT).alongWith(
+                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER)).andThen(
+                        intake.feedShooter(),
+                        led.colorAlliance());
+    }
+
+    public Command podiumShot() {
+        return this.shooterSpeed(Speeds.PODIUM_SHOT)
+                .alongWith(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM))
+                .andThen(intake.feedShooter(), shooterSpeed(Speeds.OFF));
+    }
+
+    public Command setRumble(ButtonXboxController controller, int rumbleAmount) {
+        return runOnce(() -> {
+            controller.getHID().setRumble(RumbleType.kBothRumble, rumbleAmount);
+        });
     }
 }
