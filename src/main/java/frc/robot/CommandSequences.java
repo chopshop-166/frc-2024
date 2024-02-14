@@ -112,16 +112,4 @@ public class CommandSequences {
             controller.getHID().setRumble(RumbleType.kBothRumble, rumbleAmount);
         });
     }
-
-    public Command test(ButtonXboxController controller) {
-        return shooter.setSpeed(Speeds.HALF_SPEED).andThen(() -> {
-            this.setRumble(controller, 1);
-        });
-    }
-
-    public Command rumbleAndShoooterOff(ButtonXboxController controller) {
-        return shooter.setSpeed(Speeds.HALF_SPEED).andThen(() -> {
-            this.setRumble(controller, 0);
-        });
-    }
 }
