@@ -24,11 +24,7 @@ public class UndertakerMap implements LoggableMap<UndertakerMap.Data> {
     }
 
     public static class Data extends DataWrapper {
-        public MotorControllerData roller = new MotorControllerData("Roller");
-
-        public Data() {
-            super("Undertaker");
-        }
+        public MotorControllerData roller = new MotorControllerData();
     }
 
 }
