@@ -212,10 +212,11 @@ public class Henry extends RobotMap {
 
     @Override
     public LedMap getLedMap() {
-        var result = new LedMap(0, 16);
+        var result = new LedMap(0, 56);
         var leds = result.ledBuffer;
 
-        SegmentConfig underglow = leds.segment(16).tags("underglow", "Shooter", "ArmRotate", "Intake", "HP Signal");
+        SegmentConfig underglow = leds.segment(56).tags("underglow", "Shooter", "Arm Rotate", "Intake", "HP signal",
+                "Vision", "Fire", "Auto", "Alliance");
         return result;
     }
 

@@ -48,7 +48,7 @@ public class Led extends LEDSubsystem {
     }
 
     public Command atPreset() {
-        return setPattern("Arm Rotate", new Color(255, 147, 69), "At Preset");
+        return setPattern("Arm Rotate", new Color(40, 131, 176), "At Preset");
     }
 
     public Command toPreset() {
