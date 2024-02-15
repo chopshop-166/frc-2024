@@ -1,10 +1,10 @@
 package frc.robot.maps.subsystems;
 
-import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.inputs.LoggableInputs;
-
 import com.chopshop166.chopshoplib.ValueRange;
+import com.chopshop166.chopshoplib.logging.DataWrapper;
+import com.chopshop166.chopshoplib.logging.LogName;
 import com.chopshop166.chopshoplib.logging.LoggableMap;
+import com.chopshop166.chopshoplib.logging.data.MotorControllerData;
 import com.chopshop166.chopshoplib.motors.SmartMotorController;
 import com.chopshop166.chopshoplib.sensors.IEncoder;
 import com.chopshop166.chopshoplib.sensors.MockEncoder;
@@ -41,44 +41,39 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
 
     @Override
     public void updateData(Data data) {
-        motor.set(data.setPoint);
-        data.currentAmps = motor.getCurrentAmps();
-        data.tempCelcius = motor.getTemperatureC();
+        data.motor.updateData(motor);
+        data.acceleration = data.motor.velocityInchesPerSec - previousRate;
+        previousRate = data.motor.velocityInchesPerSec;
         data.rotatingAbsAngleDegrees = encoder.getAbsolutePosition();
         data.positionError = pid.getPositionError();
         data.rotatingAngleVelocity = encoder.getRate();
     }
 
-    public static class Data implements LoggableInputs {
+    public static class Data extends DataWrapper {
 
-        public double setPoint;
-        public double[] currentAmps = new double[0];
-        public double[] tempCelcius = new double[0];
+        public final MotorControllerData motor = new MotorControllerData();
+
+        @LogName("Acceleration")
+        public double acceleration;
+
+        @LogName("Rotation Angle")
         public double rotatingAbsAngleDegrees;
+
+        @LogName("Rotation Velocity")
         public double rotatingAngleVelocity;
+
+        @LogName("PID Position Error")
         public double positionError;
 
-        // Logs the values of the variables
-        @Override
-        public void toLog(LogTable table) {
-            table.put("MotorSetpoint", setPoint);
-            table.put("MotorTempCelcius", tempCelcius);
-            table.put("MotorCurrentAmps", currentAmps);
-            table.put("rotatingAbsAngleDegrees", rotatingAbsAngleDegrees);
-            table.put("PIDPositionError", positionError);
-            table.put("rotatingAngleVelocity", rotatingAngleVelocity);
+        @LogName("PID Velocity Error")
+        public double velocityError;
+
+        public double getSetpoint() {
+            return motor.setpoint;
         }
 
-        // Retrieves the values of the variables
-        @Override
-        public void fromLog(LogTable table) {
-            this.setPoint = table.get("MotorSetpoint", setPoint);
-            this.currentAmps = table.get("MotorCurrentAmps", currentAmps);
-            this.tempCelcius = table.get("MotorTempCelcius", tempCelcius);
-            this.rotatingAbsAngleDegrees = table.get("rotatingAbsAngleDegrees", rotatingAbsAngleDegrees);
-            this.positionError = table.get("PIDPositionError", positionError);
-            this.rotatingAngleVelocity = table.get("rotatingAngleVelocity", rotatingAngleVelocity);
+        public void setSetpoint(double setpoint) {
+            motor.setpoint = setpoint;
         }
-
     }
 }
