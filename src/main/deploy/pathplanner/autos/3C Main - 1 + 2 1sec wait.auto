@@ -12,6 +12,56 @@
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pickup 1 - CS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Game Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker from 1 - CS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Rotate Speaker Sub."
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot Game Piece"
@@ -44,50 +94,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "Speaker from 2 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Rotate Speaker Sub."
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pickup 5 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 5 - CS"
                 }
               },
               {
