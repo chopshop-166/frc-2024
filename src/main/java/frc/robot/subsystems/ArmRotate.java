@@ -22,10 +22,11 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
     final ProfiledPIDController pid;
     // Set to zero until able to test
+    private boolean useAbsolute = true;
     final double RAISE_SPEED = .85;
-    final double MANUAL_LOWER_SPEED_COEF = 0.1;
+    final double MANUAL_LOWER_SPEED_COEF = 0.3;
     final double SLOW_DOWN_COEF = 0.5;
-    final double LOWER_SPEED = -0.1;
+    final double LOWER_SPEED = -0.15;
     final double NORMAL_TOLERANCE = 2;
     final double INTAKE_TOLERANCE = 4;
 
