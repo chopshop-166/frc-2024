@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.maps.subsystems.ArmRotateMap;
+import frc.robot.maps.subsystems.ArmRotateMap.ArmPresets;
 import frc.robot.maps.subsystems.ArmRotateMap.Data;
 
 public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
@@ -24,7 +25,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     // Set to zero until able to test
     private boolean useAbsolute = true;
     final double RAISE_SPEED = .85;
-    final double MANUAL_LOWER_SPEED_COEF = 0.3;
+    final double MANUAL_LOWER_SPEED_COEF = 0.5;
     final double SLOW_DOWN_COEF = 0.5;
     final double LOWER_SPEED = -0.15;
     final double NORMAL_TOLERANCE = 2;
@@ -32,40 +33,6 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
     private Constraints rotateConstraints = new Constraints(150, 200);
     ArmPresets level = ArmPresets.OFF;
-
-    public enum ArmPresets {
-        INTAKE(0.25),
-
-        OFF(Double.NaN),
-
-        SCORE_SPEAKER_PODIUM(28),
-
-        SCORE_AMP(90),
-
-        SCORE_SPEAKER_SUBWOOFER(11.5),
-
-        // Probs not correct
-        SCORE_SPEAKER_CENTERLINE(28),
-
-        STOW(75);
-
-        // podium angle maybe: 33.4
-
-        private double absoluteAngle;
-
-        private ArmPresets(double absoluteAngle) {
-            this.absoluteAngle = absoluteAngle;
-        }
-
-        /**
-         * Get the angle of the arm
-         * 
-         * @return Arm angle in degrees
-         */
-        public double getAngle() {
-            return absoluteAngle;
-        }
-    }
 
     public ArmRotate(ArmRotateMap armRotateMap) {
         super(new Data(), armRotateMap);
@@ -102,7 +69,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
                     getData().setSetpoint(LOWER_SPEED);
                     level = ArmPresets.OFF;
                 }, this::safeState).until(() -> {
-                    return getArmAngle() < ArmPresets.INTAKE.getAngle();
+                    return getArmAngle() < getMap().armPresets.getValue(ArmPresets.INTAKE);
                 });
     }
 
@@ -149,13 +116,14 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         super.periodic();
 
         if (level != ArmPresets.OFF) {
-            double setpoint = pid.calculate(getArmAngle(), new State(level.getAngle(), 0));
+            double setpoint = pid.calculate(getArmAngle(), new State(getMap().armPresets.getValue(level), 0));
             setpoint += getMap().armFeedforward.calculate(
                     Units.Degrees.of(pid.getSetpoint().position).in(Units.Radians),
                     Units.DegreesPerSecond.of(pid.getSetpoint().velocity).in(Units.RadiansPerSecond));
             getData().setSetpoint(setpoint);
         }
         Logger.recordOutput("armPreset", level);
+        Logger.recordOutput("desiredArmVelocity", pid.getSetpoint().velocity);
     }
 
 }

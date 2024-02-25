@@ -7,8 +7,8 @@ import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.maps.subsystems.ArmRotateMap.ArmPresets;
 import frc.robot.subsystems.ArmRotate;
-import frc.robot.subsystems.ArmRotate.ArmPresets;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
@@ -32,6 +32,7 @@ public class CommandSequences {
         this.shooter = shooter;
         this.led = led;
         this.armRotate = armRotate;
+        this.undertaker = undertaker;
     }
 
     // make sequences for intake and shooter.
@@ -52,7 +53,8 @@ public class CommandSequences {
 
     public Command moveAndIntake() {
         return led.toPreset().andThen(this.intake().deadlineWith(
-                armRotate.moveTo(ArmPresets.INTAKE).andThen(armRotate.moveToZero())), led.grabbedPiece());
+                armRotate.moveTo(ArmPresets.INTAKE).andThen(armRotate.moveToZero(), undertaker.spinIn())),
+                led.grabbedPiece());
     }
 
     public Command feedShoot() {
