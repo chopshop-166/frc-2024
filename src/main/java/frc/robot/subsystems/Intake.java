@@ -10,8 +10,8 @@ import frc.robot.maps.subsystems.IntakeMap.Data;
 
 public class Intake extends LoggedSubsystem<Data, IntakeMap> {
 
-    private final double GRAB_SPEED = 0.75;
-    private final double RELEASE_SPEED = -0.75;
+    private final double GRAB_SPEED = 0.25;
+    private final double RELEASE_SPEED = -0.25;
     private final double FEED_SPEED = 1.0;
     private final double FEED_DELAY = 0.2;
 

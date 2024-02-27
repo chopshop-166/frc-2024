@@ -11,15 +11,18 @@ import com.chopshop166.chopshoplib.motors.SmartMotorController;
 public class IntakeMap implements LoggableMap<IntakeMap.Data> {
     public SmartMotorController motor;
     private BooleanSupplier sensor;
+    public double grabSpeed;
 
     public IntakeMap() {
-        this(new SmartMotorController(), () -> false);
+        this(new SmartMotorController(), () -> false, 0);
 
     }
 
-    public IntakeMap(SmartMotorController motor, BooleanSupplier sensor) {
+    public IntakeMap(SmartMotorController motor, BooleanSupplier sensor, double grabSpeed) {
         this.motor = motor;
         this.sensor = sensor;
+        this.grabSpeed = grabSpeed;
+
     }
 
     @Override

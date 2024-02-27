@@ -207,7 +207,7 @@ public class Henry extends RobotMap {
         topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
         CSDigitalInput sensor = new CSDigitalInput(9);
         sensor.setInverted(true);
-        return new IntakeMap(topRoller, sensor::get);
+        return new IntakeMap(topRoller, sensor::get, 0.75);
     }
 
     @Override

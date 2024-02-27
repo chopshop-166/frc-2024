@@ -137,7 +137,8 @@ public class Robot extends CommandRobot {
         copilotController.rightBumper().onTrue(commandSequences.scoreAmp());
         copilotController.leftBumper().onTrue(commandSequences.podiumShot());
         copilotController.povUp().whileTrue(commandSequences.moveToAmp());
-        copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));
+        // copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));
+        copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.HALF_SPEED));
         copilotController.povRight().whileTrue(commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
         copilotController.povLeft().whileTrue(commandSequences.stow());
     }

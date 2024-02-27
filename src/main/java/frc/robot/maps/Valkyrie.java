@@ -129,7 +129,7 @@ public class Valkyrie extends RobotMap {
         CSSparkMax topRoller = new CSSparkMax(11, MotorType.kBrushless);
         CSSparkMax bottomRoller = new CSSparkMax(9, MotorType.kBrushless);
         bottomRoller.getMotorController().follow(topRoller.getMotorController(), true);
-        return new IntakeMap(topRoller, () -> false);
+        return new IntakeMap(topRoller, () -> false, 0.5);
     }
 
     @Override
