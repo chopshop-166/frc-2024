@@ -9,14 +9,16 @@ public class ShooterMap implements LoggableMap<ShooterMap.Data> {
 
     public final SmartMotorController topRoller;
     public final SmartMotorController bottomRoller;
+    public boolean splitSpeeds;
 
     public ShooterMap() {
-        this(new SmartMotorController(), new SmartMotorController());
+        this(new SmartMotorController(), new SmartMotorController(), false);
     }
 
-    public ShooterMap(SmartMotorController topRoller, SmartMotorController bottomRoller) {
+    public ShooterMap(SmartMotorController topRoller, SmartMotorController bottomRoller, boolean splitSpeeds) {
         this.topRoller = topRoller;
         this.bottomRoller = bottomRoller;
+        this.splitSpeeds = splitSpeeds;
     }
 
     @Override

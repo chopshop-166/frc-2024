@@ -10,7 +10,6 @@ import frc.robot.maps.subsystems.IntakeMap.Data;
 
 public class Intake extends LoggedSubsystem<Data, IntakeMap> {
 
-    private final double GRAB_SPEED = 0.25;
     private final double RELEASE_SPEED = -0.25;
     private final double FEED_SPEED = 1.0;
     private final double FEED_DELAY = 0.2;
@@ -22,7 +21,7 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
     public Command spinIn() {
         return runEnd(
                 () -> {
-                    getData().roller.setpoint = GRAB_SPEED;
+                    getData().roller.setpoint = getMap().grabSpeed;
 
                 }, this::safeState);
     }
@@ -37,7 +36,7 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
     public Command intakeGamePiece() {
         return runEnd(
                 () -> {
-                    getData().roller.setpoint = GRAB_SPEED;
+                    getData().roller.setpoint = getMap().grabSpeed;
                 }, this::safeState).until(() -> getData().gamePieceDetected);
     }
 

@@ -177,7 +177,7 @@ public class Henry extends RobotMap {
         ArmFeedforward feedForward = new ArmFeedforward(0, 0.04, 0.3, 0);
 
         return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, new ValueRange(.5, 90),
-                new ValueRange(20, 75), new ArmRotateMap.ArmPresetValues(0.5, 90, 28, 28, 11.5, 75));
+                new ValueRange(20, 75), new ArmRotateMap.ArmPresetValues(40, 90, 28, 28, 11.5, 75));
     }
 
     @Override
@@ -196,7 +196,7 @@ public class Henry extends RobotMap {
         bottomWheels.getPidController().setI(0);
         bottomWheels.getPidController().setD(0.0);
         bottomWheels.getPidController().setFF(0.000185);
-        return new ShooterMap(topWheels, bottomWheels);
+        return new ShooterMap(topWheels, bottomWheels, false);
     }
 
     @Override
