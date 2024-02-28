@@ -130,7 +130,9 @@ public class Robot extends CommandRobot {
         copilotController.back().onTrue(intake.safeStateCmd());
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.a().onTrue(commandSequences.moveAndIntake());
-        copilotController.b().whileTrue(commandSequences.scoreSpeakerCharge(copilotController, driveController));
+        copilotController.b().onTrue(undertaker.safeStateCmd());
+        // copilotController.b().whileTrue(commandSequences.scoreSpeakerCharge(copilotController,
+        // driveController));
         copilotController.b().onFalse(commandSequences.scoreSpeakerRelease(copilotController, driveController));
         copilotController.y().onTrue(intake.feedShooter());
         copilotController.x().whileTrue(intake.spinOut());

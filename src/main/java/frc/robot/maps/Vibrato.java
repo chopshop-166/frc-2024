@@ -174,9 +174,9 @@ public class Vibrato extends RobotMap {
         setStatusPeriods(rightMotor);
         rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
         leftMotor.getMotorController().setInverted(false);
-        leftMotor.getMotorController().setIdleMode(IdleMode.kCoast);
+        leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
         leftMotor.getMotorController().setSmartCurrentLimit(40);
-        rightMotor.getMotorController().setIdleMode(IdleMode.kCoast);
+        rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
         rightMotor.getMotorController().setSmartCurrentLimit(40);
         CSEncoder encoder = new CSEncoder(2, 3, false);
         encoder.setDistancePerPulse(360.0 / 2048.0);
@@ -201,38 +201,38 @@ public class Vibrato extends RobotMap {
                         -20));
     }
 
-    @Override
-    public IntakeMap getIntakeMap() {
-        CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
-        setStatusPeriods(topRoller);
-        topRoller.getMotorController().setInverted(true);
-        topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
-        topRoller.getMotorController().setSmartCurrentLimit(30);
-        CSDigitalInput sensor = new CSDigitalInput(0);
-        return new IntakeMap(topRoller, sensor::get, 0.3);
-    }
+    // @Override
+    // public IntakeMap getIntakeMap() {
+    //     CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
+    //     setStatusPeriods(topRoller);
+    //     topRoller.getMotorController().setInverted(true);
+    //     topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
+    //     topRoller.getMotorController().setSmartCurrentLimit(30);
+    //     CSDigitalInput sensor = new CSDigitalInput(0);
+    //     return new IntakeMap(topRoller, sensor::get, 0.3);
+    // }
 
-    @Override
-    public ShooterMap getShooterMap() {
-        CSSparkFlex rightWheels = new CSSparkFlex(11, MotorType.kBrushless);
-        CSSparkFlex leftWheels = new CSSparkFlex(10, MotorType.kBrushless);
+    // @Override
+    // public ShooterMap getShooterMap() {
+    //     CSSparkFlex rightWheels = new CSSparkFlex(11, MotorType.kBrushless);
+    //     CSSparkFlex leftWheels = new CSSparkFlex(10, MotorType.kBrushless);
 
-        rightWheels.setControlType(ControlType.kVelocity);
-        rightWheels.getPidController().setP(0.001);
-        rightWheels.getPidController().setI(0);
-        rightWheels.getPidController().setD(0.0);
-        rightWheels.getPidController().setFF(0.000182);
-        rightWheels.getEncoder().getRaw().setMeasurementPeriod(10);
+    //     rightWheels.setControlType(ControlType.kVelocity);
+    //     rightWheels.getPidController().setP(0.001);
+    //     rightWheels.getPidController().setI(0);
+    //     rightWheels.getPidController().setD(0.0);
+    //     rightWheels.getPidController().setFF(0.000182);
+    //     rightWheels.getEncoder().getRaw().setMeasurementPeriod(10);
 
-        leftWheels.setControlType(ControlType.kVelocity);
-        leftWheels.getPidController().setP(0.001);
-        leftWheels.getPidController().setI(0);
-        leftWheels.getPidController().setD(0.0);
-        leftWheels.getPidController().setFF(0.000174);
-        leftWheels.getEncoder().getRaw().setMeasurementPeriod(10);
-        leftWheels.getMotorController().setInverted(true);
-        return new ShooterMap(rightWheels, leftWheels, true);
-    }
+    //     leftWheels.setControlType(ControlType.kVelocity);
+    //     leftWheels.getPidController().setP(0.001);
+    //     leftWheels.getPidController().setI(0);
+    //     leftWheels.getPidController().setD(0.0);
+    //     leftWheels.getPidController().setFF(0.000174);
+    //     leftWheels.getEncoder().getRaw().setMeasurementPeriod(10);
+    //     leftWheels.getMotorController().setInverted(true);
+    //     return new ShooterMap(rightWheels, leftWheels, true);
+    // }
 
     // public LedMap getLedMap() {
     // var result = new LedMap(0, 56);
@@ -244,20 +244,20 @@ public class Vibrato extends RobotMap {
     // return result;
     // }
 
-    // @Override
-    // public UndertakerMap getUndertakerMap() {
-    // CSSparkFlex topRoller = new CSSparkFlex(16, MotorType.kBrushless);
-    // CSSparkFlex bottomRoller = new CSSparkFlex(15, MotorType.kBrushless);
+    @Override
+    public UndertakerMap getUndertakerMap() {
+    CSSparkFlex topRoller = new CSSparkFlex(16, MotorType.kBrushless);
+    CSSparkFlex bottomRoller = new CSSparkFlex(15, MotorType.kBrushless);
 
-    // topRoller.getMotorController().setInverted(true);
-    // topRoller.getMotorController().setIdleMode(IdleMode.kCoast);
-    // topRoller.getMotorController().setSmartCurrentLimit(40);
-    // bottomRoller.getMotorController().setSmartCurrentLimit(40);
-    // bottomRoller.getMotorController().follow(topRoller.getMotorController(),
-    // false);
-    // return new UndertakerMap(new SmartMotorControllerGroup(topRoller,
-    // bottomRoller));
-    // }
+    topRoller.getMotorController().setInverted(true);
+    topRoller.getMotorController().setIdleMode(IdleMode.kCoast);
+    topRoller.getMotorController().setSmartCurrentLimit(40);
+    bottomRoller.getMotorController().setSmartCurrentLimit(40);
+    bottomRoller.getMotorController().follow(topRoller.getMotorController(),
+    false);
+    return new UndertakerMap(new SmartMotorControllerGroup(topRoller,
+    bottomRoller));
+    }
 
     @Override
     public void setupLogging() {

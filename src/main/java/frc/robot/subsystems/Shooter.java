@@ -10,7 +10,7 @@ import frc.robot.maps.subsystems.ShooterMap.Data;
 public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
 
     public enum Speeds {
-        FULL_SPEED(4500, 4500, 4500),
+        FULL_SPEED(3000, 5500, 4500),
 
         SUBWOOFER_SHOT(3000, 3000, 3000),
 
