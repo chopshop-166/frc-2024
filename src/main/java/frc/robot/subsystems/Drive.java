@@ -151,6 +151,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
         // All the states
         getData().setDesiredStates(moduleStates);
+        Logger.recordOutput("Desired Module States", moduleStates);
     }
 
     public ChassisSpeeds getSpeeds() {
@@ -256,6 +257,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
         Logger.recordOutput("Angle", getMap().gyro().getAngle());
         Logger.recordOutput("rotation", getMap().gyro().getRotation2d());
+        Logger.recordOutput("Actual Module States", getData().getModuleStates());
     }
 
     public void resetGyro() {

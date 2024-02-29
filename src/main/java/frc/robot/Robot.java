@@ -151,9 +151,9 @@ public class Robot extends CommandRobot {
         Shuffleboard.getTab("Pit Test").add("Drive Backward",
                 drive.moveInDirection(0, -1, 3)).withPosition(1, 2);
         Shuffleboard.getTab("Pit Test").add("Drive Left",
-                drive.moveInDirection(-1, 0, 3)).withPosition(0, 1);
+                drive.moveInDirection(1, 0, 3)).withPosition(0, 1);
         Shuffleboard.getTab("Pit Test").add("Drive Right",
-                drive.moveInDirection(1, 0, 3)).withPosition(2, 1);
+                drive.moveInDirection(-1, 0, 3)).withPosition(2, 1);
         Shuffleboard.getTab("Pit Test").add("Drive Forward",
                 drive.moveInDirection(0, 1, 3)).withPosition(1, 0);
         Shuffleboard.getTab("Pit Test").add("Drive Forward Faster",
