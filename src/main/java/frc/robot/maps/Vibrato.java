@@ -102,6 +102,11 @@ public class Vibrato extends RobotMap {
         rearLeftDrive.setInverted(true);
         rearRightDrive.setInverted(false);
 
+        frontLeftSteer.getMotorController().setSmartCurrentLimit(30);
+        frontRightSteer.getMotorController().setSmartCurrentLimit(30);
+        rearLeftSteer.getMotorController().setSmartCurrentLimit(30);
+        rearRightSteer.getMotorController().setSmartCurrentLimit(30);
+
         // Configuration for MK4i with L2 speeds
         Configuration MK4i_L2 = new Configuration(SDSSwerveModule.MK4_V2.gearRatio,
                 SDSSwerveModule.MK4_V2.wheelDiameter, new PIDValues(0.011, 0.00, 0.0002),
@@ -225,6 +230,9 @@ public class Vibrato extends RobotMap {
     // setStatusPeriods(rightWheels, 100, 100, 100);
     // setStatusPeriods(leftWheels, 100, 100, 100);
 
+    // rightWheels.getMotorController().setSmartCurrentLimit(50);
+    // leftWheels.getMotorController().setSmartCurrentLimit(50);
+
     // rightWheels.setControlType(ControlType.kVelocity);
     // rightWheels.getPidController().setP(0.001);
     // rightWheels.getPidController().setI(0);
@@ -242,12 +250,13 @@ public class Vibrato extends RobotMap {
     // return new ShooterMap(rightWheels, leftWheels, true);
     // }
 
+    // @Override
     // public LedMap getLedMap() {
     // var result = new LedMap(0, 56);
     // var leds = result.ledBuffer;
 
-    // SegmentConfig underglow = leds.segment(56).tags("underglow", "Shooter", "Arm
-    // Rotate", "Intake", "HP signal",
+    // SegmentConfig underglow = leds.segment(56).tags("underglow", "Shooter",
+    // "ArmRotate", "Intake", "HP signal",
     // "Vision", "Fire", "Auto", "Alliance");
     // return result;
     // }
