@@ -9,6 +9,7 @@ public class CSDutyCycleEncoderLocal extends DutyCycleEncoder implements IAbsolu
 
     private double distancePerRotation = 1.0;
     private double positionOffset = 0;
+    private boolean isInverted = false;
 
     /**
      * Create the Duty Cycle Encoder
@@ -39,18 +40,23 @@ public class CSDutyCycleEncoderLocal extends DutyCycleEncoder implements IAbsolu
 
     @Override
     public double getAbsolutePosition() {
-        double distance = super.getAbsolutePosition() * this.distancePerRotation;
+
+        double distance = super.getAbsolutePosition();
+        // If encoder is going from 360(1) to 0, go from 0 to 360(1)
+        if (isInverted) {
+            distance = 1 - distance;
+        }
+
+        distance *= this.distancePerRotation;
+
         // Before the sensor is initialized we will get the negative offset back.
         // Just return 0 if this happens.
         if (distance == -this.positionOffset) {
             return 0;
         }
 
-        // if (distance < -10) {
-        // return distance + 180;
-        // }
-        return distance - this.positionOffset;
-
+        distance -= this.positionOffset;
+        return distance;
     }
 
     @Override
@@ -68,6 +74,10 @@ public class CSDutyCycleEncoderLocal extends DutyCycleEncoder implements IAbsolu
     @Override
     public double getDistancePerRotation() {
         return this.distancePerRotation;
+    }
+
+    public void setInverted(boolean isInverted) {
+        this.isInverted = isInverted;
     }
 
     @Override

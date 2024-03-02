@@ -63,7 +63,7 @@ public class Vibrato extends RobotMap {
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
         final double MODULE_OFFSET_XY = Units.inchesToMeters(10.875);
-        final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(0);
+        final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(1);
 
         final CSSparkMax frontLeftSteer = new CSSparkMax(4);
         final CSSparkMax frontRightSteer = new CSSparkMax(8);
