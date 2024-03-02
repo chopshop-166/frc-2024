@@ -22,7 +22,6 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
         return runEnd(
                 () -> {
                     getData().roller.setpoint = getMap().grabSpeed;
-
                 }, this::safeState);
     }
 
@@ -56,10 +55,4 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
     public void safeState() {
         getData().roller.setpoint = 0;
     }
-
-    @Override
-    public void periodic() {
-        super.periodic();
-    }
-
 }
