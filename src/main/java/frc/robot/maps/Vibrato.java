@@ -7,6 +7,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
+import com.chopshop166.chopshoplib.motors.CSSpark;
 import com.chopshop166.chopshoplib.motors.CSSparkFlex;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
 import com.chopshop166.chopshoplib.motors.SmartMotorControllerGroup;
@@ -51,11 +52,10 @@ import frc.robot.maps.subsystems.UndertakerMap;
 @RobotMapFor("00:80:2F:36:7C:49")
 public class Vibrato extends RobotMap {
 
-    private static void setStatusPeriods(CSSparkMax motor) {
-        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
-        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus4, 1000);
-        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
-        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus6, 1000);
+    private static void setStatusPeriods(CSSpark motor, int status0, int status1, int status2) {
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus0, status0);
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus1, status1);
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus2, status2);
     }
 
     @Override
@@ -82,10 +82,15 @@ public class Vibrato extends RobotMap {
         CSSparkFlex rearLeftDrive = new CSSparkFlex(1, MotorType.kBrushless);
         CSSparkFlex rearRightDrive = new CSSparkFlex(5, MotorType.kBrushless);
 
-        setStatusPeriods(frontLeftSteer);
-        setStatusPeriods(frontRightSteer);
-        setStatusPeriods(rearLeftSteer);
-        setStatusPeriods(rearRightSteer);
+        setStatusPeriods(frontLeftSteer, 100, 100, 100);
+        setStatusPeriods(frontRightSteer, 100, 100, 100);
+        setStatusPeriods(rearLeftSteer, 100, 100, 100);
+        setStatusPeriods(rearRightSteer, 100, 100, 100);
+
+        setStatusPeriods(frontLeftDrive, 100, 10, 10);
+        setStatusPeriods(frontRightDrive, 100, 10, 10);
+        setStatusPeriods(rearLeftDrive, 100, 10, 10);
+        setStatusPeriods(rearRightDrive, 100, 10, 10);
 
         frontLeftSteer.getMotorController().setInverted(true);
         frontRightSteer.getMotorController().setInverted(true);
@@ -169,8 +174,8 @@ public class Vibrato extends RobotMap {
     // public ArmRotateMap getArmRotateMap() {
     // CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
     // CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
-    // setStatusPeriods(leftMotor);
-    // setStatusPeriods(rightMotor);
+    // setStatusPeriods(leftMotor, 10, 100, 100);
+    // setStatusPeriods(rightMotor, 10, 100, 100);
     // rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
     // leftMotor.getMotorController().setInverted(false);
     // leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
@@ -204,7 +209,7 @@ public class Vibrato extends RobotMap {
     // @Override
     // public IntakeMap getIntakeMap() {
     // CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
-    // setStatusPeriods(topRoller);
+    // setStatusPeriods(topRoller, 100, 100, 100);
     // topRoller.getMotorController().setInverted(true);
     // topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
     // topRoller.getMotorController().setSmartCurrentLimit(30);
@@ -216,6 +221,9 @@ public class Vibrato extends RobotMap {
     // public ShooterMap getShooterMap() {
     // CSSparkFlex rightWheels = new CSSparkFlex(11, MotorType.kBrushless);
     // CSSparkFlex leftWheels = new CSSparkFlex(10, MotorType.kBrushless);
+
+    // setStatusPeriods(rightWheels, 100, 100, 100);
+    // setStatusPeriods(leftWheels, 100, 100, 100);
 
     // rightWheels.setControlType(ControlType.kVelocity);
     // rightWheels.getPidController().setP(0.001);
@@ -248,6 +256,9 @@ public class Vibrato extends RobotMap {
     // public UndertakerMap getUndertakerMap() {
     // CSSparkFlex topRoller = new CSSparkFlex(16, MotorType.kBrushless);
     // CSSparkFlex bottomRoller = new CSSparkFlex(15, MotorType.kBrushless);
+
+    // setStatusPeriods(topRoller, 10, 100, 100);
+    // setStatusPeriods(bottomRoller, 10, 100, 100);
 
     // topRoller.getMotorController().setInverted(true);
     // topRoller.getMotorController().setIdleMode(IdleMode.kCoast);
