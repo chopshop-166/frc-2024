@@ -38,5 +38,4 @@ public class Undertaker extends LoggedSubsystem<Data, UndertakerMap> {
     public void safeState() {
         getData().roller.setpoint = 0;
     }
-
 }
