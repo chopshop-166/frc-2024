@@ -51,8 +51,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     SwerveDrivePoseEstimator estimator;
 
     // Vision objects
-    private final PhotonCamera camera;
-    private final PhotonPoseEstimator photonEstimator;
+    private PhotonCamera camera = null;
+    private PhotonPoseEstimator photonEstimator = null;
     private double lastEstTimestamp = 0;
 
     // Cam mounted facing forward, half a meter forward of center, half a meter up
@@ -90,11 +90,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
                 // RELATIVE ChassisSpeeds
                 map.pathFollower(), () -> isBlue, this);
 
-        camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
+        // camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
 
-        photonEstimator = new PhotonPoseEstimator(
-                kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
-        photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        // photonEstimator = new PhotonPoseEstimator(
+        // kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
+        // photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     }
 
@@ -243,16 +243,16 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         super.periodic();
         estimator.update(getMap().gyro().getRotation2d(), getData().getModulePositions());
         // Correct pose estimate with vision measurements
-        var visionEst = getEstimatedGlobalPose();
-        visionEst.ifPresent(
-                est -> {
-                    var estPose = est.estimatedPose.toPose2d();
-                    // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = getEstimationStdDevs(estPose);
+        // var visionEst = getEstimatedGlobalPose();
+        // visionEst.ifPresent(
+        //         est -> {
+        //             var estPose = est.estimatedPose.toPose2d();
+        //             // Change our trust in the measurement based on the tags we can see
+        //             var estStdDevs = getEstimationStdDevs(estPose);
 
-                    estimator.addVisionMeasurement(
-                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                });
+        //             estimator.addVisionMeasurement(
+        //                     est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+        //         });
 
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
         Logger.recordOutput("Angle", getMap().gyro().getAngle());
