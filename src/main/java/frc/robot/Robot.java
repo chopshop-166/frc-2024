@@ -111,7 +111,8 @@ public class Robot extends CommandRobot {
         // be added.
         Logger.start();
 
-        led.BLUE().schedule();;
+        led.blue().schedule();
+
     }
 
     @Override

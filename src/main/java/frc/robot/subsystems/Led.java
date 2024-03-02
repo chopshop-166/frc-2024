@@ -79,7 +79,7 @@ public class Led extends LEDSubsystem {
         return setGlobalPattern(new FlashPattern(new Color(255, 32, 82), .5));
     }
 
-    public Command BLUE() {
+    public Command blue() {
         return setGlobalPattern(new Color(255, 0, 0));
     }
 
