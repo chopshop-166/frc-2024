@@ -27,7 +27,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -64,10 +63,10 @@ public class Henry extends RobotMap {
         final double MODULE_OFFSET_XY = Units.inchesToMeters(10.875); // Frostbites was 9.89
         final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(1);
 
-        final CSSparkMax frontLeftSteer = new CSSparkMax(4, MotorType.kBrushless);
-        final CSSparkMax frontRightSteer = new CSSparkMax(8, MotorType.kBrushless);
-        final CSSparkMax rearLeftSteer = new CSSparkMax(2, MotorType.kBrushless);
-        final CSSparkMax rearRightSteer = new CSSparkMax(6, MotorType.kBrushless);
+        final CSSparkMax frontLeftSteer = new CSSparkMax(4);
+        final CSSparkMax frontRightSteer = new CSSparkMax(8);
+        final CSSparkMax rearLeftSteer = new CSSparkMax(2);
+        final CSSparkMax rearRightSteer = new CSSparkMax(6);
 
         setStatusPeriods(frontLeftSteer);
         setStatusPeriods(frontRightSteer);
@@ -91,8 +90,7 @@ public class Henry extends RobotMap {
         encoderFLConfig.MagnetSensor.MagnetOffset = FLOFFSET;
         encoderFL.getConfigurator().apply(encoderFLConfig);
         final SDSSwerveModule frontLeft = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFL), frontLeftSteer, new CSSparkMax(3, MotorType.kBrushless),
-                MK4i_L2);
+                new CtreEncoder(encoderFL), frontLeftSteer, new CSSparkMax(3), MK4i_L2);
 
         // Front Right Module
         final CANcoder encoderFR = new CANcoder(4);
@@ -101,9 +99,7 @@ public class Henry extends RobotMap {
         encoderFRConfig.MagnetSensor.MagnetOffset = FROFFSET;
         encoderFR.getConfigurator().apply(encoderFRConfig);
         final SDSSwerveModule frontRight = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFR), frontRightSteer, new CSSparkMax(7,
-                        MotorType.kBrushless),
-                MK4i_L2);
+                new CtreEncoder(encoderFR), frontRightSteer, new CSSparkMax(7), MK4i_L2);
 
         // Rear Left Module
         final CANcoder encoderRL = new CANcoder(3);
@@ -112,9 +108,7 @@ public class Henry extends RobotMap {
         encoderRLConfig.MagnetSensor.MagnetOffset = RLOFFSET;
         encoderRL.getConfigurator().apply(encoderRLConfig);
         final SDSSwerveModule rearLeft = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkMax(1,
-                        MotorType.kBrushless),
-                MK4i_L2);
+                new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkMax(1), MK4i_L2);
 
         // Rear Right Module
         final CANcoder encoderRR = new CANcoder(1);
@@ -123,9 +117,7 @@ public class Henry extends RobotMap {
         encoderRRConfig.MagnetSensor.MagnetOffset = RROFFSET;
         encoderRR.getConfigurator().apply(encoderRRConfig);
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRR), rearRightSteer, new CSSparkMax(5,
-                        MotorType.kBrushless),
-                MK4i_L2);
+                new CtreEncoder(encoderRR), rearRightSteer, new CSSparkMax(5), MK4i_L2);
 
         final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(15);
 
@@ -152,8 +144,8 @@ public class Henry extends RobotMap {
 
     @Override
     public ArmRotateMap getArmRotateMap() {
-        CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
-        CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
+        CSSparkMax leftMotor = new CSSparkMax(13);
+        CSSparkMax rightMotor = new CSSparkMax(14);
         setStatusPeriods(leftMotor);
         setStatusPeriods(rightMotor);
         rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
@@ -182,8 +174,8 @@ public class Henry extends RobotMap {
 
     @Override
     public ShooterMap getShooterMap() {
-        CSSparkMax topWheels = new CSSparkMax(11, MotorType.kBrushless);
-        CSSparkMax bottomWheels = new CSSparkMax(10, MotorType.kBrushless);
+        CSSparkMax topWheels = new CSSparkMax(11);
+        CSSparkMax bottomWheels = new CSSparkMax(10);
         setStatusPeriods(topWheels);
         setStatusPeriods(bottomWheels);
         topWheels.setControlType(ControlType.kVelocity);
@@ -201,7 +193,7 @@ public class Henry extends RobotMap {
 
     @Override
     public IntakeMap getIntakeMap() {
-        CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
+        CSSparkMax topRoller = new CSSparkMax(12);
         setStatusPeriods(topRoller);
         topRoller.getMotorController().setInverted(true);
         topRoller.getMotorController().setIdleMode(IdleMode.kBrake);

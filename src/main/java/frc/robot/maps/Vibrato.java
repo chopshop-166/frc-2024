@@ -1,11 +1,14 @@
 package frc.robot.maps;
 
-import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.chopshop166.chopshoplib.ValueRange;
+import com.chopshop166.chopshoplib.digital.CSDigitalInput;
+import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
+import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
+import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 import com.chopshop166.chopshoplib.motors.CSSpark;
 import com.chopshop166.chopshoplib.motors.CSSparkFlex;
@@ -25,7 +28,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -36,19 +38,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.maps.subsystems.ArmRotateMap;
-
-import com.chopshop166.chopshoplib.ValueRange;
-import com.chopshop166.chopshoplib.digital.CSDigitalInput;
-import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
-import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
-import com.chopshop166.chopshoplib.leds.SegmentConfig;
-import com.chopshop166.chopshoplib.maps.LedMap;
-import com.chopshop166.chopshoplib.maps.RobotMapFor;
-
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 import frc.robot.maps.subsystems.UndertakerMap;
-import frc.robot.subsystems.ArmRotate;
 
 @RobotMapFor("00:80:2F:36:7C:49")
 public class Vibrato extends RobotMap {
@@ -73,15 +65,15 @@ public class Vibrato extends RobotMap {
         final double MODULE_OFFSET_XY = Units.inchesToMeters(10.875);
         final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(0);
 
-        final CSSparkMax frontLeftSteer = new CSSparkMax(4, MotorType.kBrushless);
-        final CSSparkMax frontRightSteer = new CSSparkMax(8, MotorType.kBrushless);
-        final CSSparkMax rearLeftSteer = new CSSparkMax(2, MotorType.kBrushless);
-        final CSSparkMax rearRightSteer = new CSSparkMax(6, MotorType.kBrushless);
+        final CSSparkMax frontLeftSteer = new CSSparkMax(4);
+        final CSSparkMax frontRightSteer = new CSSparkMax(8);
+        final CSSparkMax rearLeftSteer = new CSSparkMax(2);
+        final CSSparkMax rearRightSteer = new CSSparkMax(6);
 
-        CSSparkFlex frontLeftDrive = new CSSparkFlex(3, MotorType.kBrushless);
-        CSSparkFlex frontRightDrive = new CSSparkFlex(7, MotorType.kBrushless);
-        CSSparkFlex rearLeftDrive = new CSSparkFlex(1, MotorType.kBrushless);
-        CSSparkFlex rearRightDrive = new CSSparkFlex(5, MotorType.kBrushless);
+        CSSparkFlex frontLeftDrive = new CSSparkFlex(3);
+        CSSparkFlex frontRightDrive = new CSSparkFlex(7);
+        CSSparkFlex rearLeftDrive = new CSSparkFlex(1);
+        CSSparkFlex rearRightDrive = new CSSparkFlex(5);
 
         setStatusPeriods(frontLeftSteer, 100, 100, 100);
         setStatusPeriods(frontRightSteer, 100, 100, 100);
@@ -121,8 +113,7 @@ public class Vibrato extends RobotMap {
         encoderFLConfig.MagnetSensor.MagnetOffset = FLOFFSET;
         encoderFL.getConfigurator().apply(encoderFLConfig);
         final SDSSwerveModule frontLeft = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFL), frontLeftSteer, frontLeftDrive,
-                MK4i_L2);
+                new CtreEncoder(encoderFL), frontLeftSteer, frontLeftDrive, MK4i_L2);
 
         // Front Right Module
         final CANcoder encoderFR = new CANcoder(4);
@@ -131,8 +122,7 @@ public class Vibrato extends RobotMap {
         encoderFRConfig.MagnetSensor.MagnetOffset = FROFFSET;
         encoderFR.getConfigurator().apply(encoderFRConfig);
         final SDSSwerveModule frontRight = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFR), frontRightSteer, frontRightDrive,
-                MK4i_L2);
+                new CtreEncoder(encoderFR), frontRightSteer, frontRightDrive, MK4i_L2);
 
         // Rear Left Module
         final CANcoder encoderRL = new CANcoder(1);
@@ -141,8 +131,7 @@ public class Vibrato extends RobotMap {
         encoderRLConfig.MagnetSensor.MagnetOffset = RLOFFSET;
         encoderRL.getConfigurator().apply(encoderRLConfig);
         final SDSSwerveModule rearLeft = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRL), rearLeftSteer, rearLeftDrive,
-                MK4i_L2);
+                new CtreEncoder(encoderRL), rearLeftSteer, rearLeftDrive, MK4i_L2);
 
         // Rear Right Module
         final CANcoder encoderRR = new CANcoder(3);
@@ -151,8 +140,7 @@ public class Vibrato extends RobotMap {
         encoderRRConfig.MagnetSensor.MagnetOffset = RROFFSET;
         encoderRR.getConfigurator().apply(encoderRRConfig);
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRR), rearRightSteer, rearRightDrive,
-                MK4i_L2);
+                new CtreEncoder(encoderRR), rearRightSteer, rearRightDrive, MK4i_L2);
 
         final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(15);
 
@@ -178,10 +166,11 @@ public class Vibrato extends RobotMap {
 
     @Override
     public ArmRotateMap getArmRotateMap() {
-        CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
-        CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
+        CSSparkMax leftMotor = new CSSparkMax(13);
+        CSSparkMax rightMotor = new CSSparkMax(14);
         setStatusPeriods(leftMotor, 10, 100, 100);
         setStatusPeriods(rightMotor, 10, 100, 100);
+
         rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
         leftMotor.getMotorController().setInverted(false);
         leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
@@ -213,7 +202,7 @@ public class Vibrato extends RobotMap {
 
     @Override
     public IntakeMap getIntakeMap() {
-        CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
+        CSSparkMax topRoller = new CSSparkMax(12);
         setStatusPeriods(topRoller, 100, 100, 100);
         topRoller.getMotorController().setInverted(true);
         topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
@@ -224,8 +213,8 @@ public class Vibrato extends RobotMap {
 
     @Override
     public ShooterMap getShooterMap() {
-        CSSparkFlex rightWheels = new CSSparkFlex(11, MotorType.kBrushless);
-        CSSparkFlex leftWheels = new CSSparkFlex(10, MotorType.kBrushless);
+        CSSparkFlex rightWheels = new CSSparkFlex(11);
+        CSSparkFlex leftWheels = new CSSparkFlex(10);
 
         setStatusPeriods(rightWheels, 100, 100, 100);
         setStatusPeriods(leftWheels, 100, 100, 100);
@@ -263,8 +252,8 @@ public class Vibrato extends RobotMap {
 
     @Override
     public UndertakerMap getUndertakerMap() {
-        CSSparkFlex topRoller = new CSSparkFlex(16, MotorType.kBrushless);
-        CSSparkFlex bottomRoller = new CSSparkFlex(15, MotorType.kBrushless);
+        CSSparkFlex topRoller = new CSSparkFlex(16);
+        CSSparkFlex bottomRoller = new CSSparkFlex(15);
 
         setStatusPeriods(topRoller, 10, 100, 100);
         setStatusPeriods(bottomRoller, 10, 100, 100);
