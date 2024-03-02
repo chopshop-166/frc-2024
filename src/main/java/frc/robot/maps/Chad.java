@@ -5,6 +5,12 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.chopshop166.chopshoplib.ValueRange;
+import com.chopshop166.chopshoplib.digital.CSDigitalInput;
+import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
+import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
+import com.chopshop166.chopshoplib.leds.SegmentConfig;
+import com.chopshop166.chopshoplib.maps.LedMap;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 import com.chopshop166.chopshoplib.motors.CSSparkFlex;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
@@ -23,7 +29,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -32,14 +37,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.robot.maps.subsystems.ArmRotateMap;
-
-import com.chopshop166.chopshoplib.ValueRange;
-import com.chopshop166.chopshoplib.digital.CSDigitalInput;
-import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
-import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
-import com.chopshop166.chopshoplib.leds.SegmentConfig;
-import com.chopshop166.chopshoplib.maps.LedMap;
-
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 import frc.robot.maps.subsystems.UndertakerMap;
@@ -65,10 +62,10 @@ public class Chad {
         final double MODULE_OFFSET_XY = Units.inchesToMeters(10.875); // Frostbites was 9.89
         final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(1);
 
-        final CSSparkMax frontLeftSteer = new CSSparkMax(4, MotorType.kBrushless);
-        final CSSparkMax frontRightSteer = new CSSparkMax(8, MotorType.kBrushless);
-        final CSSparkMax rearLeftSteer = new CSSparkMax(2, MotorType.kBrushless);
-        final CSSparkMax rearRightSteer = new CSSparkMax(6, MotorType.kBrushless);
+        final CSSparkMax frontLeftSteer = new CSSparkMax(4);
+        final CSSparkMax frontRightSteer = new CSSparkMax(8);
+        final CSSparkMax rearLeftSteer = new CSSparkMax(2);
+        final CSSparkMax rearRightSteer = new CSSparkMax(6);
 
         setStatusPeriods(frontLeftSteer);
         setStatusPeriods(frontRightSteer);
@@ -92,8 +89,7 @@ public class Chad {
         encoderFLConfig.MagnetSensor.MagnetOffset = FLOFFSET;
         encoderFL.getConfigurator().apply(encoderFLConfig);
         final SDSSwerveModule frontLeft = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFL), frontLeftSteer, new CSSparkFlex(3, MotorType.kBrushless),
-                MK4i_L2);
+                new CtreEncoder(encoderFL), frontLeftSteer, new CSSparkFlex(3), MK4i_L2);
 
         // Front Right Module
         final CANcoder encoderFR = new CANcoder(4);
@@ -102,9 +98,7 @@ public class Chad {
         encoderFRConfig.MagnetSensor.MagnetOffset = FROFFSET;
         encoderFR.getConfigurator().apply(encoderFRConfig);
         final SDSSwerveModule frontRight = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFR), frontRightSteer, new CSSparkFlex(7,
-                        MotorType.kBrushless),
-                MK4i_L2);
+                new CtreEncoder(encoderFR), frontRightSteer, new CSSparkFlex(7), MK4i_L2);
 
         // Rear Left Module
         final CANcoder encoderRL = new CANcoder(3);
@@ -113,9 +107,7 @@ public class Chad {
         encoderRLConfig.MagnetSensor.MagnetOffset = RLOFFSET;
         encoderRL.getConfigurator().apply(encoderRLConfig);
         final SDSSwerveModule rearLeft = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkFlex(1,
-                        MotorType.kBrushless),
-                MK4i_L2);
+                new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkFlex(1), MK4i_L2);
 
         // Rear Right Module
         final CANcoder encoderRR = new CANcoder(1);
@@ -124,9 +116,7 @@ public class Chad {
         encoderRRConfig.MagnetSensor.MagnetOffset = RROFFSET;
         encoderRR.getConfigurator().apply(encoderRRConfig);
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRR), rearRightSteer, new CSSparkFlex(5,
-                        MotorType.kBrushless),
-                MK4i_L2);
+                new CtreEncoder(encoderRR), rearRightSteer, new CSSparkFlex(5), MK4i_L2);
 
         final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(15);
 
@@ -151,8 +141,8 @@ public class Chad {
     }
 
     public ArmRotateMap getArmRotateMap() {
-        CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
-        CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
+        CSSparkMax leftMotor = new CSSparkMax(13);
+        CSSparkMax rightMotor = new CSSparkMax(14);
         setStatusPeriods(leftMotor);
         setStatusPeriods(rightMotor);
         rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
@@ -181,7 +171,7 @@ public class Chad {
     }
 
     public IntakeMap getIntakeMap() {
-        CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
+        CSSparkMax topRoller = new CSSparkMax(12);
         setStatusPeriods(topRoller);
         topRoller.getMotorController().setInverted(true);
         topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
@@ -191,8 +181,8 @@ public class Chad {
     }
 
     public ShooterMap getShooterMap() {
-        CSSparkFlex rightWheels = new CSSparkFlex(11, MotorType.kBrushless);
-        CSSparkFlex leftWheels = new CSSparkFlex(10, MotorType.kBrushless);
+        CSSparkFlex rightWheels = new CSSparkFlex(11);
+        CSSparkFlex leftWheels = new CSSparkFlex(10);
         rightWheels.setControlType(ControlType.kVelocity);
         rightWheels.getPidController().setP(0.000055);
         rightWheels.getPidController().setI(0);
@@ -216,8 +206,8 @@ public class Chad {
     }
 
     public UndertakerMap getUndertakerMap() {
-        CSSparkFlex topRoller = new CSSparkFlex(14, MotorType.kBrushless);
-        CSSparkFlex bottomRoller = new CSSparkFlex(15, MotorType.kBrushless);
+        CSSparkFlex topRoller = new CSSparkFlex(14);
+        CSSparkFlex bottomRoller = new CSSparkFlex(15);
 
         topRoller.getMotorController().setInverted(false);
         topRoller.getMotorController().setIdleMode(IdleMode.kBrake);

@@ -19,7 +19,6 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -38,10 +37,10 @@ public class Valkyrie extends RobotMap {
         final PigeonGyro pigeonGyro = new PigeonGyro(new PigeonIMU(0));
         pigeonGyro.setInverted(true);
 
-        final CSSparkMax frontLeftSteer = new CSSparkMax(4, MotorType.kBrushless);
-        final CSSparkMax frontRightSteer = new CSSparkMax(8, MotorType.kBrushless);
-        final CSSparkMax rearLeftSteer = new CSSparkMax(2, MotorType.kBrushless);
-        final CSSparkMax rearRightSteer = new CSSparkMax(6, MotorType.kBrushless);
+        final CSSparkMax frontLeftSteer = new CSSparkMax(4);
+        final CSSparkMax frontRightSteer = new CSSparkMax(8);
+        final CSSparkMax rearLeftSteer = new CSSparkMax(2);
+        final CSSparkMax rearRightSteer = new CSSparkMax(6);
 
         frontLeftSteer.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
         frontRightSteer.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
@@ -65,8 +64,7 @@ public class Valkyrie extends RobotMap {
         encoderFLConfig.MagnetSensor.MagnetOffset = 0.396;
         encoderFL.getConfigurator().apply(encoderFLConfig);
         final SDSSwerveModule frontLeft = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFL), frontLeftSteer, new CSSparkMax(3, MotorType.kBrushless),
-                MK4_V2);
+                new CtreEncoder(encoderFL), frontLeftSteer, new CSSparkMax(3), MK4_V2);
 
         // Front Right Module
         final CANcoder encoderFR = new CANcoder(4);
@@ -75,9 +73,7 @@ public class Valkyrie extends RobotMap {
         encoderFRConfig.MagnetSensor.MagnetOffset = 0.789;
         encoderFR.getConfigurator().apply(encoderFRConfig);
         final SDSSwerveModule frontRight = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFR), frontRightSteer, new CSSparkMax(7,
-                        MotorType.kBrushless),
-                MK4_V2);
+                new CtreEncoder(encoderFR), frontRightSteer, new CSSparkMax(7), MK4_V2);
 
         // Rear Left Module
         final CANcoder encoderRL = new CANcoder(1);
@@ -86,9 +82,7 @@ public class Valkyrie extends RobotMap {
         encoderRLConfig.MagnetSensor.MagnetOffset = 0.209;
         encoderRL.getConfigurator().apply(encoderRLConfig);
         final SDSSwerveModule rearLeft = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkMax(1,
-                        MotorType.kBrushless),
-                MK4_V2);
+                new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkMax(1), MK4_V2);
 
         // Rear Right Module
         final CANcoder encoderRR = new CANcoder(3);
@@ -97,9 +91,7 @@ public class Valkyrie extends RobotMap {
         encoderRRConfig.MagnetSensor.MagnetOffset = 0.918;
         encoderRR.getConfigurator().apply(encoderRRConfig);
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRR), rearRightSteer, new CSSparkMax(5,
-                        MotorType.kBrushless),
-                MK4_V2);
+                new CtreEncoder(encoderRR), rearRightSteer, new CSSparkMax(5), MK4_V2);
 
         final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(12);
 
@@ -126,8 +118,8 @@ public class Valkyrie extends RobotMap {
 
     @Override
     public IntakeMap getIntakeMap() {
-        CSSparkMax topRoller = new CSSparkMax(11, MotorType.kBrushless);
-        CSSparkMax bottomRoller = new CSSparkMax(9, MotorType.kBrushless);
+        CSSparkMax topRoller = new CSSparkMax(11);
+        CSSparkMax bottomRoller = new CSSparkMax(9);
         bottomRoller.getMotorController().follow(topRoller.getMotorController(), true);
         return new IntakeMap(topRoller, () -> false);
     }
