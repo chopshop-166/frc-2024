@@ -32,6 +32,8 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
         // Probs not correct
         SCORE_SPEAKER_CENTERLINE,
 
+        HOLD,
+
         STOW
     }
 

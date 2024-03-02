@@ -30,6 +30,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     final double LOWER_SPEED = -0.15;
     final double NORMAL_TOLERANCE = 2;
     final double INTAKE_TOLERANCE = 4;
+    double holdAngle = 0;
 
     private Constraints rotateConstraints = new Constraints(150, 200);
     ArmPresets level = ArmPresets.OFF;
@@ -91,6 +92,14 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         }).runsUntil(setPointPersistenceCheck);
     }
 
+    public Command hold() {
+
+        return runOnce(() -> {
+            holdAngle = getArmAngle();
+            this.level = ArmPresets.HOLD;
+        });
+    }
+
     private double limits(double speed) {
         double angle = getArmAngle();
         // If we're at the hard limits, don't allow it to go any further
@@ -116,7 +125,8 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         super.periodic();
 
         if (level != ArmPresets.OFF) {
-            double setpoint = pid.calculate(getArmAngle(), new State(getMap().armPresets.getValue(level), 0));
+            double targetAngle = level == ArmPresets.HOLD ? holdAngle : getMap().armPresets.getValue(level);
+            double setpoint = pid.calculate(getArmAngle(), new State(targetAngle, 0));
             setpoint += getMap().armFeedforward.calculate(
                     Units.Degrees.of(pid.getSetpoint().position).in(Units.Radians),
                     Units.DegreesPerSecond.of(pid.getSetpoint().velocity).in(Units.RadiansPerSecond));

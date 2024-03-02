@@ -48,6 +48,7 @@ import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 import frc.robot.maps.subsystems.UndertakerMap;
+import frc.robot.subsystems.ArmRotate;
 
 @RobotMapFor("00:80:2F:36:7C:49")
 public class Vibrato extends RobotMap {
@@ -175,80 +176,79 @@ public class Vibrato extends RobotMap {
                 config);
     }
 
-    // @Override
-    // public ArmRotateMap getArmRotateMap() {
-    // CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
-    // CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
-    // setStatusPeriods(leftMotor, 10, 100, 100);
-    // setStatusPeriods(rightMotor, 10, 100, 100);
-    // rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
-    // leftMotor.getMotorController().setInverted(false);
-    // leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
-    // leftMotor.getMotorController().setSmartCurrentLimit(40);
-    // rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
-    // rightMotor.getMotorController().setSmartCurrentLimit(40);
-    // CSEncoder encoder = new CSEncoder(2, 3, false);
-    // encoder.setDistancePerPulse(360.0 / 2048.0);
-    // CSDutyCycleEncoderLocal absEncoder = new CSDutyCycleEncoderLocal(1);
-    // absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
-    // absEncoder.setDistancePerRotation(360);
-    // // Adjust this to fix absolute encoder angle. If at your zero angle,
-    // // just put in that number, no need to make it negative
-    // absEncoder.setPositionOffset(60.2);
-    // CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
-    // ProfiledPIDController pid = new ProfiledPIDController(0.02, 0.0, 0.0, new
-    // Constraints(120, 500));
-    // pid.setTolerance(2);
-    // ArmFeedforward feedForward = new ArmFeedforward(0, 0.02, 0.37, 0);
+    @Override
+    public ArmRotateMap getArmRotateMap() {
+        CSSparkMax leftMotor = new CSSparkMax(13, MotorType.kBrushless);
+        CSSparkMax rightMotor = new CSSparkMax(14, MotorType.kBrushless);
+        setStatusPeriods(leftMotor, 10, 100, 100);
+        setStatusPeriods(rightMotor, 10, 100, 100);
+        rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
+        leftMotor.getMotorController().setInverted(false);
+        leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
+        leftMotor.getMotorController().setSmartCurrentLimit(40);
+        rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
+        rightMotor.getMotorController().setSmartCurrentLimit(40);
+        CSEncoder encoder = new CSEncoder(2, 3, false);
+        encoder.setDistancePerPulse(360.0 / 2048.0);
+        CSDutyCycleEncoderLocal absEncoder = new CSDutyCycleEncoderLocal(1);
+        absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
+        absEncoder.setDistancePerRotation(360);
+        // Adjust this to fix absolute encoder angle. If at your zero angle,
+        // just put in that number, no need to make it negative
+        absEncoder.setPositionOffset(60.2);
+        CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
+        ProfiledPIDController pid = new ProfiledPIDController(0.02, 0.0, 0.0, new Constraints(120, 500));
+        pid.setTolerance(2);
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.02, 0.37, 0);
 
-    // return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor),
-    // pid, feedForward, fusedEncoder,
-    // // Hard limits
-    // new ValueRange(-15, 88),
-    // // Soft limits
-    // new ValueRange(0, 73),
-    // new ArmRotateMap.ArmPresetValues(34, 88, 26, 26, 9.5,
-    // -20));
-    // }
+        return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor),
+                pid, feedForward, fusedEncoder,
+                // Hard limits
+                new ValueRange(-15, 88),
+                // Soft limits
+                new ValueRange(0, 73),
+                new ArmRotateMap.ArmPresetValues(34, 88, 26, 26, 9.5,
+                        -20));
+    }
 
-    // @Override
-    // public IntakeMap getIntakeMap() {
-    // CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
-    // setStatusPeriods(topRoller, 100, 100, 100);
-    // topRoller.getMotorController().setInverted(true);
-    // topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
-    // topRoller.getMotorController().setSmartCurrentLimit(30);
-    // CSDigitalInput sensor = new CSDigitalInput(0);
-    // return new IntakeMap(topRoller, sensor::get, 0.3);
-    // }
+    @Override
+    public IntakeMap getIntakeMap() {
+        CSSparkMax topRoller = new CSSparkMax(12, MotorType.kBrushless);
+        setStatusPeriods(topRoller, 100, 100, 100);
+        topRoller.getMotorController().setInverted(true);
+        topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
+        topRoller.getMotorController().setSmartCurrentLimit(30);
+        CSDigitalInput sensor = new CSDigitalInput(0);
+        return new IntakeMap(topRoller, sensor::get, 0.3);
+    }
 
-    // @Override
-    // public ShooterMap getShooterMap() {
-    // CSSparkFlex rightWheels = new CSSparkFlex(11, MotorType.kBrushless);
-    // CSSparkFlex leftWheels = new CSSparkFlex(10, MotorType.kBrushless);
+    @Override
+    public ShooterMap getShooterMap() {
+        CSSparkFlex rightWheels = new CSSparkFlex(11, MotorType.kBrushless);
+        CSSparkFlex leftWheels = new CSSparkFlex(10, MotorType.kBrushless);
 
-    // setStatusPeriods(rightWheels, 100, 100, 100);
-    // setStatusPeriods(leftWheels, 100, 100, 100);
+        setStatusPeriods(rightWheels, 100, 100, 100);
+        setStatusPeriods(leftWheels, 100, 100, 100);
 
-    // rightWheels.getMotorController().setSmartCurrentLimit(50);
-    // leftWheels.getMotorController().setSmartCurrentLimit(50);
+        rightWheels.getMotorController().setSmartCurrentLimit(50);
+        leftWheels.getMotorController().setSmartCurrentLimit(50);
 
-    // rightWheels.setControlType(ControlType.kVelocity);
-    // rightWheels.getPidController().setP(0.001);
-    // rightWheels.getPidController().setI(0);
-    // rightWheels.getPidController().setD(0.0);
-    // rightWheels.getPidController().setFF(0.000182);
-    // rightWheels.getEncoder().getRaw().setMeasurementPeriod(10);
+        rightWheels.setControlType(ControlType.kVelocity);
+        rightWheels.getPidController().setP(0.001);
+        rightWheels.getPidController().setI(0);
+        rightWheels.getPidController().setD(0.0);
+        rightWheels.getPidController().setFF(0.000182);
+        rightWheels.getEncoder().getRaw().setMeasurementPeriod(10);
 
-    // leftWheels.setControlType(ControlType.kVelocity);
-    // leftWheels.getPidController().setP(0.001);
-    // leftWheels.getPidController().setI(0);
-    // leftWheels.getPidController().setD(0.0);
-    // leftWheels.getPidController().setFF(0.000174);
-    // leftWheels.getEncoder().getRaw().setMeasurementPeriod(10);
-    // leftWheels.getMotorController().setInverted(true);
-    // return new ShooterMap(rightWheels, leftWheels, true);
-    // }
+        leftWheels.setControlType(ControlType.kVelocity);
+        leftWheels.getPidController().setP(0.001);
+        leftWheels.getPidController().setI(0);
+        leftWheels.getPidController().setD(0.0);
+        leftWheels.getPidController().setFF(0.000174);
+        leftWheels.getEncoder().getRaw().setMeasurementPeriod(10);
+        leftWheels.getMotorController().setInverted(true);
+        return new ShooterMap(rightWheels, leftWheels, true);
+    }
 
     // @Override
     // public LedMap getLedMap() {
@@ -261,23 +261,23 @@ public class Vibrato extends RobotMap {
     // return result;
     // }
 
-    // @Override
-    // public UndertakerMap getUndertakerMap() {
-    // CSSparkFlex topRoller = new CSSparkFlex(16, MotorType.kBrushless);
-    // CSSparkFlex bottomRoller = new CSSparkFlex(15, MotorType.kBrushless);
+    @Override
+    public UndertakerMap getUndertakerMap() {
+        CSSparkFlex topRoller = new CSSparkFlex(16, MotorType.kBrushless);
+        CSSparkFlex bottomRoller = new CSSparkFlex(15, MotorType.kBrushless);
 
-    // setStatusPeriods(topRoller, 10, 100, 100);
-    // setStatusPeriods(bottomRoller, 10, 100, 100);
+        setStatusPeriods(topRoller, 10, 100, 100);
+        setStatusPeriods(bottomRoller, 10, 100, 100);
 
-    // topRoller.getMotorController().setInverted(true);
-    // topRoller.getMotorController().setIdleMode(IdleMode.kCoast);
-    // topRoller.getMotorController().setSmartCurrentLimit(40);
-    // bottomRoller.getMotorController().setSmartCurrentLimit(40);
-    // bottomRoller.getMotorController().follow(topRoller.getMotorController(),
-    // false);
-    // return new UndertakerMap(new SmartMotorControllerGroup(topRoller,
-    // bottomRoller));
-    // }
+        topRoller.getMotorController().setInverted(false);
+        topRoller.getMotorController().setIdleMode(IdleMode.kCoast);
+        topRoller.getMotorController().setSmartCurrentLimit(40);
+        bottomRoller.getMotorController().setSmartCurrentLimit(40);
+        bottomRoller.getMotorController().follow(topRoller.getMotorController(),
+                false);
+        return new UndertakerMap(new SmartMotorControllerGroup(topRoller,
+                bottomRoller));
+    }
 
     @Override
     public void setupLogging() {
