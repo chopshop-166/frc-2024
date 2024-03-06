@@ -65,6 +65,13 @@ public class CommandSequences {
                 shooter.setSpeed(Speeds.OFF));
     }
 
+    public Command outtake() {
+        return intake.spinOut().alongWith(
+            undertaker.spinOut()
+        );
+        
+    }
+
     public Command moveToIntake() {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.INTAKE), led.atPreset());
     }
