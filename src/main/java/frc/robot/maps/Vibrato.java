@@ -256,11 +256,11 @@ public class Vibrato extends RobotMap {
         CSSparkFlex bottomRoller = new CSSparkFlex(15);
 
         setStatusPeriods(topRoller, 10, 100, 100);
-        setStatusPeriods(bottomRoller, 10, 100, 100);
+        setStatusPeriods(bottomRoller, 100, 100, 100);
 
         topRoller.getMotorController().setInverted(false);
         topRoller.getMotorController().setIdleMode(IdleMode.kCoast);
-        topRoller.getMotorController().setSmartCurrentLimit(40);
+        topRoller.getMotorController().setSmartCurrentLimit(50);
         bottomRoller.getMotorController().setSmartCurrentLimit(40);
         bottomRoller.getMotorController().follow(topRoller.getMotorController(),
                 false);
