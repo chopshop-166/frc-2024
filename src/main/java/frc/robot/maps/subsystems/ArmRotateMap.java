@@ -42,8 +42,8 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
     @Override
     public void updateData(Data data) {
         data.motor.updateData(motor);
-        data.acceleration = data.motor.velocityInchesPerSec - previousRate;
-        previousRate = data.motor.velocityInchesPerSec;
+        data.acceleration = data.motor.velocity - previousRate;
+        previousRate = data.motor.velocity;
         data.rotatingAbsAngleDegrees = encoder.getAbsolutePosition();
         data.positionError = pid.getPositionError();
         data.rotatingAngleVelocity = encoder.getRate();

@@ -85,7 +85,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     implementation 'com.google.guava:guava:33.0.0-jre'
-    implementation 'com.chopshop166:chopshoplib:2024.6.2'
+    implementation 'com.chopshop166:chopshoplib:revlib-testing-SNAPSHOT'
 
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
