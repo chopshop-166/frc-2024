@@ -48,10 +48,8 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
     public Command setSpeed(Speeds speed) {
         PersistenceCheck speedPersistenceCheck = new PersistenceCheck(5,
                 () -> {
-                    return Math.abs(getData().leftWheels.velocityInchesPerSec) > speed
-                            .getLeftSpeed(getMap().splitSpeeds)
-                            && Math.abs(getData().rightWheels.velocityInchesPerSec) > speed
-                                    .getRightSpeed(getMap().splitSpeeds);
+                    return Math.abs(getData().leftWheels.velocity) > speed.getLeftSpeed(getMap().splitSpeeds)
+                            && Math.abs(getData().rightWheels.velocity) > speed.getRightSpeed(getMap().splitSpeeds);
                 });
         return run(
                 () -> {
