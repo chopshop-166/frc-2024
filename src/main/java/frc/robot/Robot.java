@@ -59,7 +59,7 @@ public class Robot extends CommandRobot {
         // commands into PathPlanner.
         NamedCommands.registerCommand("Intake Game Piece", commandSequences.moveAndIntake());
         NamedCommands.registerCommand("Shoot Game Piece", commandSequences.scoreSpeakerAuto());
-        NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.scoreAmp());
+        NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.chargeAmp());
         NamedCommands.registerCommand("Stop Shooter", shooter.setSpeed(Speeds.OFF));
         NamedCommands.registerCommand("Rotate Speaker Sub.",
                 commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
@@ -121,23 +121,30 @@ public class Robot extends CommandRobot {
         // Magic numbers for auto testing
         driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
         driveController.leftBumper()
-
-                .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
-                        () -> -driveController.getRightX()));
+                .whileTrue(drive.robotCentricDrive(() -> {
+                    return driveScaler.applyAsDouble(-driveController.getLeftX());
+                }, () -> {
+                    return driveScaler.applyAsDouble(-driveController.getLeftY());
+                }, () -> {
+                    return driveScaler.applyAsDouble(-driveController.getRightX());
+                }));
 
         driveController.y().onTrue(led.awesome());
-        driveController.rightBumper().onTrue(commandSequences.scoreAmp());
+        driveController.rightBumper().onTrue(commandSequences.chargeAmp());
 
         copilotController.back().onTrue(intake.safeStateCmd());
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.a().onTrue(commandSequences.moveAndIntake());
-        copilotController.b().onTrue(undertaker.safeStateCmd());
-        // copilotController.b().whileTrue(commandSequences.scoreSpeakerCharge(copilotController,
-        // driveController));
+        // copilotController.b().onTrue(undertaker.safeStateCmd());
+        copilotController.b().whileTrue(commandSequences.scoreSpeakerCharge(copilotController, driveController));
         copilotController.b().onFalse(commandSequences.scoreSpeakerRelease(copilotController, driveController));
-        copilotController.y().onTrue(intake.feedShooter());
-        copilotController.x().whileTrue(intake.spinOut());
-        copilotController.rightBumper().onTrue(commandSequences.scoreAmp());
+        copilotController.y().onTrue(commandSequences.scoreSpeakerCenterlineCharge(copilotController, driveController));
+        copilotController.y()
+                .onFalse(commandSequences.scoreSpeakerCenterlineRelease(copilotController, driveController));
+        copilotController.x().whileTrue(intake.spinOut().alongWith(undertaker.spinOut()));
+        copilotController.rightStick().whileTrue(intake.feedShooter());
+        copilotController.rightBumper().onTrue(commandSequences.chargeAmp());
+        copilotController.rightBumper().onFalse(commandSequences.releaseAmp());
         copilotController.leftBumper().onTrue(commandSequences.podiumShot());
         copilotController.povUp().whileTrue(commandSequences.moveToAmp());
         // copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));

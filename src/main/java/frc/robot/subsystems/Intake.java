@@ -44,7 +44,7 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
         return run(
                 () -> {
                     getData().roller.setpoint = FEED_SPEED;
-                }).until(() -> !getData().gamePieceDetected).andThen(waitSeconds(FEED_DELAY), runOnce(this::safeState));
+                }).until(() -> !getData().gamePieceDetected).andThen(waitSeconds(FEED_DELAY), safeStateCmd());
     }
 
     @Override

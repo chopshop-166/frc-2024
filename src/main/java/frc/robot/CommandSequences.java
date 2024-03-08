@@ -53,7 +53,7 @@ public class CommandSequences {
 
     public Command moveAndIntake() {
         return led.toPreset().andThen(this.intake().deadlineWith(
-                armRotate.moveTo(ArmPresets.INTAKE).andThen(
+                armRotate.moveTo(ArmPresets.INTAKE).alongWith(
                         // armRotate.moveToZero(),
                         undertaker.spinIn())),
                 led.grabbedPiece());
@@ -67,9 +67,8 @@ public class CommandSequences {
 
     public Command outtake() {
         return intake.spinOut().alongWith(
-            undertaker.spinOut()
-        );
-        
+                undertaker.spinOut());
+
     }
 
     public Command moveToIntake() {
@@ -88,10 +87,13 @@ public class CommandSequences {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset());
     }
 
-    public Command scoreAmp() {
-        return this.armRotatePreset(ArmPresets.SCORE_AMP).withTimeout(0.75).andThen(this.shooterSpeed(Speeds.AMP_SPEED),
-                intake.feedShooter(),
-                shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+    public Command chargeAmp() {
+        return this.armRotatePreset(ArmPresets.SCORE_AMP).withTimeout(0.75)
+                .andThen(this.shooterSpeed(Speeds.AMP_SPEED));
+    }
+
+    public Command releaseAmp() {
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), led.colorAlliance());
     }
 
     public Command scoreSpeakerCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
@@ -101,6 +103,17 @@ public class CommandSequences {
     }
 
     public Command scoreSpeakerRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
+                setRumble(controller2, 0));
+    }
+
+    public Command scoreSpeakerCenterlineCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
+        return this.shooterSpeed(Speeds.FULL_SPEED).alongWith(
+                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_CENTERLINE)).andThen(
+                        setRumble(controller1, 1), setRumble(controller2, 1));
+    }
+
+    public Command scoreSpeakerCenterlineRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
         return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
                 setRumble(controller2, 0));
     }
