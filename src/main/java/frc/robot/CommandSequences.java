@@ -56,7 +56,7 @@ public class CommandSequences {
                 armRotate.moveTo(ArmPresets.INTAKE).alongWith(
                         // armRotate.moveToZero(),
                         undertaker.spinIn())),
-                led.grabbedPiece());
+                led.grabbedPiece(), waitSeconds(1.5), led.colorAlliance());
     }
 
     public Command feedShoot() {
@@ -104,7 +104,7 @@ public class CommandSequences {
 
     public Command scoreSpeakerRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
         return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
-                setRumble(controller2, 0));
+                setRumble(controller2, 0), led.colorAlliance());
     }
 
     public Command scoreSpeakerCenterlineCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
@@ -115,7 +115,7 @@ public class CommandSequences {
 
     public Command scoreSpeakerCenterlineRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
         return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
-                setRumble(controller2, 0));
+                setRumble(controller2, 0), led.colorAlliance());
     }
 
     public Command scoreSpeakerAuto() {
