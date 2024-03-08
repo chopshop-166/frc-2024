@@ -125,10 +125,13 @@ public class CommandSequences {
                         led.colorAlliance());
     }
 
-    public Command podiumShot() {
+    public Command podiumShotCharge() {
         return this.shooterSpeed(Speeds.PODIUM_SHOT)
-                .alongWith(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM))
-                .andThen(intake.feedShooter(), shooterSpeed(Speeds.OFF));
+                .alongWith(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
+    }
+
+    public Command podiumShotRelease() {
+        return this.intake.feedShooter().andThen(this.shooterSpeed(Speeds.OFF));
     }
 
     public Command setRumble(ButtonXboxController controller, int rumbleAmount) {
