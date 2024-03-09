@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.maps.subsystems.CameraSwerveDriveMap;
 import frc.robot.maps.subsystems.IntakeMap;
+import frc.robot.maps.subsystems.SimCameraSwerveDriveMap;
 
 @RobotMapFor("00:80:2F:19:7B:A3")
 public class Valkyrie extends RobotMap {
@@ -115,7 +116,7 @@ public class Valkyrie extends RobotMap {
                 maxRotationRadianPerSecond, pigeonGyro,
                 config);
 
-        return new CameraSwerveDriveMap(driveMap);
+        return new SimCameraSwerveDriveMap(driveMap);
     }
 
     @Override

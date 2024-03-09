@@ -44,6 +44,7 @@ import frc.robot.maps.subsystems.ArmRotateMap;
 import frc.robot.maps.subsystems.CameraSwerveDriveMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
+import frc.robot.maps.subsystems.SimCameraSwerveDriveMap;
 import frc.robot.maps.subsystems.UndertakerMap;
 
 @RobotMapFor("00:80:2F:36:7C:49")
@@ -167,7 +168,7 @@ public class Vibrato extends RobotMap {
                 maxRotationRadianPerSecond, pigeonGyro2,
                 config);
 
-        return new CameraSwerveDriveMap(driveMap);
+        return new SimCameraSwerveDriveMap(driveMap);
     }
 
     @Override

@@ -40,6 +40,7 @@ import frc.robot.maps.subsystems.ArmRotateMap;
 import frc.robot.maps.subsystems.CameraSwerveDriveMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
+import frc.robot.maps.subsystems.SimCameraSwerveDriveMap;
 
 @RobotMapFor("00:80:2F:17:F7:AF")
 public class Henry extends RobotMap {
@@ -141,7 +142,7 @@ public class Henry extends RobotMap {
                 maxRotationRadianPerSecond, pigeonGyro2,
                 config);
 
-        return new CameraSwerveDriveMap(driveMap);
+        return new SimCameraSwerveDriveMap(driveMap);
     }
 
     @Override

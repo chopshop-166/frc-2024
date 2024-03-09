@@ -11,12 +11,13 @@ import frc.robot.maps.subsystems.ArmRotateMap;
 import frc.robot.maps.subsystems.CameraSwerveDriveMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
+import frc.robot.maps.subsystems.SimCameraSwerveDriveMap;
 import frc.robot.maps.subsystems.UndertakerMap;
 
 public class RobotMap {
 
     public CameraSwerveDriveMap getDriveMap() {
-        return new CameraSwerveDriveMap();
+        return new SimCameraSwerveDriveMap();
     }
 
     public ArmRotateMap getArmRotateMap() {
