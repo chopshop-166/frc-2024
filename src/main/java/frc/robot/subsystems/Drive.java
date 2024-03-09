@@ -73,13 +73,13 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
         super(new SwerveDriveData(), map);
 
-        getMap().gyro().reset();
-        kinematics = new SwerveDriveKinematics(map.frontLeft().getLocation(), map.frontRight().getLocation(),
-                map.rearLeft().getLocation(), map.rearRight().getLocation());
-        maxDriveSpeedMetersPerSecond = map.maxDriveSpeedMetersPerSecond();
-        maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond();
+        getMap().gyro.reset();
+        kinematics = new SwerveDriveKinematics(map.frontLeft.getLocation(), map.frontRight.getLocation(),
+                map.rearLeft.getLocation(), map.rearRight.getLocation());
+        maxDriveSpeedMetersPerSecond = map.maxDriveSpeedMetersPerSecond;
+        maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond;
 
-        estimator = new SwerveDrivePoseEstimator(kinematics, getMap().gyro().getRotation2d(),
+        estimator = new SwerveDrivePoseEstimator(kinematics, getMap().gyro.getRotation2d(),
                 getData().getModulePositions(),
                 new Pose2d(),
                 VecBuilder.fill(0.02, 0.02, 0.01),
@@ -88,7 +88,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         AutoBuilder.configureHolonomic(estimator::getEstimatedPosition, this::setPose,
                 this::getSpeeds, this::move, // Method that will drive the robot given ROBOT
                 // RELATIVE ChassisSpeeds
-                map.pathFollower(), () -> isBlue, this);
+                map.pathFollower, () -> isBlue, this);
 
         // camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
 
@@ -99,7 +99,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     }
 
     public void setPose(Pose2d pose) {
-        estimator.resetPosition(getMap().gyro().getRotation2d(),
+        estimator.resetPosition(getMap().gyro.getRotation2d(),
                 getData().getModulePositions(), pose);
     }
 
@@ -241,26 +241,26 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         // This method will be called once per scheduler run
         // Use this for any background processing
         super.periodic();
-        estimator.update(getMap().gyro().getRotation2d(), getData().getModulePositions());
+        estimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
         // Correct pose estimate with vision measurements
         // var visionEst = getEstimatedGlobalPose();
         // visionEst.ifPresent(
-        //         est -> {
-        //             var estPose = est.estimatedPose.toPose2d();
-        //             // Change our trust in the measurement based on the tags we can see
-        //             var estStdDevs = getEstimationStdDevs(estPose);
+        // est -> {
+        // var estPose = est.estimatedPose.toPose2d();
+        // // Change our trust in the measurement based on the tags we can see
+        // var estStdDevs = getEstimationStdDevs(estPose);
 
-        //             estimator.addVisionMeasurement(
-        //                     est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-        //         });
+        // estimator.addVisionMeasurement(
+        // est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+        // });
 
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
-        Logger.recordOutput("Angle", getMap().gyro().getAngle());
-        Logger.recordOutput("rotation", getMap().gyro().getRotation2d());
+        Logger.recordOutput("Angle", getMap().gyro.getAngle());
+        Logger.recordOutput("rotation", getMap().gyro.getRotation2d());
         Logger.recordOutput("Actual Module States", getData().getModuleStates());
     }
 
     public void resetGyro() {
-        getMap().gyro().reset();
+        getMap().gyro.reset();
     }
 }
