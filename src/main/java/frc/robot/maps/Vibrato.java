@@ -1,8 +1,7 @@
 package frc.robot.maps;
 
-import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.chopshop166.chopshoplib.ValueRange;
@@ -11,7 +10,9 @@ import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
 import com.chopshop166.chopshoplib.leds.SegmentConfig;
 import com.chopshop166.chopshoplib.maps.LedMap;
+import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
+import com.chopshop166.chopshoplib.motors.CSSpark;
 import com.chopshop166.chopshoplib.motors.CSSparkFlex;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
 import com.chopshop166.chopshoplib.motors.SmartMotorControllerGroup;
@@ -36,30 +37,34 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.maps.subsystems.ArmRotateMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 import frc.robot.maps.subsystems.UndertakerMap;
 
-public class Chad {
+@RobotMapFor("00:80:2F:36:7C:49")
+public class Vibrato extends RobotMap {
 
-    private static void setStatusPeriods(CSSparkMax motor) {
-        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
-        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus4, 1000);
-        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
-        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus6, 1000);
+    private static void setStatusPeriods(CSSpark motor, int status0, int status1, int status2) {
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus0, status0);
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus1, status1);
+        motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus2, status2);
     }
 
+    @Override
     public SwerveDriveMap getDriveMap() {
 
-        final double FLOFFSET = -0.776;
-        final double FROFFSET = -0.38;
-        final double RLOFFSET = 0.448;
-        final double RROFFSET = -0.891;
+        // Remember to divide by 360
+        final double FLOFFSET = -0.429688;
+        final double FROFFSET = 0.099121;
+        final double RLOFFSET = -0.226562;
+        final double RROFFSET = 0.477539;
+
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
-
-        final double MODULE_OFFSET_XY = Units.inchesToMeters(10.875); // Frostbites was 9.89
+        final double MODULE_OFFSET_XY = Units.inchesToMeters(10.875);
         final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(1);
 
         final CSSparkMax frontLeftSteer = new CSSparkMax(4);
@@ -67,19 +72,40 @@ public class Chad {
         final CSSparkMax rearLeftSteer = new CSSparkMax(2);
         final CSSparkMax rearRightSteer = new CSSparkMax(6);
 
-        setStatusPeriods(frontLeftSteer);
-        setStatusPeriods(frontRightSteer);
-        setStatusPeriods(rearLeftSteer);
-        setStatusPeriods(rearRightSteer);
+        CSSparkFlex frontLeftDrive = new CSSparkFlex(3);
+        CSSparkFlex frontRightDrive = new CSSparkFlex(7);
+        CSSparkFlex rearLeftDrive = new CSSparkFlex(1);
+        CSSparkFlex rearRightDrive = new CSSparkFlex(5);
+
+        setStatusPeriods(frontLeftSteer, 100, 100, 100);
+        setStatusPeriods(frontRightSteer, 100, 100, 100);
+        setStatusPeriods(rearLeftSteer, 100, 100, 100);
+        setStatusPeriods(rearRightSteer, 100, 100, 100);
+
+        setStatusPeriods(frontLeftDrive, 100, 10, 10);
+        setStatusPeriods(frontRightDrive, 100, 10, 10);
+        setStatusPeriods(rearLeftDrive, 100, 10, 10);
+        setStatusPeriods(rearRightDrive, 100, 10, 10);
 
         frontLeftSteer.getMotorController().setInverted(true);
         frontRightSteer.getMotorController().setInverted(true);
         rearLeftSteer.getMotorController().setInverted(true);
         rearRightSteer.getMotorController().setInverted(true);
 
+        frontLeftDrive.setInverted(true);
+        frontRightDrive.setInverted(false);
+        rearLeftDrive.setInverted(true);
+        rearRightDrive.setInverted(false);
+
+        frontLeftSteer.getMotorController().setSmartCurrentLimit(30);
+        frontRightSteer.getMotorController().setSmartCurrentLimit(30);
+        rearLeftSteer.getMotorController().setSmartCurrentLimit(30);
+        rearRightSteer.getMotorController().setSmartCurrentLimit(30);
+
         // Configuration for MK4i with L2 speeds
         Configuration MK4i_L2 = new Configuration(SDSSwerveModule.MK4_V2.gearRatio,
-                SDSSwerveModule.MK4_V2.wheelDiameter, new PIDValues(0.011, 0.00, 0.0002));
+                SDSSwerveModule.MK4_V2.wheelDiameter, new PIDValues(0.011, 0.00, 0.0002),
+                new PIDValues(0.001, 0.0, 0.0, 0.192));
 
         // All Distances are in Meters
         // Front Left Module
@@ -89,7 +115,7 @@ public class Chad {
         encoderFLConfig.MagnetSensor.MagnetOffset = FLOFFSET;
         encoderFL.getConfigurator().apply(encoderFLConfig);
         final SDSSwerveModule frontLeft = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFL), frontLeftSteer, new CSSparkFlex(3), MK4i_L2);
+                new CtreEncoder(encoderFL), frontLeftSteer, frontLeftDrive, MK4i_L2);
 
         // Front Right Module
         final CANcoder encoderFR = new CANcoder(4);
@@ -98,29 +124,29 @@ public class Chad {
         encoderFRConfig.MagnetSensor.MagnetOffset = FROFFSET;
         encoderFR.getConfigurator().apply(encoderFRConfig);
         final SDSSwerveModule frontRight = new SDSSwerveModule(new Translation2d(MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderFR), frontRightSteer, new CSSparkFlex(7), MK4i_L2);
+                new CtreEncoder(encoderFR), frontRightSteer, frontRightDrive, MK4i_L2);
 
         // Rear Left Module
-        final CANcoder encoderRL = new CANcoder(3);
+        final CANcoder encoderRL = new CANcoder(1);
         CANcoderConfiguration encoderRLConfig = new CANcoderConfiguration();
         encoderRLConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         encoderRLConfig.MagnetSensor.MagnetOffset = RLOFFSET;
         encoderRL.getConfigurator().apply(encoderRLConfig);
         final SDSSwerveModule rearLeft = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRL), rearLeftSteer, new CSSparkFlex(1), MK4i_L2);
+                new CtreEncoder(encoderRL), rearLeftSteer, rearLeftDrive, MK4i_L2);
 
         // Rear Right Module
-        final CANcoder encoderRR = new CANcoder(1);
+        final CANcoder encoderRR = new CANcoder(3);
         CANcoderConfiguration encoderRRConfig = new CANcoderConfiguration();
         encoderRRConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         encoderRRConfig.MagnetSensor.MagnetOffset = RROFFSET;
         encoderRR.getConfigurator().apply(encoderRRConfig);
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
-                new CtreEncoder(encoderRR), rearRightSteer, new CSSparkFlex(5), MK4i_L2);
+                new CtreEncoder(encoderRR), rearRightSteer, rearRightDrive, MK4i_L2);
 
         final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(15);
 
-        final double maxRotationRadianPerSecond = Math.PI;
+        final double maxRotationRadianPerSecond = Math.PI * 2;
 
         final HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(
                 // HolonomicPathFollowerConfig, this should likely live in your
@@ -140,87 +166,114 @@ public class Chad {
                 config);
     }
 
+    @Override
     public ArmRotateMap getArmRotateMap() {
         CSSparkMax leftMotor = new CSSparkMax(13);
         CSSparkMax rightMotor = new CSSparkMax(14);
-        setStatusPeriods(leftMotor);
-        setStatusPeriods(rightMotor);
+        setStatusPeriods(leftMotor, 10, 100, 100);
+        setStatusPeriods(rightMotor, 10, 100, 100);
+
         rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
         leftMotor.getMotorController().setInverted(false);
         leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
         leftMotor.getMotorController().setSmartCurrentLimit(40);
         rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
         rightMotor.getMotorController().setSmartCurrentLimit(40);
-        CSEncoder encoder = new CSEncoder(6, 7, false);
-        encoder.setDistancePerPulse(360.0 / 2048.0 / 2);
-        CSDutyCycleEncoderLocal absEncoder = new CSDutyCycleEncoderLocal(8);
+        CSEncoder encoder = new CSEncoder(2, 3, false);
+        encoder.setDistancePerPulse(360.0 / 2048.0);
+        CSDutyCycleEncoderLocal absEncoder = new CSDutyCycleEncoderLocal(1);
         absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
-        absEncoder.setDistancePerRotation(-360 / 2);
-        // Adjust this to move the encoder zero point to the retracted position (can't
-        // be negative, do 360 - #)
-        absEncoder.setPositionOffset(0.7);
+        absEncoder.setDistancePerRotation(360);
+        // Adjust this to fix absolute encoder angle. If at your zero angle,
+        // just put in that number, no need to make it negative
+        absEncoder.setPositionOffset(60.2);
         CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
-        ProfiledPIDController pid = new ProfiledPIDController(0.005, 0.0, 0.0, new Constraints(120, 500));
+        ProfiledPIDController pid = new ProfiledPIDController(0.02, 0.0, 0.0, new Constraints(120, 500));
         pid.setTolerance(2);
-        // Kv 3.74
-        ArmFeedforward feedForward = new ArmFeedforward(0, 0.04, 0.3, 0);
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.02, 0.37, 0);
 
-        return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor), pid, feedForward, fusedEncoder,
-                new ValueRange(.5, 90),
-                new ValueRange(20, 75));
+        return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor),
+                pid, feedForward, fusedEncoder,
+                // Hard limits
+                new ValueRange(-15, 88),
+                // Soft limits
+                new ValueRange(0, 73),
+                new ArmRotateMap.ArmPresetValues(-16, 88, 23, 13.5, -3,
+                        -20));
     }
 
+    @Override
     public IntakeMap getIntakeMap() {
         CSSparkMax topRoller = new CSSparkMax(12);
-        setStatusPeriods(topRoller);
+        setStatusPeriods(topRoller, 100, 100, 100);
         topRoller.getMotorController().setInverted(true);
         topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
-        CSDigitalInput sensor = new CSDigitalInput(9);
-        sensor.setInverted(true);
-        return new IntakeMap(topRoller, sensor::get);
+        topRoller.getMotorController().setSmartCurrentLimit(30);
+        CSDigitalInput sensor = new CSDigitalInput(0);
+        return new IntakeMap(topRoller, sensor::get, 0.3);
     }
 
+    @Override
     public ShooterMap getShooterMap() {
         CSSparkFlex rightWheels = new CSSparkFlex(11);
         CSSparkFlex leftWheels = new CSSparkFlex(10);
+
+        setStatusPeriods(rightWheels, 100, 100, 100);
+        setStatusPeriods(leftWheels, 100, 100, 100);
+
+        rightWheels.getMotorController().setSmartCurrentLimit(50);
+        leftWheels.getMotorController().setSmartCurrentLimit(50);
+
         rightWheels.setControlType(ControlType.kVelocity);
-        rightWheels.getPidController().setP(0.000055);
+        rightWheels.getPidController().setP(0.001);
         rightWheels.getPidController().setI(0);
         rightWheels.getPidController().setD(0.0);
-        rightWheels.getPidController().setFF(0.000185);
+        rightWheels.getPidController().setFF(0.000182);
+        rightWheels.getEncoder().getRaw().setMeasurementPeriod(10);
+
         leftWheels.setControlType(ControlType.kVelocity);
-        leftWheels.getPidController().setP(0.000055);
+        leftWheels.getPidController().setP(0.001);
         leftWheels.getPidController().setI(0);
         leftWheels.getPidController().setD(0.0);
-        leftWheels.getPidController().setFF(0.000185);
-        return new ShooterMap(rightWheels, leftWheels);
+        leftWheels.getPidController().setFF(0.000174);
+        leftWheels.getEncoder().getRaw().setMeasurementPeriod(10);
+        leftWheels.getMotorController().setInverted(true);
+        return new ShooterMap(rightWheels, leftWheels, true);
     }
 
+    @Override
     public LedMap getLedMap() {
-        var result = new LedMap(0, 56);
+        var result = new LedMap(0, 23);
         var leds = result.ledBuffer;
 
-        SegmentConfig underglow = leds.segment(56).tags("underglow", "Shooter", "Arm Rotate", "Intake", "HP signal",
-                "Vision", "Fire", "Auto", "Alliance");
+        SegmentConfig both = leds.segment(11).tags("Shooter", "Intake", "Alliance");
+        SegmentConfig backOnly = leds.segment(12).tags("ArmRotate", "Vision", "Auto", "Alliance");
         return result;
     }
 
+    @Override
     public UndertakerMap getUndertakerMap() {
-        CSSparkFlex topRoller = new CSSparkFlex(14);
+        CSSparkFlex topRoller = new CSSparkFlex(16);
         CSSparkFlex bottomRoller = new CSSparkFlex(15);
 
+        setStatusPeriods(topRoller, 10, 100, 100);
+        setStatusPeriods(bottomRoller, 100, 100, 100);
+
         topRoller.getMotorController().setInverted(false);
-        topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
-        bottomRoller.getMotorController().follow(topRoller.getMotorController(), true);
-        return new UndertakerMap(new SmartMotorControllerGroup(topRoller, bottomRoller));
+        topRoller.getMotorController().setIdleMode(IdleMode.kCoast);
+        topRoller.getMotorController().setSmartCurrentLimit(50);
+        bottomRoller.getMotorController().setSmartCurrentLimit(40);
+        bottomRoller.getMotorController().follow(topRoller.getMotorController(),
+                false);
+        return new UndertakerMap(new SmartMotorControllerGroup(topRoller,
+                bottomRoller));
     }
 
+    @Override
     public void setupLogging() {
-        // Pull the replay log from AdvantageScope (or prompt the user)
-        String logPath = LogFileUtil.findReplayLog();
-        // Read replay log
-        Logger.setReplaySource(new WPILOGReader(logPath));
-        // Save outputs to a new log
-        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+        Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        Logger.recordMetadata("RobotMap", this.getClass().getSimpleName());
+        new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
     }
 }

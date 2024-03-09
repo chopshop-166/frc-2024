@@ -161,7 +161,7 @@ public class Henry extends RobotMap {
         absEncoder.setDistancePerRotation(-360 / 2);
         // Adjust this to move the encoder zero point to the retracted position (can't
         // be negative, do 360 - #)
-        absEncoder.setPositionOffset(0.7);
+        absEncoder.setPositionOffset(-179.5);
         CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
         ProfiledPIDController pid = new ProfiledPIDController(0.005, 0.0, 0.0, new Constraints(120, 500));
         pid.setTolerance(2);
@@ -169,7 +169,7 @@ public class Henry extends RobotMap {
         ArmFeedforward feedForward = new ArmFeedforward(0, 0.04, 0.3, 0);
 
         return new ArmRotateMap(leftMotor, pid, feedForward, fusedEncoder, new ValueRange(.5, 90),
-                new ValueRange(20, 75));
+                new ValueRange(20, 75), new ArmRotateMap.ArmPresetValues(.5, 90, 28, 28, 11.5, 75));
     }
 
     @Override
@@ -188,7 +188,7 @@ public class Henry extends RobotMap {
         bottomWheels.getPidController().setI(0);
         bottomWheels.getPidController().setD(0.0);
         bottomWheels.getPidController().setFF(0.000185);
-        return new ShooterMap(topWheels, bottomWheels);
+        return new ShooterMap(topWheels, bottomWheels, false);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class Henry extends RobotMap {
         topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
         CSDigitalInput sensor = new CSDigitalInput(9);
         sensor.setInverted(true);
-        return new IntakeMap(topRoller, sensor::get);
+        return new IntakeMap(topRoller, sensor::get, 0.75);
     }
 
     @Override

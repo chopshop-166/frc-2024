@@ -4,6 +4,7 @@ import com.chopshop166.chopshoplib.leds.LEDSubsystem;
 import com.chopshop166.chopshoplib.leds.patterns.AlliancePattern;
 import com.chopshop166.chopshoplib.leds.patterns.ColdFirePattern;
 import com.chopshop166.chopshoplib.leds.patterns.FlashPattern;
+import com.chopshop166.chopshoplib.leds.patterns.RainbowRoad;
 import com.chopshop166.chopshoplib.leds.patterns.SpinPattern;
 import com.chopshop166.chopshoplib.maps.LedMap;
 
@@ -44,7 +45,7 @@ public class Led extends LEDSubsystem {
     }
 
     public Command grabbedPiece() {
-        return setPattern("Intake", Color.kGreen, "Green");
+        return setPattern("Intake", new FlashPattern(Color.kGreen, .125), "Green");
     }
 
     public Command atPreset() {
@@ -67,8 +68,8 @@ public class Led extends LEDSubsystem {
         return setPattern("HP signal", new Color(133, 19, 79), "Activate AMP");
     }
 
-    public Command visonAligned() {
-        return setPattern("Vison", new FlashPattern(new Color(48, 102, 53), 0.5), "To preset");
+    public Command visonAligning() {
+        return setPattern("Vison", new RainbowRoad(), "To preset");
     }
 
     public Command awesome() {
@@ -77,6 +78,10 @@ public class Led extends LEDSubsystem {
 
     public Command flash() {
         return setGlobalPattern(new FlashPattern(new Color(255, 32, 82), .5));
+    }
+
+    public Command blue() {
+        return setGlobalPattern(new Color(255, 0, 0));
     }
 
     // Auto Leds

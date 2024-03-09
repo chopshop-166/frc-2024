@@ -15,6 +15,63 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
 
+    public enum ArmPresets {
+
+        // Most values for comp robot are two degrees less than alpha bot
+
+        INTAKE,
+
+        OFF,
+
+        SCORE_SPEAKER_PODIUM,
+
+        SCORE_AMP,
+
+        SCORE_SPEAKER_SUBWOOFER,
+
+        // Probs not correct
+        SCORE_SPEAKER_CENTERLINE,
+
+        HOLD,
+
+        STOW
+    }
+
+    public record ArmPresetValues(double intake, double amp, double scoreSpeakerCenterline,
+            double scoreSpeakerPodium, double scoreSpeakerSubwoofer, double stow) {
+        public ArmPresetValues() {
+            this(0, 0, 0, 0, 0, 0);
+        }
+
+        public double getValue(ArmPresets preset) {
+            switch (preset) {
+                case INTAKE:
+                    return intake;
+
+                case SCORE_AMP:
+                    return amp;
+
+                case OFF:
+                    return Double.NaN;
+
+                case SCORE_SPEAKER_CENTERLINE:
+                    return scoreSpeakerCenterline;
+
+                case SCORE_SPEAKER_PODIUM:
+                    return scoreSpeakerPodium;
+
+                case SCORE_SPEAKER_SUBWOOFER:
+                    return scoreSpeakerSubwoofer;
+
+                case STOW:
+                    return stow;
+                default:
+                    return 0;
+            }
+
+        }
+    }
+
     public final SmartMotorController motor;
     public final ProfiledPIDController pid;
     public final ArmFeedforward armFeedforward;
@@ -22,21 +79,23 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
     private double previousRate = 0;
     public ValueRange hardLimits;
     public ValueRange softLimits;
+    public ArmPresetValues armPresets;
 
     public ArmRotateMap() {
         this(new SmartMotorController(), new ProfiledPIDController(0, 0, 0,
                 new Constraints(0, 0)), new ArmFeedforward(0, 0, 0, 0),
-                new MockEncoder(), new ValueRange(0, 0), new ValueRange(0, 0));
+                new MockEncoder(), new ValueRange(0, 0), new ValueRange(0, 0), new ArmPresetValues());
     }
 
     public ArmRotateMap(SmartMotorController motor, ProfiledPIDController pid, ArmFeedforward armFeedforward,
-            IEncoder encoder, ValueRange hardLimits, ValueRange softLimits) {
+            IEncoder encoder, ValueRange hardLimits, ValueRange softLimits, ArmPresetValues armPresets) {
         this.motor = motor;
         this.pid = pid;
         this.armFeedforward = armFeedforward;
         this.encoder = encoder;
         this.hardLimits = hardLimits;
         this.softLimits = softLimits;
+        this.armPresets = armPresets;
     }
 
     @Override

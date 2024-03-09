@@ -7,6 +7,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.chopshop166.chopshoplib.drive.MockSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
+import com.chopshop166.chopshoplib.leds.SegmentConfig;
+import com.chopshop166.chopshoplib.maps.LedMap;
 import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 import com.chopshop166.chopshoplib.motors.CSSparkFlex;
@@ -27,6 +29,16 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 @RobotMapFor("00:80:2F:19:78:A9")
 public class Thomas extends RobotMap {
+
+    @Override
+    public LedMap getLedMap() {
+        var result = new LedMap(0, 150);
+        var leds = result.ledBuffer;
+
+        SegmentConfig underglow = leds.segment(150).tags("underglow", "Shooter", "Arm Rotate", "Intake", "HP signal",
+                "Vision", "Fire", "Auto", "Alliance");
+        return result;
+    }
 
     @Override
     public void setupLogging() {

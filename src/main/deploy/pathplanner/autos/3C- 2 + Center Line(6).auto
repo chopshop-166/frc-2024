@@ -12,57 +12,69 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "Shoot Game Piece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Pickup 2 - CS"
+            "commands": []
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Game Piece"
+            "name": "Intake Definitely Intakes"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Speaker from 2 - CS"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Pickup 6 - CS"
+            "commands": []
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Game Piece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Speaker from 6 - CS"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Subwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": []
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": []
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         }
       ]

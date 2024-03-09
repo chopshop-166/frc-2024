@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.38,
-      "y": 5.55
+      "x": 0.65,
+      "y": 4.35
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
@@ -24,33 +24,21 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 2 - CS"
+                  "pathName": "Bottom Outta the Way"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake Game Piece"
+                  "name": "Stop Shooter"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Speaker from 2 - CS"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece"
           }
         }
       ]
     }
   },
-  "folder": "2 Piece - Center Start",
+  "folder": "Score and leave",
   "choreoAuto": false
 }

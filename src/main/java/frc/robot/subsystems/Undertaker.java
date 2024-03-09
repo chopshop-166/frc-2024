@@ -12,6 +12,7 @@ public class Undertaker extends LoggedSubsystem<Data, UndertakerMap> {
 
     public Undertaker(UndertakerMap undertakerMap) {
         super(new Data(), undertakerMap);
+
     }
 
     public Command spinIn() {

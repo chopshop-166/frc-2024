@@ -24,13 +24,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.maps.RobotMap;
+import frc.robot.maps.subsystems.ArmRotateMap.ArmPresets;
 import frc.robot.subsystems.ArmRotate;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Undertaker;
-import frc.robot.subsystems.ArmRotate.ArmPresets;
 import frc.robot.subsystems.Shooter.Speeds;
 
 public class Robot extends CommandRobot {
@@ -58,11 +58,13 @@ public class Robot extends CommandRobot {
         // PathPlanner doesn't get too complicated. You might need to add wait
         // commands into PathPlanner.
         NamedCommands.registerCommand("Intake Game Piece", commandSequences.moveAndIntake());
+        NamedCommands.registerCommand("Intake Definitely Intakes", commandSequences.moveAndIntakeContingency());
         NamedCommands.registerCommand("Shoot Game Piece", commandSequences.scoreSpeakerAuto());
-        NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.scoreAmp());
+        NamedCommands.registerCommand("Shoot Game Piece - Podium", commandSequences.scoreSpeakerPodiumAuto());
+        NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.chargeAmp());
         NamedCommands.registerCommand("Stop Shooter", shooter.setSpeed(Speeds.OFF));
-        NamedCommands.registerCommand("Rotate Speaker Sub.",
-                commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
+        NamedCommands.registerCommand("Rotate Arm",
+                commandSequences.moveAndIntakeContingencyRotate());
         NamedCommands.registerCommand("Rotate Speaker Pod.",
                 commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
     }
@@ -111,7 +113,8 @@ public class Robot extends CommandRobot {
         // be added.
         Logger.start();
 
-        led.awesome().schedule();
+        led.blue().schedule();
+
     }
 
     @Override
@@ -120,24 +123,35 @@ public class Robot extends CommandRobot {
         // Magic numbers for auto testing
         driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
         driveController.leftBumper()
-
-                .whileTrue(drive.robotCentricDrive(() -> -driveController.getLeftX(), () -> -driveController.getLeftY(),
-                        () -> -driveController.getRightX()));
+                .whileTrue(drive.robotCentricDrive(() -> {
+                    return driveScaler.applyAsDouble(-driveController.getLeftX());
+                }, () -> {
+                    return driveScaler.applyAsDouble(-driveController.getLeftY());
+                }, () -> {
+                    return driveScaler.applyAsDouble(-driveController.getRightX());
+                }));
 
         driveController.y().onTrue(led.awesome());
-        driveController.rightBumper().onTrue(commandSequences.scoreAmp());
+        driveController.rightBumper().onTrue(commandSequences.chargeAmp());
 
         copilotController.back().onTrue(intake.safeStateCmd());
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.a().onTrue(commandSequences.moveAndIntake());
+        // copilotController.b().onTrue(undertaker.safeStateCmd());
         copilotController.b().whileTrue(commandSequences.scoreSpeakerCharge(copilotController, driveController));
         copilotController.b().onFalse(commandSequences.scoreSpeakerRelease(copilotController, driveController));
-        copilotController.y().onTrue(intake.feedShooter());
-        copilotController.x().whileTrue(intake.spinOut());
-        copilotController.rightBumper().onTrue(commandSequences.scoreAmp());
-        copilotController.leftBumper().onTrue(commandSequences.podiumShot());
+        copilotController.y().onTrue(commandSequences.scoreSpeakerCenterlineCharge(copilotController, driveController));
+        copilotController.y()
+                .onFalse(commandSequences.scoreSpeakerCenterlineRelease(copilotController, driveController));
+        copilotController.x().whileTrue(intake.spinOut().alongWith(undertaker.spinOut()));
+        copilotController.rightStick().whileTrue(intake.feedShooter());
+        copilotController.rightBumper().onTrue(commandSequences.chargeAmp());
+        copilotController.rightBumper().onFalse(commandSequences.releaseAmp());
+        copilotController.leftBumper().onTrue(commandSequences.podiumShotCharge());
+        copilotController.leftBumper().onFalse(commandSequences.podiumShotRelease());
         copilotController.povUp().whileTrue(commandSequences.moveToAmp());
-        copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));
+        // copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));
+        copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.HALF_SPEED));
         copilotController.povRight().whileTrue(commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
         copilotController.povLeft().whileTrue(commandSequences.stow());
     }
@@ -148,9 +162,9 @@ public class Robot extends CommandRobot {
         Shuffleboard.getTab("Pit Test").add("Drive Backward",
                 drive.moveInDirection(0, -1, 3)).withPosition(1, 2);
         Shuffleboard.getTab("Pit Test").add("Drive Left",
-                drive.moveInDirection(-1, 0, 3)).withPosition(0, 1);
+                drive.moveInDirection(1, 0, 3)).withPosition(0, 1);
         Shuffleboard.getTab("Pit Test").add("Drive Right",
-                drive.moveInDirection(1, 0, 3)).withPosition(2, 1);
+                drive.moveInDirection(-1, 0, 3)).withPosition(2, 1);
         Shuffleboard.getTab("Pit Test").add("Drive Forward",
                 drive.moveInDirection(0, 1, 3)).withPosition(1, 0);
         Shuffleboard.getTab("Pit Test").add("Drive Forward Faster",

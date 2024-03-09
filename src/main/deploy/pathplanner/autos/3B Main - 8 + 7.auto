@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.55
+      "x": 0.65,
+      "y": 4.35
     },
-    "rotation": 0.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -30,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 1 - CS"
+                  "pathName": "Pickup 8 - BS"
                 }
               },
               {
@@ -55,7 +49,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 1 - CS"
+                  "pathName": "Speaker from 8 - BS"
                 }
               },
               {
@@ -80,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 2 - CS"
+                  "pathName": "Pickup 7 - BS"
                 }
               },
               {
@@ -105,7 +99,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 2 - CS"
+                  "pathName": "Speaker from 7 - BS"
                 }
               },
               {
@@ -132,6 +126,6 @@
       ]
     }
   },
-  "folder": "3 Piece - Center Start",
+  "folder": "3 Piece - Bottom Start",
   "choreoAuto": false
 }

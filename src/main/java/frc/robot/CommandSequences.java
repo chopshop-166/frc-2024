@@ -7,8 +7,8 @@ import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.maps.subsystems.ArmRotateMap.ArmPresets;
 import frc.robot.subsystems.ArmRotate;
-import frc.robot.subsystems.ArmRotate.ArmPresets;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
@@ -32,6 +32,7 @@ public class CommandSequences {
         this.shooter = shooter;
         this.led = led;
         this.armRotate = armRotate;
+        this.undertaker = undertaker;
     }
 
     // make sequences for intake and shooter.
@@ -45,20 +46,37 @@ public class CommandSequences {
     }
 
     public Command armRotatePreset(ArmPresets presets) {
-        return armRotate.moveTo(presets);
-        // led.toPreset().andThen(
-        // , led.atPreset());
+        return armRotate.moveTo(presets).alongWith(
+                led.toPreset()).andThen(led.atPreset());
     }
 
     public Command moveAndIntake() {
         return led.toPreset().andThen(this.intake().deadlineWith(
-                armRotate.moveTo(ArmPresets.INTAKE).andThen(armRotate.moveToZero())), led.grabbedPiece());
+                this.armRotatePreset(ArmPresets.INTAKE).alongWith(
+                        // armRotate.moveToZero(),
+                        undertaker.spinIn())),
+                led.grabbedPiece());
+    }
+
+    public Command moveAndIntakeContingency() {
+        return led.toPreset().andThen(this.intake().alongWith(undertaker.spinIn())).withTimeout(0.5);
+    }
+
+    public Command moveAndIntakeContingencyRotate() {
+        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()))
+                .andThen(armRotate.moveTo(ArmPresets.INTAKE));
     }
 
     public Command feedShoot() {
         return shooterSpeed(Speeds.SUBWOOFER_SHOT).andThen(waitSeconds(.5),
                 intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF));
+    }
+
+    public Command outtake() {
+        return intake.spinOut().alongWith(
+                undertaker.spinOut());
+
     }
 
     public Command moveToIntake() {
@@ -77,10 +95,13 @@ public class CommandSequences {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset());
     }
 
-    public Command scoreAmp() {
-        return this.armRotatePreset(ArmPresets.SCORE_AMP).withTimeout(0.75).andThen(this.shooterSpeed(Speeds.AMP_SPEED),
-                intake.feedShooter(),
-                shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+    public Command chargeAmp() {
+        return this.armRotatePreset(ArmPresets.SCORE_AMP).withTimeout(0.75)
+                .andThen(this.shooterSpeed(Speeds.AMP_SPEED));
+    }
+
+    public Command releaseAmp() {
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), led.colorAlliance());
     }
 
     public Command scoreSpeakerCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
@@ -91,7 +112,18 @@ public class CommandSequences {
 
     public Command scoreSpeakerRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
         return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
-                setRumble(controller2, 0));
+                setRumble(controller2, 0), this.armRotatePreset(ArmPresets.INTAKE), led.colorAlliance());
+    }
+
+    public Command scoreSpeakerCenterlineCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
+        return this.shooterSpeed(Speeds.FULL_SPEED).alongWith(
+                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_CENTERLINE)).andThen(
+                        setRumble(controller1, 1), setRumble(controller2, 1));
+    }
+
+    public Command scoreSpeakerCenterlineRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
+                setRumble(controller2, 0), led.colorAlliance());
     }
 
     public Command scoreSpeakerAuto() {
@@ -101,10 +133,20 @@ public class CommandSequences {
                         led.colorAlliance());
     }
 
-    public Command podiumShot() {
+    public Command scoreSpeakerPodiumAuto() {
+        return this.shooterSpeed(Speeds.PODIUM_SHOT).alongWith(
+                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM)).andThen(
+                        intake.feedShooter(),
+                        led.colorAlliance());
+    }
+
+    public Command podiumShotCharge() {
         return this.shooterSpeed(Speeds.PODIUM_SHOT)
-                .alongWith(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM))
-                .andThen(intake.feedShooter(), shooterSpeed(Speeds.OFF));
+                .alongWith(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
+    }
+
+    public Command podiumShotRelease() {
+        return this.intake.feedShooter().andThen(this.shooterSpeed(Speeds.OFF));
     }
 
     public Command setRumble(ButtonXboxController controller, int rumbleAmount) {
