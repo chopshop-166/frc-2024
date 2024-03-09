@@ -46,14 +46,13 @@ public class CommandSequences {
     }
 
     public Command armRotatePreset(ArmPresets presets) {
-        return armRotate.moveTo(presets);
-        // led.toPreset().andThen(
-        // , led.atPreset());
+        return armRotate.moveTo(presets).alongWith(
+                led.toPreset()).andThen(led.atPreset());
     }
 
     public Command moveAndIntake() {
         return led.toPreset().andThen(this.intake().deadlineWith(
-                armRotate.moveTo(ArmPresets.INTAKE).alongWith(
+                this.armRotatePreset(ArmPresets.INTAKE).alongWith(
                         // armRotate.moveToZero(),
                         undertaker.spinIn())),
                 led.grabbedPiece());
