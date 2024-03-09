@@ -41,6 +41,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.maps.subsystems.ArmRotateMap;
+import frc.robot.maps.subsystems.CameraSwerveDriveMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 import frc.robot.maps.subsystems.UndertakerMap;
@@ -55,7 +56,7 @@ public class Vibrato extends RobotMap {
     }
 
     @Override
-    public SwerveDriveMap getDriveMap() {
+    public CameraSwerveDriveMap getDriveMap() {
 
         // Remember to divide by 360
         final double FLOFFSET = -0.429688;
@@ -161,10 +162,12 @@ public class Vibrato extends RobotMap {
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
         );
 
-        return new SwerveDriveMap(frontLeft, frontRight, rearLeft, rearRight,
+        var driveMap = new SwerveDriveMap(frontLeft, frontRight, rearLeft, rearRight,
                 maxDriveSpeedMetersPerSecond,
                 maxRotationRadianPerSecond, pigeonGyro2,
                 config);
+
+        return new CameraSwerveDriveMap(driveMap);
     }
 
     @Override

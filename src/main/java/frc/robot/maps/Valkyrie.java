@@ -25,13 +25,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import frc.robot.maps.subsystems.CameraSwerveDriveMap;
 import frc.robot.maps.subsystems.IntakeMap;
 
 @RobotMapFor("00:80:2F:19:7B:A3")
 public class Valkyrie extends RobotMap {
 
     @Override
-    public SwerveDriveMap getDriveMap() {
+    public CameraSwerveDriveMap getDriveMap() {
 
         final double MODULE_OFFSET_XY = Units.inchesToMeters(12.375);
         final PigeonGyro pigeonGyro = new PigeonGyro(new PigeonIMU(0));
@@ -109,11 +110,12 @@ public class Valkyrie extends RobotMap {
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
         );
 
-        return new SwerveDriveMap(frontLeft, frontRight, rearLeft, rearRight,
+        var driveMap = new SwerveDriveMap(frontLeft, frontRight, rearLeft, rearRight,
                 maxDriveSpeedMetersPerSecond,
                 maxRotationRadianPerSecond, pigeonGyro,
                 config);
 
+        return new CameraSwerveDriveMap(driveMap);
     }
 
     @Override
