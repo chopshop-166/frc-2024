@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.65,
-      "y": 4.35
+      "y": 6.7
     },
-    "rotation": -60.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup 8 - BS"
+            "pathName": "Pickup 3 - TS"
           }
         },
         {
@@ -32,19 +32,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker from 8 - BS"
+            "pathName": "Speaker from 3 - TS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup 7 - BS"
+            "pathName": "Pickup 4 - TS"
           }
         },
         {
@@ -56,18 +56,42 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker from 7 - BS"
+            "pathName": "Speaker from 4 - TS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 5 - TS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Game Piece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker from 5 - TS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Subwoofer"
           }
         }
       ]
     }
   },
-  "folder": "3 Piece - Bottom Start",
+  "folder": "4 Piece - Top Start",
   "choreoAuto": false
 }

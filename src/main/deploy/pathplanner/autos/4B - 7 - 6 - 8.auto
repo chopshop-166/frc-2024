@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Pickup 1 - BS"
+            "pathName": "Pickup 7 - BS"
           }
         },
         {
@@ -32,13 +32,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker from 1 - BS"
+            "pathName": "Speaker from 7 - BS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
@@ -62,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
@@ -86,7 +86,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         }
       ]

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.65,
-        "y": 4.35
+        "x": 0.7511871911042578,
+        "y": 6.637928410024977
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9260417769493865,
-        "y": 3.935762862581182
+        "x": 0.7952442380734501,
+        "y": 7.871525725162363
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3225551996721174,
-        "y": 5.198731542364695
+        "x": 4.995349382469785,
+        "y": 7.665926172639466
       },
       "prevControl": {
-        "x": 2.0288415532108353,
-        "y": 4.802218119641965
+        "x": 1.059586519888604,
+        "y": 7.7393545842547855
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.0,
-    "rotateFast": false
+    "rotation": 0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Pickups - Bottom Speaker",
-  "previewStartingState": null,
+  "folder": "GET OUTTA THE WAY!",
+  "previewStartingState": {
+    "rotation": 60.57855923889684,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

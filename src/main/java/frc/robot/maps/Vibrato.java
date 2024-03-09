@@ -144,7 +144,7 @@ public class Vibrato extends RobotMap {
 
         final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(15);
 
-        final double maxRotationRadianPerSecond = Math.PI;
+        final double maxRotationRadianPerSecond = Math.PI * 2;
 
         final HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(
                 // HolonomicPathFollowerConfig, this should likely live in your
@@ -196,7 +196,7 @@ public class Vibrato extends RobotMap {
                 new ValueRange(-15, 88),
                 // Soft limits
                 new ValueRange(0, 73),
-                new ArmRotateMap.ArmPresetValues(-16, 88, 23, 13, -3,
+                new ArmRotateMap.ArmPresetValues(-16, 88, 23, 13.5, -3,
                         -20));
     }
 

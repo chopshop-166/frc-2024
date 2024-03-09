@@ -14,11 +14,11 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -37,6 +37,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Definitely Intakes"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -49,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Speaker Sub."
+                  "name": "Rotate Arm"
                 }
               }
             ]
@@ -58,11 +64,11 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -81,6 +87,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Definitely Intakes"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -93,7 +105,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Speaker Sub."
+                  "name": "Rotate Arm"
                 }
               }
             ]
@@ -102,11 +114,11 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -125,6 +137,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Definitely Intakes"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -137,7 +155,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Speaker Sub."
+                  "name": "Rotate Arm"
                 }
               }
             ]
@@ -146,7 +164,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {

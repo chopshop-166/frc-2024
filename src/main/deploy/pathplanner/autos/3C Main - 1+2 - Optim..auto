@@ -14,11 +14,11 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -39,13 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Rotate Speaker Pod."
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -70,13 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Rotate Speaker Pod."
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {

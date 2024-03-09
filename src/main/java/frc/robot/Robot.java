@@ -58,11 +58,13 @@ public class Robot extends CommandRobot {
         // PathPlanner doesn't get too complicated. You might need to add wait
         // commands into PathPlanner.
         NamedCommands.registerCommand("Intake Game Piece", commandSequences.moveAndIntake());
+        NamedCommands.registerCommand("Intake Definitely Intakes", commandSequences.moveAndIntakeContingency());
         NamedCommands.registerCommand("Shoot Game Piece", commandSequences.scoreSpeakerAuto());
+        NamedCommands.registerCommand("Shoot Game Piece - Podium", commandSequences.scoreSpeakerPodiumAuto());
         NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.chargeAmp());
         NamedCommands.registerCommand("Stop Shooter", shooter.setSpeed(Speeds.OFF));
-        NamedCommands.registerCommand("Rotate Speaker Sub.",
-                commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
+        NamedCommands.registerCommand("Rotate Arm",
+                commandSequences.moveAndIntakeContingencyRotate());
         NamedCommands.registerCommand("Rotate Speaker Pod.",
                 commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
     }
@@ -145,7 +147,8 @@ public class Robot extends CommandRobot {
         copilotController.rightStick().whileTrue(intake.feedShooter());
         copilotController.rightBumper().onTrue(commandSequences.chargeAmp());
         copilotController.rightBumper().onFalse(commandSequences.releaseAmp());
-        copilotController.leftBumper().onTrue(commandSequences.podiumShot());
+        copilotController.leftBumper().onTrue(commandSequences.podiumShotCharge());
+        copilotController.leftBumper().onFalse(commandSequences.podiumShotRelease());
         copilotController.povUp().whileTrue(commandSequences.moveToAmp());
         // copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));
         copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.HALF_SPEED));

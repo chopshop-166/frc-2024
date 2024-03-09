@@ -56,7 +56,16 @@ public class CommandSequences {
                 armRotate.moveTo(ArmPresets.INTAKE).alongWith(
                         // armRotate.moveToZero(),
                         undertaker.spinIn())),
-                led.grabbedPiece(), waitSeconds(1.5), led.colorAlliance());
+                led.grabbedPiece());
+    }
+
+    public Command moveAndIntakeContingency() {
+        return led.toPreset().andThen(this.intake().alongWith(undertaker.spinIn())).withTimeout(0.5);
+    }
+
+    public Command moveAndIntakeContingencyRotate() {
+        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()))
+                .andThen(armRotate.moveTo(ArmPresets.INTAKE));
     }
 
     public Command feedShoot() {
@@ -104,7 +113,7 @@ public class CommandSequences {
 
     public Command scoreSpeakerRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
         return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
-                setRumble(controller2, 0), led.colorAlliance());
+                setRumble(controller2, 0), this.armRotatePreset(ArmPresets.INTAKE), led.colorAlliance());
     }
 
     public Command scoreSpeakerCenterlineCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
@@ -121,6 +130,13 @@ public class CommandSequences {
     public Command scoreSpeakerAuto() {
         return this.shooterSpeed(Speeds.SUBWOOFER_SHOT).alongWith(
                 this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER)).andThen(
+                        intake.feedShooter(),
+                        led.colorAlliance());
+    }
+
+    public Command scoreSpeakerPodiumAuto() {
+        return this.shooterSpeed(Speeds.PODIUM_SHOT).alongWith(
+                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM)).andThen(
                         intake.feedShooter(),
                         led.colorAlliance());
     }
