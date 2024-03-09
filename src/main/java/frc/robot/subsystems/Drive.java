@@ -57,8 +57,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
     // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
-    public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5),
-            new Rotation3d(0, 0, 0));
+    public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(0.076731, 0.177711, 0.316103),
+            new Rotation3d(0, 106.875, 4.5));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();

@@ -58,16 +58,15 @@ public class CommandSequences {
     }
 
     public Command moveAndIntakeContingency() {
-        return led.toPreset().andThen(this.intake().alongWith(undertaker.spinIn())).withTimeout(0.5);
+        return led.toPreset().andThen(this.intake().alongWith(undertaker.spinIn())).withTimeout(0.2);
     }
 
-    public Command moveAndIntakeContingencyRotate() {
-        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()))
-                .andThen(armRotate.moveTo(ArmPresets.INTAKE));
+    public Command moveAndIntakeContingencyTwo() {
+        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()));
     }
 
     public Command feedShoot() {
-        return shooterSpeed(Speeds.SUBWOOFER_SHOT).andThen(waitSeconds(.5),
+        return shooterSpeed(Speeds.SUBWOOFER_SHOT).andThen(waitSeconds(.2),
                 intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF));
     }

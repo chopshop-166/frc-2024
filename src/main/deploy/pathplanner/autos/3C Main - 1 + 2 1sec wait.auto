@@ -61,7 +61,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Arm"
+                  "name": "Intake While Leaving"
                 }
               }
             ]
@@ -111,7 +111,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Arm"
+                  "name": "Intake While Leaving"
                 }
               }
             ]

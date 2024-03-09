@@ -59,12 +59,14 @@ public class Robot extends CommandRobot {
         // commands into PathPlanner.
         NamedCommands.registerCommand("Intake Game Piece", commandSequences.moveAndIntake());
         NamedCommands.registerCommand("Intake Definitely Intakes", commandSequences.moveAndIntakeContingency());
-        NamedCommands.registerCommand("Shoot Game Piece", commandSequences.scoreSpeakerAuto());
+        NamedCommands.registerCommand("Shoot Game Piece - Subwoofer", commandSequences.scoreSpeakerAuto());
         NamedCommands.registerCommand("Shoot Game Piece - Podium", commandSequences.scoreSpeakerPodiumAuto());
         NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.chargeAmp());
+        NamedCommands.registerCommand("Rotate Arm Sub",
+                commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
         NamedCommands.registerCommand("Stop Shooter", shooter.setSpeed(Speeds.OFF));
-        NamedCommands.registerCommand("Rotate Arm",
-                commandSequences.moveAndIntakeContingencyRotate());
+        NamedCommands.registerCommand("Intake While Leaving",
+                commandSequences.moveAndIntakeContingencyTwo());
         NamedCommands.registerCommand("Rotate Speaker Pod.",
                 commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
     }
