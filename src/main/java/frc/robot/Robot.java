@@ -69,6 +69,8 @@ public class Robot extends CommandRobot {
                 commandSequences.moveAndIntakeContingencyTwo());
         NamedCommands.registerCommand("Rotate Speaker Pod.",
                 commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
+        NamedCommands.registerCommand("Has Game Piece? Rotate.",
+                commandSequences.autoGamePieceDetected());
     }
 
     @Autonomous(name = "No Auto", defaultAuto = true)

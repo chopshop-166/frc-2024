@@ -18,13 +18,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 1 - BS"
+                  "pathName": "Pickup 8 P1 - BS"
                 }
               },
               {
@@ -37,44 +37,13 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Definitely Intakes"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 1 - BS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake While Leaving"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece - Subwoofer"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 8 P1 - BS"
+                  "pathName": "Pickup 8 P2 - BS"
                 }
               },
               {
@@ -176,6 +145,6 @@
       ]
     }
   },
-  "folder": "4 Piece - Bottom Start",
+  "folder": "3 Piece - Bottom Start",
   "choreoAuto": false
 }

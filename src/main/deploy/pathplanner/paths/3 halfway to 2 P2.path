@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3826715309960145,
-        "y": 5.55
+        "x": 1.9,
+        "y": 6.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.720442224426489,
-        "y": 5.815530199933388
+        "x": 2.0265663066537405,
+        "y": 5.737835701023514
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6603258931025917,
-        "y": 6.755413868609491
+        "x": 2.5,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 2.5428404345180784,
-        "y": 6.637928410024979
+        "x": 2.2867200663978795,
+        "y": 5.5210409012367325
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 45.0,
+    "rotation": 0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "Pickups - Center Speaker",
-  "previewStartingState": null,
+  "folder": "Optimization",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

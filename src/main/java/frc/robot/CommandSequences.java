@@ -65,6 +65,11 @@ public class CommandSequences {
         return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()));
     }
 
+    public Command autoGamePieceDetected() {
+        return intake.getData().gamePieceDetected ? this.intake().deadlineWith(undertaker.spinIn())
+                : armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER);
+    }
+
     public Command feedShoot() {
         return shooterSpeed(Speeds.SUBWOOFER_SHOT).andThen(waitSeconds(.2),
                 intake.feedShooter(),

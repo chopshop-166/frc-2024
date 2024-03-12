@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.65,
-      "y": 4.35
+      "x": 1.3,
+      "y": 5.55
     },
-    "rotation": -60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 8 - BS"
+                  "pathName": "Pickup 3 - CS"
                 }
               },
               {
@@ -49,13 +49,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 8 - BS"
+                  "pathName": "3 halfway to 2 P1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Rotate Arm Sub"
                 }
               }
             ]
@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 7 - BS"
+                  "pathName": "3 halfway to 2 P2"
                 }
               },
               {
@@ -99,13 +99,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 7 - BS"
+                  "pathName": "2 Halfway to 1 P1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Rotate Arm Sub"
                 }
               }
             ]
@@ -118,6 +118,31 @@
           }
         },
         {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2 Halfway to 1 P2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Game Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Podium"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Stop Shooter"
@@ -126,6 +151,6 @@
       ]
     }
   },
-  "folder": "3 Piece - Bottom Start",
+  "folder": "4 Piece - Center Start",
   "choreoAuto": false
 }
