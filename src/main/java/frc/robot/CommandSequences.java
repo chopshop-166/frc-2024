@@ -51,11 +51,10 @@ public class CommandSequences {
     }
 
     public Command moveAndIntake() {
-        return led.toPreset().andThen(this.intake().deadlineWith(
-                this.armRotatePreset(ArmPresets.INTAKE).alongWith(
-                        // armRotate.moveToZero(),
-                        undertaker.spinIn())),
-                led.grabbedPiece());
+        return this.intake().deadlineWith(
+                this.armRotatePreset(ArmPresets.INTAKE),
+                undertaker.spinIn()).andThen(
+                        led.grabbedPiece());
     }
 
     public Command moveAndIntakeContingency() {
