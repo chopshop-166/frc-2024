@@ -19,7 +19,6 @@ public class Undertaker extends LoggedSubsystem<Data, UndertakerMap> {
         return runEnd(
                 () -> {
                     getData().roller.setpoint = GRAB_SPEED;
-
                 }, this::safeState);
     }
 
@@ -39,10 +38,4 @@ public class Undertaker extends LoggedSubsystem<Data, UndertakerMap> {
     public void safeState() {
         getData().roller.setpoint = 0;
     }
-
-    @Override
-    public void periodic() {
-        super.periodic();
-    }
-
 }

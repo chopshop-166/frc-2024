@@ -73,8 +73,4 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
         getData().rightWheels.setpoint = 0;
     }
 
-    @Override
-    public void periodic() {
-        super.periodic();
-    }
 }
