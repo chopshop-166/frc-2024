@@ -104,7 +104,8 @@ public class CommandSequences {
     }
 
     public Command releaseAmp() {
-        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), this.armRotatePreset(ArmPresets.INTAKE),
+                led.colorAlliance());
     }
 
     public Command scoreSpeakerCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
@@ -125,7 +126,8 @@ public class CommandSequences {
     }
 
     public Command scoreSpeakerCenterlineRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
-        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), this.armRotatePreset(ArmPresets.INTAKE),
+                setRumble(controller1, 0),
                 setRumble(controller2, 0), led.colorAlliance());
     }
 
