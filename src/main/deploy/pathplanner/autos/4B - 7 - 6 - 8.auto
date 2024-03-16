@@ -18,21 +18,97 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Pickup 7 - BS"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pickup 7 - BS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Game Piece"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Game Piece"
+            "name": "Intake Definitely Intakes"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Speaker from 7 - BS"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker from 7 - BS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake While Leaving"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Subwoofer"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pickup 6 - BS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Game Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Definitely Intakes"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker from 6 - BS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake While Leaving"
+                }
+              }
+            ]
           }
         },
         {
@@ -42,21 +118,47 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Pickup 6 - BS"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pickup 8 P1 - BS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Game Piece"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Game Piece"
+            "name": "Intake Definitely Intakes"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Speaker from 6 - BS"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker from 8 - BS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake While Leaving"
+                }
+              }
+            ]
           }
         },
         {
@@ -66,27 +168,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Pickup 8 - BS"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Intake Game Piece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Speaker from 8 - BS"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Stop Shooter"
           }
         }
       ]

@@ -58,16 +58,20 @@ public class CommandSequences {
     }
 
     public Command moveAndIntakeContingency() {
-        return led.toPreset().andThen(this.intake().alongWith(undertaker.spinIn())).withTimeout(0.5);
+        return led.toPreset().andThen(this.intake().alongWith(undertaker.spinIn())).withTimeout(0.2);
     }
 
-    public Command moveAndIntakeContingencyRotate() {
-        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()))
-                .andThen(armRotate.moveTo(ArmPresets.INTAKE));
+    public Command moveAndIntakeContingencyTwo() {
+        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()));
+    }
+
+    public Command autoGamePieceDetected() {
+        return intake.getData().gamePieceDetected ? this.intake().deadlineWith(undertaker.spinIn())
+                : armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER);
     }
 
     public Command feedShoot() {
-        return shooterSpeed(Speeds.SUBWOOFER_SHOT).andThen(waitSeconds(.5),
+        return shooterSpeed(Speeds.SUBWOOFER_SHOT).andThen(waitSeconds(.2),
                 intake.feedShooter(),
                 shooter.setSpeed(Speeds.OFF));
     }
@@ -100,7 +104,8 @@ public class CommandSequences {
     }
 
     public Command releaseAmp() {
-        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), led.colorAlliance());
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), this.armRotatePreset(ArmPresets.INTAKE),
+                led.colorAlliance());
     }
 
     public Command scoreSpeakerCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
@@ -121,7 +126,8 @@ public class CommandSequences {
     }
 
     public Command scoreSpeakerCenterlineRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
-        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
+        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), this.armRotatePreset(ArmPresets.INTAKE),
+                setRumble(controller1, 0),
                 setRumble(controller2, 0), led.colorAlliance());
     }
 

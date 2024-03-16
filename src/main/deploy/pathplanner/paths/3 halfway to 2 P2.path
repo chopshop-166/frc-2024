@@ -3,28 +3,28 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.309243119380694,
-        "y": 5.507130871149041
+        "x": 1.9,
+        "y": 6.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.342081303351033,
-        "y": 5.507130871149041
+        "x": 2.0265663066537405,
+        "y": 5.737835701023514
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.309243119380694,
-        "y": 5.507130871149041
+        "x": 2.5,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 1.308414358381414,
-        "y": 5.507130871149041
+        "x": 2.2867200663978795,
+        "y": 5.5210409012367325
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     }
   ],
@@ -39,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
-    "rotateFast": false
+    "rotation": 0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Scoring Locations - Center Speaker",
-  "previewStartingState": null,
+  "folder": "Optimization",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

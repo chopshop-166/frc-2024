@@ -16,34 +16,40 @@
     },
     {
       "anchor": {
-        "x": 0.65,
-        "y": 4.35
+        "x": 1.0742722022116682,
+        "y": 4.288219238334721
       },
       "prevControl": {
-        "x": 2.2050697410876046,
-        "y": 2.0706812075520395
+        "x": 2.6293419432992664,
+        "y": 2.0089004458867605
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 4.2,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.0,
+    "rotation": -50.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Scoring Locations - Bottom Speaker",
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

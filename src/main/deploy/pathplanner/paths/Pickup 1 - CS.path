@@ -45,5 +45,5 @@
   "reversed": false,
   "folder": "Pickups - Center Speaker",
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
