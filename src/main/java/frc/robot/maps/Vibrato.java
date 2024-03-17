@@ -195,10 +195,10 @@ public class Vibrato extends RobotMap {
         return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor),
                 pid, feedForward, fusedEncoder,
                 // Hard limits
-                new ValueRange(-14, 88),
+                new ValueRange(-14, 87),
                 // Soft limits
                 new ValueRange(0, 73),
-                new ArmRotateMap.ArmPresetValues(-14, 88, 23, 13.5, -3,
+                new ArmRotateMap.ArmPresetValues(-12, 87, 23, 13.5, -3,
                         -14));
     }
 
