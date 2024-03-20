@@ -35,7 +35,10 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -167,6 +170,9 @@ public class Vibrato extends RobotMap {
                 maxDriveSpeedMetersPerSecond,
                 maxRotationRadianPerSecond, pigeonGyro2,
                 config);
+
+        var kCameraOffset = new Transform3d(new Translation3d(0.076731, 0.177711, 0.316103),
+                new Rotation3d(0, 106.875, 4.5));
 
         return new SimCameraSwerveDriveMap(driveMap);
     }
