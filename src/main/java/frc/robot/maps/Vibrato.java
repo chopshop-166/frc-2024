@@ -247,9 +247,9 @@ public class Vibrato extends RobotMap {
         var result = new LedMap(0, 23);
         var leds = result.ledBuffer;
 
+        SegmentConfig backBottom = leds.segment(11).tags("Shooter", "Intake", "Alliance");
+        SegmentConfig backTop = leds.segment(12).tags("ArmRotate", "Vision", "Auto", "Alliance");
         SegmentConfig slants = leds.segment(11, ColorFormat.GRB).tags("Shooter", "Intake", "Alliance");
-        SegmentConfig backTop = leds.segment(11).tags("Shooter", "Intake", "Alliance");
-        SegmentConfig backBottom = leds.segment(12).tags("ArmRotate", "Vision", "Auto", "Alliance");
         return result;
     }
 
