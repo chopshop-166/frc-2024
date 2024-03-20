@@ -244,7 +244,7 @@ public class Vibrato extends RobotMap {
 
     @Override
     public LedMap getLedMap() {
-        var result = new LedMap(0, 23);
+        var result = new LedMap(0, 34);
         var leds = result.ledBuffer;
 
         SegmentConfig backBottom = leds.segment(11).tags("Shooter", "Intake", "Alliance");
