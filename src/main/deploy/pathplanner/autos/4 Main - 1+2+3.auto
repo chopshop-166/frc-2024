@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 3 - CS"
+                  "pathName": "Pickup 1 - CS"
                 }
               },
               {
@@ -49,13 +49,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 3 - CS"
+                  "pathName": "Speaker from 1 - CS"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Rotate Arm"
                 }
               }
             ]
@@ -105,7 +105,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Rotate Arm"
                 }
               }
             ]
@@ -124,7 +124,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 1 - CS"
+                  "pathName": "Pickup 3 - CS"
                 }
               },
               {
@@ -149,13 +149,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 1 - CS"
+                  "pathName": "Speaker from 3 - CS"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Rotate Arm"
                 }
               }
             ]

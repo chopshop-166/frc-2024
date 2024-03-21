@@ -18,7 +18,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -37,12 +37,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Definitely Intakes"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -55,20 +49,14 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Shoot Game Piece - Subwoofer"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece - Subwoofer"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -87,12 +75,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Definitely Intakes"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -105,16 +87,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Shoot Game Piece - Subwoofer"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {

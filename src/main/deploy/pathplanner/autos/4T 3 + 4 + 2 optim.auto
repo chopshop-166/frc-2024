@@ -93,7 +93,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 4 - CS"
+                  "pathName": "4 to 3"
                 }
               },
               {
@@ -108,7 +108,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -118,7 +118,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 2 - CS"
+                  "pathName": "2 to 3"
                 }
               },
               {

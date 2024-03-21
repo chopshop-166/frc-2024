@@ -24,57 +24,57 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 3 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece - Podium"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "3 to 2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece - Podium"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
                   "pathName": "Pickup 1 - CS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Game Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Podium"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "1 to 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Game Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Podium"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pickup 3 - CS"
                 }
               },
               {

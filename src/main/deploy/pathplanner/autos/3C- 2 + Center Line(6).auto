@@ -14,20 +14,7 @@
         {
           "type": "deadline",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pickup 2 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
+            "commands": []
           }
         },
         {
@@ -39,82 +26,55 @@
         {
           "type": "parallel",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 2 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake While Leaving"
-                }
-              }
-            ]
+            "commands": []
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot Game Piece - Subwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Subwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Subwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         },
         {
           "type": "deadline",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pickup 6 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
+            "commands": []
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": null
           }
         },
         {
           "type": "parallel",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 6 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake While Leaving"
-                }
-              }
-            ]
+            "commands": []
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Shooter"
+            "name": null
           }
         }
       ]
