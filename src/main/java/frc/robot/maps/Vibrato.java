@@ -8,6 +8,7 @@ import com.chopshop166.chopshoplib.ValueRange;
 import com.chopshop166.chopshoplib.digital.CSDigitalInput;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
+import com.chopshop166.chopshoplib.leds.ColorFormat;
 import com.chopshop166.chopshoplib.leds.SegmentConfig;
 import com.chopshop166.chopshoplib.maps.LedMap;
 import com.chopshop166.chopshoplib.maps.RobotMapFor;
@@ -243,11 +244,12 @@ public class Vibrato extends RobotMap {
 
     @Override
     public LedMap getLedMap() {
-        var result = new LedMap(0, 23);
+        var result = new LedMap(0, 34);
         var leds = result.ledBuffer;
 
-        SegmentConfig both = leds.segment(11).tags("Shooter", "Intake", "Alliance");
-        SegmentConfig backOnly = leds.segment(12).tags("ArmRotate", "Vision", "Auto", "Alliance");
+        SegmentConfig backBottom = leds.segment(11).tags("Shooter", "Intake", "Alliance");
+        SegmentConfig backTop = leds.segment(11).tags("ArmRotate", "Vision", "Auto", "Alliance");
+        SegmentConfig slants = leds.segment(10, ColorFormat.GRB).tags("Shooter", "Intake", "Alliance");
         return result;
     }
 
