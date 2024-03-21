@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.3.1"
+    id "edu.wpi.first.GradleRIO" version "2024.3.2"
     id "com.peterabeles.gversion" version "1.10"
 }
 
@@ -85,7 +85,8 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     implementation 'com.google.guava:guava:33.0.0-jre'
-    implementation 'com.chopshop166:chopshoplib:2024.7.3'
+    implementation 'com.chopshop166:chopshoplib:2024.7.4'
+
 
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$akitJson.version"
