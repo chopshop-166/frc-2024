@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.6162688461334,
-        "y": 4.346961967626977
+        "x": 2.57805991438955,
+        "y": 4.313536158878934
       },
       "prevControl": {
-        "x": 2.322555199672118,
-        "y": 4.6113042494421315
+        "x": 2.284346267928268,
+        "y": 4.5778784406940884
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,5 +45,5 @@
   "reversed": false,
   "folder": "Pickups - Center Speaker",
   "previewStartingState": null,
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
