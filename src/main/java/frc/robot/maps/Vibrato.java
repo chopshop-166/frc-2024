@@ -58,10 +58,14 @@ public class Vibrato extends RobotMap {
     public SwerveDriveMap getDriveMap() {
 
         // Remember to divide by 360
-        final double FLOFFSET = -0.429688;
-        final double FROFFSET = 0.099121;
-        final double RLOFFSET = -0.226562;
-        final double RROFFSET = 0.477539;
+        // CAN ID 2
+        final double FLOFFSET = 0.571;
+        // CAN ID 4
+        final double FROFFSET = 0.099;
+        // CAN ID 1
+        final double RLOFFSET = -0.226;
+        // CAN ID 3
+        final double RROFFSET = -0.529;
 
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
