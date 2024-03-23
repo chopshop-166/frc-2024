@@ -79,7 +79,7 @@ public class CommandSequences {
 
     public Command outtake() {
         return intake.spinOut().alongWith(
-                undertaker.spinOut());
+                undertaker.spinOut(), led.outtake());
 
     }
 

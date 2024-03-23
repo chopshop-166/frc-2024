@@ -51,8 +51,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     double speedCoef = 1;
     double rotationCoef = 1;
     // Both of these are so wrong
-    double rotationKp = 1;
-    double rotationKs = 0.05;
+    double rotationKp = -0.1;
+    double rotationKs = -0.01;
     double visionMaxError = 1;
     Optional<PhotonTrackedTarget> tgt = Optional.empty();
 
@@ -66,7 +66,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
     public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(0.076731, 0.177711, 0.316103),
-            new Rotation3d(0, 106.875, 4.5));
+            new Rotation3d(0, 106.875, -4.5));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
@@ -96,7 +96,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         AutoBuilder.configureHolonomic(estimator::getEstimatedPosition, this::setPose,
                 this::getSpeeds, this::move, // Method that will drive the robot given ROBOT
                 // RELATIVE ChassisSpeeds
-                map.pathFollower, () -> isBlue, this);
+                map.pathFollower, () -> !isBlue, this);
 
         camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
 
@@ -295,6 +295,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
             Logger.recordOutput("targetAprilTag", tgt.get().getFiducialId());
             Logger.recordOutput("visionYaw", tgt.get().getYaw());
         }
+        Logger.recordOutput("Tag lost", tgt.isEmpty());
 
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
         Logger.recordOutput("Angle", getMap().gyro.getAngle());

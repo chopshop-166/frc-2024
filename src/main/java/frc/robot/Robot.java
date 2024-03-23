@@ -122,6 +122,12 @@ public class Robot extends CommandRobot {
     }
 
     @Override
+    public void disabledInit() {
+        super.disabledInit();
+        led.colorAlliance().schedule();
+    }
+
+    @Override
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing

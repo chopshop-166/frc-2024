@@ -110,7 +110,7 @@ public class Vibrato extends RobotMap {
         // Configuration for MK4i with L2 speeds
         Configuration MK4i_L2 = new Configuration(SDSSwerveModule.MK4_V2.gearRatio,
                 SDSSwerveModule.MK4_V2.wheelDiameter, new PIDValues(0.011, 0.00, 0.0002),
-                new PIDValues(0.001, 0.0, 0.0, 0.192));
+                new PIDValues(0.05, 0.0, 0.0, 0.21));
 
         // All Distances are in Meters
         // Front Left Module
@@ -149,7 +149,7 @@ public class Vibrato extends RobotMap {
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
                 new CtreEncoder(encoderRR), rearRightSteer, rearRightDrive, MK4i_L2);
 
-        final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(15);
+        final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(14.5);
 
         final double maxRotationRadianPerSecond = Math.PI * 2;
 
