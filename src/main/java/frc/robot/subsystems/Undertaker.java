@@ -16,17 +16,15 @@ public class Undertaker extends LoggedSubsystem<Data, UndertakerMap> {
     }
 
     public Command spinIn() {
-        return runEnd(
-                () -> {
-                    getData().roller.setpoint = GRAB_SPEED;
-                }, this::safeState);
+        return runSafe(() -> {
+            getData().roller.setpoint = GRAB_SPEED;
+        });
     }
 
     public Command spinOut() {
-        return runEnd(
-                () -> {
-                    getData().roller.setpoint = RELEASE_SPEED;
-                }, this::safeState);
+        return runSafe(() -> {
+            getData().roller.setpoint = RELEASE_SPEED;
+        });
     }
 
     @Override

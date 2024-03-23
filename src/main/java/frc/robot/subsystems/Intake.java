@@ -19,31 +19,27 @@ public class Intake extends LoggedSubsystem<Data, IntakeMap> {
     }
 
     public Command spinIn() {
-        return runEnd(
-                () -> {
-                    getData().roller.setpoint = getMap().grabSpeed;
-                }, this::safeState);
+        return runSafe(() -> {
+            getData().roller.setpoint = getMap().grabSpeed;
+        });
     }
 
     public Command spinOut() {
-        return runEnd(
-                () -> {
-                    getData().roller.setpoint = RELEASE_SPEED;
-                }, this::safeState);
+        return runSafe(() -> {
+            getData().roller.setpoint = RELEASE_SPEED;
+        });
     }
 
     public Command intakeGamePiece() {
-        return runEnd(
-                () -> {
-                    getData().roller.setpoint = getMap().grabSpeed;
-                }, this::safeState).until(() -> getData().gamePieceDetected);
+        return runSafe(() -> {
+            getData().roller.setpoint = getMap().grabSpeed;
+        }).until(() -> getData().gamePieceDetected);
     }
 
     public Command feedShooter() {
-        return run(
-                () -> {
-                    getData().roller.setpoint = FEED_SPEED;
-                }).until(() -> !getData().gamePieceDetected).andThen(waitSeconds(FEED_DELAY), safeStateCmd());
+        return run(() -> {
+            getData().roller.setpoint = FEED_SPEED;
+        }).until(() -> !getData().gamePieceDetected).andThen(waitSeconds(FEED_DELAY), safeStateCmd());
     }
 
     @Override
