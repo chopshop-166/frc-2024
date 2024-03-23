@@ -29,14 +29,14 @@ public class ReverseSpinPattern extends AnimatedPattern {
     @Override
     public void initialize(final SegmentBuffer buffer) {
         super.initialize(buffer);
-        this.ledPosition = 0;
+        this.ledPosition = buffer.getLength() - 1;
     }
 
     @Override
     public void animate(final SegmentBuffer buffer) {
         this.ledPosition--;
-        if (this.ledPosition >= buffer.getLength()) {
-            this.ledPosition = 0;
+        if (this.ledPosition <= 0) {
+            this.ledPosition = buffer.getLength() - 1;
         }
         buffer.setAll(Color.kBlack);
         buffer.set(this.ledPosition, this.color);
