@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.7113445212805922,
-        "y": 4.061289249339063
+        "x": 0.65,
+        "y": 4.35
       },
       "prevControl": {
-        "x": 1.1304811342017054,
-        "y": 1.8355293048614274
+        "x": 1.3533001663498863,
+        "y": 2.2175380307826815
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,24 +32,24 @@
     {
       "waypointRelativePos": 0.5,
       "rotationDegrees": 0,
-      "rotateFast": true
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.2,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 2.5,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.0,
+    "rotation": -60.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Scoring Locations - Bottom Speaker",
   "previewStartingState": null,
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

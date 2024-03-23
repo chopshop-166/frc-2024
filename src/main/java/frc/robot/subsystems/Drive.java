@@ -291,8 +291,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
 
-        Logger.recordOutput("targetAprilTag", tgt.get().getFiducialId());
-        Logger.recordOutput("visionYaw", tgt.get().getYaw());
+        if (tgt.isPresent()) {
+            Logger.recordOutput("targetAprilTag", tgt.get().getFiducialId());
+            Logger.recordOutput("visionYaw", tgt.get().getYaw());
+        }
+
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
         Logger.recordOutput("Angle", getMap().gyro.getAngle());
         Logger.recordOutput("rotation", getMap().gyro.getRotation2d());

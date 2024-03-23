@@ -10,6 +10,7 @@ import com.chopshop166.chopshoplib.maps.LedMap;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.maps.subsystems.patterns.ReverseSpinPattern;
 
 public class Led extends LEDSubsystem {
 
@@ -36,6 +37,10 @@ public class Led extends LEDSubsystem {
         return setPattern("Intake", new SpinPattern(), "Spinning");
     }
 
+    public Command outtake() {
+        return setPattern("Intake", new ReverseSpinPattern(), "Outtaking");
+    }
+
     public Command shooterSpinning() {
         return setPattern("Shooter", new SpinPattern(new Color(57, 32, 144)), "Spinning");
     }
@@ -53,7 +58,7 @@ public class Led extends LEDSubsystem {
     }
 
     public Command toPreset() {
-        return setPattern("Arm Rotate", new FlashPattern(new Color(112, 255, 248), 0.5), "To preset");
+        return setPattern("Arm Rotate", new FlashPattern(new Color(112, 255, 248), 0.125), "To preset");
     }
 
     public Command stowing() {

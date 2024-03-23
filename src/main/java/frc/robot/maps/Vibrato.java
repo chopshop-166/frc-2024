@@ -191,7 +191,7 @@ public class Vibrato extends RobotMap {
         CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
         ProfiledPIDController pid = new ProfiledPIDController(0.02, 0.0, 0.0, new Constraints(120, 500));
         pid.setTolerance(2);
-        ArmFeedforward feedForward = new ArmFeedforward(0, 0.02, 0.37, 0);
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.03, 0.35, 0);
 
         return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor),
                 pid, feedForward, fusedEncoder,
@@ -199,8 +199,8 @@ public class Vibrato extends RobotMap {
                 new ValueRange(-14, 87),
                 // Soft limits
                 new ValueRange(0, 73),
-                new ArmRotateMap.ArmPresetValues(-12, 87, 23, 13.5, -3,
-                        -14));
+                new ArmRotateMap.ArmPresetValues(-13, 87, 23, 13.5, -3,
+                        -13));
     }
 
     @Override
@@ -247,8 +247,8 @@ public class Vibrato extends RobotMap {
         var result = new LedMap(0, 34);
         var leds = result.ledBuffer;
 
-        SegmentConfig backBottom = leds.segment(11).tags("Shooter", "Intake", "Alliance");
-        SegmentConfig backTop = leds.segment(11).tags("ArmRotate", "Vision", "Auto", "Alliance");
+        SegmentConfig backBottom = leds.segment(10).tags("Shooter", "Intake", "Alliance");
+        SegmentConfig backTop = leds.segment(11).tags("Arm Rotate", "Vision", "Auto", "Alliance");
         SegmentConfig slants = leds.segment(10, ColorFormat.GRB).tags("Shooter", "Intake", "Alliance");
         return result;
     }

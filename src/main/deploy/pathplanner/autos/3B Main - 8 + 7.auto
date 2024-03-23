@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -55,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Arm"
+                  "name": "Intake Contingency Two"
                 }
               }
             ]
@@ -89,7 +89,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -105,7 +105,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Arm"
+                  "name": "Intake Contingency Two"
                 }
               }
             ]
