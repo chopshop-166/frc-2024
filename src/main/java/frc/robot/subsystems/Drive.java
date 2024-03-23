@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.wpilibj2.command.Commands.race;
-import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
 
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
@@ -26,7 +25,6 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -35,11 +33,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
 
 public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
@@ -182,11 +178,9 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     }
 
     public Command moveInDirection(double xSpeed, double ySpeed, double seconds) {
-        return race(
-                run(() -> {
-                    move(xSpeed, ySpeed, 0, false);
-                }),
-                new FunctionalWaitCommand(seconds)).andThen(safeStateCmd());
+        return run(() -> {
+            move(xSpeed, ySpeed, 0, false);
+        }).withTimeout(seconds).andThen(safeStateCmd());
     }
 
     /**
