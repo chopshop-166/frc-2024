@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.wpilibj2.command.Commands.race;
+import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
 
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
@@ -10,6 +11,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.chopshop166.chopshoplib.commands.FunctionalWaitCommand;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
@@ -35,6 +37,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
@@ -47,6 +50,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     double maxRotationRadiansPerSecond;
     double speedCoef = 1;
     double rotationCoef = 1;
+    // Both of these are so wrong
+    double rotationKp = -0.1;
+    double rotationKs = -0.01;
+    double visionMaxError = 1;
+    Optional<PhotonTrackedTarget> tgt = Optional.empty();
 
     SwerveDrivePoseEstimator estimator;
 
@@ -58,7 +66,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
     public static final Transform3d kRobotToCam = new Transform3d(new Translation3d(0.076731, 0.177711, 0.316103),
-            new Rotation3d(0, 106.875, 4.5));
+            new Rotation3d(0, 106.875, -4.5));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
@@ -88,13 +96,13 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         AutoBuilder.configureHolonomic(estimator::getEstimatedPosition, this::setPose,
                 this::getSpeeds, this::move, // Method that will drive the robot given ROBOT
                 // RELATIVE ChassisSpeeds
-                map.pathFollower, () -> isBlue, this);
+                map.pathFollower, () -> !isBlue, this);
 
-        // camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
+        camera = new PhotonCamera("Arducam_OV9782_USB_Camera");
 
-        // photonEstimator = new PhotonPoseEstimator(
-        // kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
-        // photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        photonEstimator = new PhotonPoseEstimator(
+                kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
+        photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     }
 
@@ -226,6 +234,33 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return estStdDevs;
     }
 
+    public Optional<PhotonTrackedTarget> getSpeakerTarget() {
+        var targets = camera.getLatestResult().getTargets();
+        for (var tgt : targets) {
+            if ((tgt.getFiducialId() == 7 && isBlue) || (tgt.getFiducialId() == 4 && !isBlue)) {
+                return Optional.of(tgt);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Command rotateToSpeakerTarget() {
+        return runEnd(() -> {
+            // Speaker target retrieved in periodic
+            // Rotate robot to 0 in relation to target
+            if (tgt.isPresent()) {
+                double rotationSpeed = tgt.get().getYaw() * rotationKp + rotationKs;
+                move(0, 0, rotationSpeed, false);
+            }
+            // YAY
+        }, this::safeState).until(() -> {
+            if (tgt.isEmpty()) {
+                return true;
+            }
+            return Math.abs(tgt.get().getYaw()) < visionMaxError;
+        });
+    }
+
     @Override
     public void reset() {
         // Nothing to reset here
@@ -241,18 +276,26 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         // This method will be called once per scheduler run
         // Use this for any background processing
         super.periodic();
+        isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
         estimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
+        tgt = getSpeakerTarget();
         // Correct pose estimate with vision measurements
-        // var visionEst = getEstimatedGlobalPose();
-        // visionEst.ifPresent(
-        // est -> {
-        // var estPose = est.estimatedPose.toPose2d();
-        // // Change our trust in the measurement based on the tags we can see
-        // var estStdDevs = getEstimationStdDevs(estPose);
+        var visionEst = getEstimatedGlobalPose();
+        visionEst.ifPresent(
+                est -> {
+                    var estPose = est.estimatedPose.toPose2d();
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = getEstimationStdDevs(estPose);
 
-        // estimator.addVisionMeasurement(
-        // est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-        // });
+                    estimator.addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                });
+
+        if (tgt.isPresent()) {
+            Logger.recordOutput("targetAprilTag", tgt.get().getFiducialId());
+            Logger.recordOutput("visionYaw", tgt.get().getYaw());
+        }
+        Logger.recordOutput("Tag lost", tgt.isEmpty());
 
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
         Logger.recordOutput("Angle", getMap().gyro.getAngle());

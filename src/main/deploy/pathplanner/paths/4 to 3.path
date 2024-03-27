@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 7.65,
-        "y": 2.4
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6308478250734355,
-        "y": 0.9249911457619907
+        "x": 8.645512553138225,
+        "y": 7.30537042457977
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.65,
-        "y": 4.35
+        "x": 2.9018362362424472,
+        "y": 6.997746311014251
       },
       "prevControl": {
-        "x": 2.2050697410876046,
-        "y": 2.0706812075520395
+        "x": 3.1525017757414653,
+        "y": 7.112634683284634
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.0,
+    "rotation": 24.075498255078777,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Scoring Locations - Bottom Speaker",
-  "previewStartingState": null,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

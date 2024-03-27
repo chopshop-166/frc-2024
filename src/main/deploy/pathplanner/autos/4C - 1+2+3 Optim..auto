@@ -18,57 +18,7 @@
           }
         },
         {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pickup 2 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Definitely Intakes"
-          }
-        },
-        {
           "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 2 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake While Leaving"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece - Subwoofer"
-          }
-        },
-        {
-          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -89,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -99,13 +49,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 1 - CS"
+                  "pathName": "1 to 2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Intake Game Piece"
                 }
               }
             ]
@@ -114,7 +64,32 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2 to 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Game Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -126,6 +101,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "4 Piece - Center Start",
   "choreoAuto": false
 }

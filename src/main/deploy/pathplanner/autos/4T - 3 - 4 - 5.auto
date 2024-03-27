@@ -18,47 +18,21 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pickup 3 - TS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
+            "pathName": "Pickup 3 - TS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Game Piece"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 3 - TS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake While Leaving"
-                }
-              }
-            ]
+            "pathName": "Speaker from 3 - TS"
           }
         },
         {
@@ -68,47 +42,21 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pickup 4 - TS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
+            "pathName": "Pickup 4 - TS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Game Piece"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 4 - TS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake While Leaving"
-                }
-              }
-            ]
+            "pathName": "Speaker from 4 - TS"
           }
         },
         {
@@ -118,59 +66,27 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pickup 5 - TS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
-                }
-              }
-            ]
+            "pathName": "Pickup 5 - TS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Game Piece"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 5 - TS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake While Leaving"
-                }
-              }
-            ]
+            "pathName": "Speaker from 5 - TS"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot Game Piece - Subwoofer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Shooter"
           }
         }
       ]

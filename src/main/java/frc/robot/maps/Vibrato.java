@@ -58,10 +58,14 @@ public class Vibrato extends RobotMap {
     public SwerveDriveMap getDriveMap() {
 
         // Remember to divide by 360
-        final double FLOFFSET = -0.429688;
-        final double FROFFSET = 0.099121;
-        final double RLOFFSET = -0.226562;
-        final double RROFFSET = 0.477539;
+        // CAN ID 2
+        final double FLOFFSET = 0.571;
+        // CAN ID 4
+        final double FROFFSET = 0.099;
+        // CAN ID 1
+        final double RLOFFSET = -0.226;
+        // CAN ID 3
+        final double RROFFSET = -0.529;
 
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
@@ -106,7 +110,7 @@ public class Vibrato extends RobotMap {
         // Configuration for MK4i with L2 speeds
         Configuration MK4i_L2 = new Configuration(SDSSwerveModule.MK4_V2.gearRatio,
                 SDSSwerveModule.MK4_V2.wheelDiameter, new PIDValues(0.011, 0.00, 0.0002),
-                new PIDValues(0.001, 0.0, 0.0, 0.192));
+                new PIDValues(0.05, 0.0, 0.0, 0.21));
 
         // All Distances are in Meters
         // Front Left Module
@@ -145,7 +149,7 @@ public class Vibrato extends RobotMap {
         final SDSSwerveModule rearRight = new SDSSwerveModule(new Translation2d(-MODULE_OFFSET_XY, -MODULE_OFFSET_XY),
                 new CtreEncoder(encoderRR), rearRightSteer, rearRightDrive, MK4i_L2);
 
-        final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(15);
+        final double maxDriveSpeedMetersPerSecond = Units.feetToMeters(14.5);
 
         final double maxRotationRadianPerSecond = Math.PI * 2;
 
@@ -191,7 +195,7 @@ public class Vibrato extends RobotMap {
         CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
         ProfiledPIDController pid = new ProfiledPIDController(0.02, 0.0, 0.0, new Constraints(120, 500));
         pid.setTolerance(2);
-        ArmFeedforward feedForward = new ArmFeedforward(0, 0.02, 0.37, 0);
+        ArmFeedforward feedForward = new ArmFeedforward(0, 0.03, 0.35, 0);
 
         return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor),
                 pid, feedForward, fusedEncoder,
@@ -199,8 +203,8 @@ public class Vibrato extends RobotMap {
                 new ValueRange(-14, 87),
                 // Soft limits
                 new ValueRange(0, 73),
-                new ArmRotateMap.ArmPresetValues(-12, 87, 23, 13.5, -3,
-                        -14));
+                new ArmRotateMap.ArmPresetValues(-13, 87, 23, 13.5, -3,
+                        -13));
     }
 
     @Override
@@ -247,8 +251,8 @@ public class Vibrato extends RobotMap {
         var result = new LedMap(0, 34);
         var leds = result.ledBuffer;
 
-        SegmentConfig backBottom = leds.segment(11).tags("Shooter", "Intake", "Alliance");
-        SegmentConfig backTop = leds.segment(11).tags("ArmRotate", "Vision", "Auto", "Alliance");
+        SegmentConfig backBottom = leds.segment(10).tags("Shooter", "Intake", "Alliance");
+        SegmentConfig backTop = leds.segment(11).tags("Arm Rotate", "Vision", "Auto", "Alliance");
         SegmentConfig slants = leds.segment(10, ColorFormat.GRB).tags("Shooter", "Intake", "Alliance");
         return result;
     }
