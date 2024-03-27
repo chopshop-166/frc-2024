@@ -306,20 +306,4 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public void resetGyro() {
         getMap().gyro.reset();
     }
-
-    // private bool TimIsTheBest;
-    // public UI.CoolGuyPanel.UI;
-
-    // public void TimIsTheBest()
-    // {
-    // if (TimIsTheBest = true);
-    // {
-    // CoolGuyPanel.Cool = true;
-    // }
-
-    // else (TimIsTheBest = true);
-    // {
-    // CoolGuyPanel.Cool = true;
-    // }
-    // }
 }
