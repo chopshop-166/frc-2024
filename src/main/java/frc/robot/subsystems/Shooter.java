@@ -13,7 +13,7 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
         FULL_SPEED(3000, 5500, 4500),
 
         // 2500, 2500, 3000
-        SUBWOOFER_SHOT(2600, 2600, 3000),
+        SUBWOOFER_SHOT(3000, 3000, 3000),
 
         // 3000, 3000, 3500
         PODIUM_SHOT(2500, 4500, 3500),

@@ -52,7 +52,7 @@ public class CommandSequences {
 
     public Command moveAndIntake() {
         return this.armRotatePreset(ArmPresets.INTAKE)
-                .andThen(this.intake().alongWith(undertaker.spinIn(), led.grabbedPiece()));
+                .andThen(this.intake().deadlineWith(undertaker.spinIn(), led.grabbedPiece()));
     }
 
     public Command moveAndIntakeContingency() {
