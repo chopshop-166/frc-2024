@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3,
-      "y": 5.55
+      "x": 0.65,
+      "y": 4.35
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -18,13 +18,13 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 3 - CS"
+                  "pathName": "Pickup 8 - BS"
                 }
               },
               {
@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Podium"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -49,7 +49,32 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3 to 2"
+                  "pathName": "Speaker from 8 - BS"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Contingency Two"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Game Piece - Subwoofer"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pickup 7 - BS"
                 }
               },
               {
@@ -64,7 +89,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Podium"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -74,13 +99,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 1 - CS"
+                  "pathName": "Speaker from 7 - BS"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake Game Piece"
+                  "name": "Intake Contingency Two"
                 }
               }
             ]
@@ -89,7 +114,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Podium"
+            "name": "Shoot Game Piece - Subwoofer"
           }
         },
         {
@@ -101,6 +126,6 @@
       ]
     }
   },
-  "folder": "4 Piece - Center Start",
+  "folder": "3 Piece - Bottom Start",
   "choreoAuto": false
 }

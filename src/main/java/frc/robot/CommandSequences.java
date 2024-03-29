@@ -62,7 +62,8 @@ public class CommandSequences {
     }
 
     public Command moveAndIntakeContingencyTwo() {
-        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()));
+        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()))
+                .andThen(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
     }
 
     public Command autoGamePieceDetected() {
@@ -78,7 +79,7 @@ public class CommandSequences {
 
     public Command outtake() {
         return intake.spinOut().alongWith(
-                undertaker.spinOut());
+                undertaker.spinOut(), led.outtake());
 
     }
 
