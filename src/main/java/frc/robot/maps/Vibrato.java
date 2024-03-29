@@ -98,9 +98,17 @@ public class Vibrato extends RobotMap {
         rearRightSteer.getMotorController().setInverted(true);
 
         frontLeftDrive.setInverted(true);
+        frontLeftDrive.getEncoder().getRaw().setMeasurementPeriod(8);
+        frontLeftDrive.getEncoder().getRaw().setAverageDepth(2);
         frontRightDrive.setInverted(false);
+        frontRightDrive.getEncoder().getRaw().setMeasurementPeriod(8);
+        frontRightDrive.getEncoder().getRaw().setAverageDepth(2);
         rearLeftDrive.setInverted(true);
+        rearLeftDrive.getEncoder().getRaw().setMeasurementPeriod(8);
+        rearLeftDrive.getEncoder().getRaw().setAverageDepth(2);
         rearRightDrive.setInverted(false);
+        rearRightDrive.getEncoder().getRaw().setMeasurementPeriod(8);
+        rearRightDrive.getEncoder().getRaw().setAverageDepth(2);
 
         frontLeftSteer.getMotorController().setSmartCurrentLimit(30);
         frontRightSteer.getMotorController().setSmartCurrentLimit(30);
