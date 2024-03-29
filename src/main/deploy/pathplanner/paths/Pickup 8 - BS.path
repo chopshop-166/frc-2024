@@ -8,32 +8,38 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4987833875488867,
-        "y": 1.2042259504912576
+        "x": 2.498623284650071,
+        "y": 1.2041318628892035
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.65,
-        "y": 0.7489697984762701
+        "x": 8.284942222836145,
+        "y": 0.7636554807993345
       },
       "prevControl": {
-        "x": 4.319807995608836,
-        "y": 1.5860536908909244
+        "x": 4.954750218444981,
+        "y": 1.600739373213989
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.85,
+      "rotationDegrees": 0.5,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.75,
+    "maxVelocity": 3.8,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -44,6 +50,9 @@
   },
   "reversed": false,
   "folder": "Pickups - Bottom Speaker",
-  "previewStartingState": null,
-  "useDefaultConstraints": true
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
 }

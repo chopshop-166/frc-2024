@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.74,
+      "y": 6.74
+    },
+    "rotation": 60.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -83,7 +89,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Game Piece"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -137,28 +143,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 2 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Contingency Two"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {

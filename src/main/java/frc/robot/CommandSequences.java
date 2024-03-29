@@ -51,10 +51,8 @@ public class CommandSequences {
     }
 
     public Command moveAndIntake() {
-        return this.intake().deadlineWith(
-                this.armRotatePreset(ArmPresets.INTAKE),
-                undertaker.spinIn()).andThen(
-                        led.grabbedPiece());
+        return this.armRotatePreset(ArmPresets.INTAKE)
+                .andThen(this.intake().alongWith(undertaker.spinIn(), led.grabbedPiece()));
     }
 
     public Command moveAndIntakeContingency() {
@@ -152,7 +150,8 @@ public class CommandSequences {
     }
 
     public Command podiumShotRelease() {
-        return this.intake.feedShooter().andThen(this.shooterSpeed(Speeds.OFF));
+        return this.intake.feedShooter().andThen(this.shooterSpeed(Speeds.OFF),
+                this.armRotatePreset(ArmPresets.INTAKE));
     }
 
     public Command setRumble(ButtonXboxController controller, int rumbleAmount) {

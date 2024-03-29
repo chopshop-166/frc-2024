@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.65,
-        "y": 6.7
+        "x": 0.7365015087811937,
+        "y": 6.740728186286426
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.456099942611335,
-        "y": 6.9022706918401315
+        "x": 1.5426014513925286,
+        "y": 6.9429988781265575
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.278498152702925,
-        "y": 6.975699103455452
+        "x": 2.6015831638103353,
+        "y": 7.181298655978349
       },
       "prevControl": {
-        "x": 1.7351279067495533,
-        "y": 6.93164205648626
+        "x": 2.058212917856964,
+        "y": 7.137241609009157
       },
       "nextControl": null,
       "isLocked": false,
@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Pickups - Top Speaker",
