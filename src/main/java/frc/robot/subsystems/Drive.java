@@ -63,7 +63,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     // from center.
     public static final Transform3d kRobotToCam = new Transform3d(
             new Translation3d(Units.inchesToMeters(3.029), Units.inchesToMeters(6.9965), Units.inchesToMeters(12.445)),
-            new Rotation3d(0, Units.degreesToRadians(16.875), Units.degreesToRadians(-4.5)));
+            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-4.5)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
@@ -289,7 +289,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         if (tgt.isPresent()) {
             Logger.recordOutput("targetAprilTag", tgt.get().getFiducialId());
             Logger.recordOutput("visionYaw", tgt.get().getYaw());
-
         }
         Logger.recordOutput("Tag lost", tgt.isEmpty());
 
