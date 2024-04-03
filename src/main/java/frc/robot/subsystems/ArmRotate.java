@@ -65,13 +65,12 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     }
 
     public Command moveToZero() {
-        return startEnd(
-                () -> {
-                    getData().setSetpoint(LOWER_SPEED);
-                    level = ArmPresets.OFF;
-                }, this::safeState).until(() -> {
-                    return getArmAngle() < getMap().armPresets.getValue(ArmPresets.INTAKE);
-                });
+        return startSafe(() -> {
+            getData().setSetpoint(LOWER_SPEED);
+            level = ArmPresets.OFF;
+        }).until(() -> {
+            return getArmAngle() < getMap().armPresets.getValue(ArmPresets.INTAKE);
+        });
     }
 
     // Automatic rotation control (angle input)
@@ -79,7 +78,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         // When executed the arm will move. The encoder will update until the desired
         // value is reached, then the command will end.
         PersistenceCheck setPointPersistenceCheck = new PersistenceCheck(30, pid::atGoal);
-        return cmd("Move To Set Angle").onInitialize(() -> {
+        return runOnce(() -> {
             this.level = level;
             if (level == ArmPresets.INTAKE) {
                 pid.setTolerance(4);
@@ -87,13 +86,12 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
                 pid.setTolerance(2);
             }
             pid.reset(getArmAngle(), getData().rotatingAngleVelocity);
-        }).onExecute(() -> {
+        }).andThen(run(() -> {
             Logger.recordOutput("Pid at goal", pid.atGoal());
-        }).runsUntil(setPointPersistenceCheck);
+        }).until(setPointPersistenceCheck)).withName("Move To Set Angle");
     }
 
     public Command hold() {
-
         return runOnce(() -> {
             holdAngle = getArmAngle();
             this.level = ArmPresets.HOLD;
