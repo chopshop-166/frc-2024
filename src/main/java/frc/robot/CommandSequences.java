@@ -60,7 +60,7 @@ public class CommandSequences {
     }
 
     public Command moveAndIntakeContingencyTwo() {
-        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()))
+        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()).withTimeout(1))
                 .andThen(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
     }
 
@@ -134,7 +134,8 @@ public class CommandSequences {
         return this.shooterSpeed(Speeds.SUBWOOFER_SHOT).alongWith(
                 this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER)).andThen(
                         intake.feedShooter(),
-                        led.colorAlliance());
+                        led.colorAlliance(),
+                        this.armRotatePreset(ArmPresets.INTAKE));
     }
 
     public Command scoreSpeakerPodiumAuto() {
