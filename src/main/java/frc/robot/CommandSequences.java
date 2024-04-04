@@ -155,6 +155,15 @@ public class CommandSequences {
                 this.armRotatePreset(ArmPresets.INTAKE));
     }
 
+    public Command shuttleShotCharge() {
+        return this.shooterSpeed(Speeds.SHUTTLE_SHOT).alongWith(this.armRotatePreset(ArmPresets.SHUTTLE));
+    }
+
+    public Command shuttleShotRelease() {
+        return this.intake.feedShooter().andThen(this.shooterSpeed(Speeds.OFF),
+                this.armRotatePreset(ArmPresets.INTAKE));
+    }
+
     public Command setRumble(ButtonXboxController controller, int rumbleAmount) {
         return runOnce(() -> {
             controller.getHID().setRumble(RumbleType.kBothRumble, rumbleAmount);

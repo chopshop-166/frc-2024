@@ -34,13 +34,15 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
 
         HOLD,
 
-        STOW
+        STOW,
+
+        SHUTTLE
     }
 
     public record ArmPresetValues(double intake, double amp, double scoreSpeakerCenterline,
-            double scoreSpeakerPodium, double scoreSpeakerSubwoofer, double stow) {
+            double scoreSpeakerPodium, double scoreSpeakerSubwoofer, double stow, double shuttle) {
         public ArmPresetValues() {
-            this(0, 0, 0, 0, 0, 0);
+            this(0, 0, 0, 0, 0, 0, 0);
         }
 
         public double getValue(ArmPresets preset) {
@@ -65,6 +67,9 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
 
                 case STOW:
                     return stow;
+
+                case SHUTTLE:
+                    return shuttle;
                 default:
                     return 0;
             }

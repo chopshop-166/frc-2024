@@ -17,7 +17,7 @@ public class Led extends LEDSubsystem {
     public Led(LedMap map) {
         super(map);
         // This one is length / 2 because the buffer has a mirrored other half
-        ledBuffer.setPattern("Fire", new ColdFirePattern(ledBuffer.getLength() / 2));
+        // ledBuffer.setPattern("Fire", new ColdFirePattern(ledBuffer.getLength() / 2));
 
     }
 

@@ -15,6 +15,8 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
         // 2500, 2500, 3000
         SUBWOOFER_SHOT(2700, 2700, 3000),
 
+        SHUTTLE_SHOT(2000, 4000, 3000),
+
         // 3000, 3000, 3500
         PODIUM_SHOT(2500, 4500, 3500),
 
