@@ -68,6 +68,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Rotate to Intake"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
