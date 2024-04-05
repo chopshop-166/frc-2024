@@ -132,6 +132,7 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
         }
         Logger.recordOutput("armPreset", level);
         Logger.recordOutput("desiredArmVelocity", pid.getSetpoint().velocity);
+        Logger.recordOutput("desiredArmPosition", pid.getSetpoint().position);
     }
 
 }

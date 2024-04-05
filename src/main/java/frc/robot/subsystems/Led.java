@@ -46,7 +46,7 @@ public class Led extends LEDSubsystem {
     }
 
     public Command shooterAtSpeed() {
-        return setPattern("Shooter", new FlashPattern(new Color(57, 32, 144), .5), "At Speed");
+        return setPattern("Shooter", new FlashPattern(new Color(57, 32, 144), .125), "At Speed");
     }
 
     public Command grabbedPiece() {
