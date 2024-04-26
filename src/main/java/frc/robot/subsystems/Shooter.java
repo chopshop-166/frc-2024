@@ -20,8 +20,6 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
         // 3000, 3000, 3500
         PODIUM_SHOT(2500, 4500, 3500),
 
-        HALF_SPEED(2250, 2250, 2250),
-
         AMP_SPEED(1125, 1125, 1125),
 
         OFF(0, 0, 0);

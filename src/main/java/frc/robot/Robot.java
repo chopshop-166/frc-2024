@@ -147,23 +147,20 @@ public class Robot extends CommandRobot {
         copilotController.back().onTrue(intake.safeStateCmd().andThen(armRotate.safeStateCmd()));
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.a().onTrue(commandSequences.moveAndIntake());
-        // copilotController.b().onTrue(undertaker.safeStateCmd());
         copilotController.b()
-                .whileTrue(commandSequences.charge(Speeds.SUBWOOFER_SHOT, ArmPresets.SCORE_SPEAKER_SUBWOOFER));
-        copilotController.b().onFalse(commandSequences.release());
-        copilotController.y().onTrue(commandSequences.charge(Speeds.SHUTTLE_SHOT, ArmPresets.SHUTTLE));
-        copilotController.y()
+                .whileTrue(commandSequences.charge(Speeds.SUBWOOFER_SHOT, ArmPresets.SCORE_SPEAKER_SUBWOOFER))
+                .onFalse(commandSequences.release());
+        copilotController.y().whileTrue(commandSequences.charge(Speeds.SHUTTLE_SHOT, ArmPresets.SHUTTLE))
                 .onFalse(commandSequences.release());
         copilotController.x().whileTrue(intake.spinOut().alongWith(undertaker.spinOut()));
         copilotController.rightStick().whileTrue(intake.feedShooter());
-        copilotController.rightBumper().onTrue(commandSequences.charge(Speeds.AMP_SPEED, ArmPresets.SCORE_AMP));
-        copilotController.rightBumper().onFalse(commandSequences.release());
+        copilotController.rightBumper().whileTrue(commandSequences.charge(Speeds.AMP_SPEED, ArmPresets.SCORE_AMP))
+                .onFalse(commandSequences.release());
         copilotController.leftBumper()
-                .onTrue(commandSequences.charge(Speeds.PODIUM_SHOT, ArmPresets.SCORE_SPEAKER_PODIUM));
-        copilotController.leftBumper().onFalse(commandSequences.release());
+                .whileTrue(commandSequences.charge(Speeds.PODIUM_SHOT, ArmPresets.SCORE_SPEAKER_PODIUM))
+                .onFalse(commandSequences.release());
         copilotController.povUp().onTrue(commandSequences.moveToAmp());
-        // copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));
-        copilotController.povDown().onTrue(commandSequences.shooterSpeed(Speeds.HALF_SPEED));
+        copilotController.povDown().onTrue(commandSequences.shooterSpeed(Speeds.FULL_SPEED));
         copilotController.povRight().onTrue(commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
         copilotController.povLeft().onTrue(commandSequences.stow());
     }
