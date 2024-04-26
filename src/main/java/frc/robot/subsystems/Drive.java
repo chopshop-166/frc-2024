@@ -54,6 +54,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     Optional<PhotonTrackedTarget> tgt = Optional.empty();
 
     SwerveDrivePoseEstimator estimator;
+    SwerveDrivePoseEstimator visionEstimator;
 
     // Vision objects
     private PhotonCamera camera = null;
@@ -86,6 +87,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         maxRotationRadiansPerSecond = map.maxRotationRadianPerSecond;
 
         estimator = new SwerveDrivePoseEstimator(kinematics, getMap().gyro.getRotation2d(),
+                getData().getModulePositions(),
+                new Pose2d(),
+                VecBuilder.fill(0.02, 0.02, 0.01),
+                VecBuilder.fill(0.1, 0.1, 0.01));
+        visionEstimator = new SwerveDrivePoseEstimator(kinematics, getMap().gyro.getRotation2d(),
                 getData().getModulePositions(),
                 new Pose2d(),
                 VecBuilder.fill(0.02, 0.02, 0.01),
@@ -282,7 +288,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = getEstimationStdDevs(estPose);
                     Logger.recordOutput("Vision Pose", est.estimatedPose);
-                    // estimator.addVisionMeasurement(
+                    // visionEstimator.addVisionMeasurement(
                     // est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
 
