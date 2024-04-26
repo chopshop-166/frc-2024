@@ -279,6 +279,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         super.periodic();
         isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
         estimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
+        visionEstimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
         tgt = getSpeakerTarget();
         // Correct pose estimate with vision measurements
         var visionEst = getEstimatedGlobalPose();
@@ -288,8 +289,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = getEstimationStdDevs(estPose);
                     Logger.recordOutput("Vision Pose", est.estimatedPose);
-                    // visionEstimator.addVisionMeasurement(
-                    // est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    visionEstimator.addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
 
         if (tgt.isPresent()) {
@@ -299,6 +300,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         Logger.recordOutput("Tag lost", tgt.isEmpty());
 
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
+        Logger.recordOutput("visionEstimatorPose", visionEstimator.getEstimatedPosition());
         Logger.recordOutput("Angle", getMap().gyro.getAngle());
         Logger.recordOutput("rotation", getMap().gyro.getRotation2d());
     }
