@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.wpilibj2.command.Commands.race;
-
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -13,7 +11,6 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import com.chopshop166.chopshoplib.commands.FunctionalWaitCommand;
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 import com.chopshop166.chopshoplib.logging.data.SwerveDriveData;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
@@ -28,9 +25,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -209,7 +206,40 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
             Logger.recordOutput("rotationSpeed", rotationSpeed);
             Logger.recordOutput("targetVelocity", rotationPID.getSetpoint().velocity);
         });
+    }
 
+    public Translation2d getSpeakerTarget() {
+        Optional<Pose3d> pose;
+        if (isBlue) {
+            pose = photonEstimator.getFieldTags().getTagPose(7);
+        } else {
+            pose = photonEstimator.getFieldTags().getTagPose(4);
+        }
+        if (pose.isEmpty()) {
+            return new Translation2d();
+        }
+        return new Translation2d(pose.get().getTranslation().getX(), pose.get().getTranslation().getY());
+    }
+
+    public Translation2d getRobotToTarget(Translation2d target) {
+        return target.minus(visionEstimator.getEstimatedPosition().getTranslation());
+    }
+
+    public Command rotateToSpeaker() {
+        return run(() -> {
+            var target = getRobotToTarget(getSpeakerTarget());
+            double rotationSpeed = rotationPID.calculate(getMap().gyro.getRotation2d().getDegrees(),
+                    target.getAngle().getDegrees());
+            rotationSpeed += Math.copySign(rotationKs, rotationSpeed);
+            // need to ensure we move at a fast enough speed for gyro to keep up
+            if (Math.abs(rotationSpeed) > 0.2 && Math.abs(rotationPID.getPositionError()) > 0.75) {
+                move(0, 0, rotationSpeed,
+                        false);
+            } else {
+                safeState();
+            }
+            Logger.recordOutput("Speaker Pose", getSpeakerTarget());
+        });
     }
 
     /**

@@ -143,7 +143,7 @@ public class Robot extends CommandRobot {
                     return driveScaler.applyAsDouble(-driveController.getRightX());
                 }));
 
-        driveController.y().onTrue(led.awesome());
+        driveController.y().whileTrue(drive.rotateToSpeaker());
         driveController.a().whileTrue(drive.rotateToAngle(90));
         driveController.b().whileTrue(drive.rotateToAngle(180));
         driveController.x().whileTrue(drive.rotateToAngle(270));
