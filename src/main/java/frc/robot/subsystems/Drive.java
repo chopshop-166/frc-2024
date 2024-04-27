@@ -4,6 +4,7 @@ import static edu.wpi.first.wpilibj2.command.Commands.race;
 
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
@@ -58,7 +59,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     Optional<PhotonTrackedTarget> tgt = Optional.empty();
 
     SwerveDrivePoseEstimator estimator;
-    SwerveDrivePoseEstimator visionEstimator;
+    public SwerveDrivePoseEstimator visionEstimator;
 
     // Vision objects
     private PhotonCamera camera = null;
@@ -68,8 +69,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
     public static final Transform3d kRobotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(3.029), Units.inchesToMeters(6.9965), Units.inchesToMeters(12.445)),
-            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-4.5)));
+            new Translation3d(Units.inchesToMeters(3.029), Units.inchesToMeters(-6.9965), Units.inchesToMeters(12.445)),
+            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-4.5 - 180)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
@@ -119,9 +120,9 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
                 getData().getModulePositions(), pose);
     }
 
-    public Command setPoseCommand(Pose2d pose) {
+    public Command setPoseCommand(Supplier<Pose2d> pose) {
         return runOnce(() -> {
-            setPose(pose);
+            setPose(pose.get());
         });
     }
 

@@ -133,7 +133,7 @@ public class Robot extends CommandRobot {
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing
-        driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
+        driveController.start().onTrue(drive.setPoseCommand(() -> drive.visionEstimator.getEstimatedPosition()));
         driveController.leftBumper()
                 .whileTrue(drive.robotCentricDrive(() -> {
                     return driveScaler.applyAsDouble(-driveController.getLeftX());
