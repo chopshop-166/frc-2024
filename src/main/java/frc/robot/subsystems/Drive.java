@@ -257,35 +257,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return estStdDevs;
     }
 
-    public Optional<PhotonTrackedTarget> getSpeakerTarget() {
-        var targets = camera.getLatestResult().getTargets();
-        for (var tgt : targets) {
-            if ((tgt.getFiducialId() == 7 && isBlue) || (tgt.getFiducialId() == 4 && !isBlue)) {
-                return Optional.of(tgt);
-            }
-        }
-        return Optional.empty();
-    }
-
-    public Command rotateToSpeakerTarget() {
-        return runEnd(() -> {
-            // Speaker target retrieved in periodic
-            // Rotate robot to 0 in relation to target
-            if (tgt.isPresent()) {
-                double rotationSpeed = tgt.get().getYaw() * rotationKp + rotationKs;
-                rotationSpeed = Math.min(rotationSpeed, 0.2);
-                move(0, 0, rotationSpeed, false);
-                Logger.recordOutput("rotationSpeed", rotationSpeed);
-            }
-            // YAY
-        }, this::safeState).until(() -> {
-            if (tgt.isEmpty()) {
-                return false;
-            }
-            return Math.abs(tgt.get().getYaw()) < visionMaxError;
-        });
-    }
-
     @Override
     public void reset() {
         // Nothing to reset here
@@ -304,7 +275,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
         estimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
         visionEstimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
-        tgt = getSpeakerTarget();
         Pose3d estimatorPose3D = new Pose3d(estimator.getEstimatedPosition());
 
         // Correct pose estimate with vision measurements
@@ -318,15 +288,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
                     visionEstimator.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
-
-        if (tgt.isPresent()) {
-            Logger.recordOutput("targetAprilTag", tgt.get().getFiducialId());
-            Logger.recordOutput("visionYaw", tgt.get().getYaw());
-            Logger.recordOutput("targetPose", (estimatorPose3D.plus(tgt.get().getBestCameraToTarget())));
-            Logger.recordOutput("rawCameraPose", tgt.get().getBestCameraToTarget());
-        }
-
-        Logger.recordOutput("Tag lost", tgt.isEmpty());
 
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
         Logger.recordOutput("visionEstimatorPose", visionEstimator.getEstimatedPosition());
