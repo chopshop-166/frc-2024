@@ -312,8 +312,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         super.periodic();
         isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
         estimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
-        visionEstimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
-        Pose3d estimatorPose3D = new Pose3d(estimator.getEstimatedPosition());
+        visionEstimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());s
 
         // Correct pose estimate with vision measurements
         var visionEst = getEstimatedGlobalPose();

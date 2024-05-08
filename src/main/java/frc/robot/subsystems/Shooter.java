@@ -9,6 +9,9 @@ import frc.robot.maps.subsystems.ShooterMap.Data;
 
 public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
 
+    private final double MIN_VELOCITY_OFFSET = 50;
+    private final double MAX_VELOCITY_OFFSET = 100;
+
     public enum Speeds {
         FULL_SPEED(3000, 5500, 4500),
 
@@ -49,10 +52,14 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
 
     public Command setSpeed(Speeds speed) {
         PersistenceCheck speedPersistenceCheck = new PersistenceCheck(5, () -> {
-            return Math.abs(getData().leftWheels.velocity) > speed.getLeftSpeed(getMap().splitSpeeds) - 50
-                    && Math.abs(getData().rightWheels.velocity) > speed.getRightSpeed(getMap().splitSpeeds) - 50
-                    && Math.abs(getData().leftWheels.velocity) < (speed.getLeftSpeed(getMap().splitSpeeds) + 100)
-                    && Math.abs(getData().rightWheels.velocity) < (speed.getRightSpeed(getMap().splitSpeeds) + 100);
+            return Math.abs(getData().leftWheels.velocity) > speed.getLeftSpeed(getMap().splitSpeeds)
+                    - MIN_VELOCITY_OFFSET
+                    && Math.abs(getData().rightWheels.velocity) > speed.getRightSpeed(getMap().splitSpeeds)
+                            - MIN_VELOCITY_OFFSET
+                    && Math.abs(getData().leftWheels.velocity) < (speed.getLeftSpeed(getMap().splitSpeeds)
+                            + MAX_VELOCITY_OFFSET)
+                    && Math.abs(getData().rightWheels.velocity) < (speed.getRightSpeed(getMap().splitSpeeds)
+                            + MAX_VELOCITY_OFFSET);
         });
         return run(() -> {
             getData().leftWheels.setpoint = speed.getLeftSpeed(getMap().splitSpeeds);
