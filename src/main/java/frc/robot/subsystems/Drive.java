@@ -194,7 +194,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
     public Command rotateToAngle(double targetAngle) {
         return run(() -> {
-            double rotationSpeed = rotationPID.calculate(getMap().gyro.getRotation2d().getDegrees(), targetAngle);
+            double newTarget = targetAngle;
+            if (Math.abs(getMap().gyro.getRotation2d().getDegrees() - targetAngle) > 180) {
+                newTarget -= 360;
+            }
+            double rotationSpeed = rotationPID.calculate(getMap().gyro.getRotation2d().getDegrees(), newTarget);
             rotationSpeed += Math.copySign(rotationKs, rotationSpeed);
             // need to ensure we move at a fast enough speed for gyro to keep up
             if (Math.abs(rotationSpeed) > 0.2 && Math.abs(rotationPID.getPositionError()) > 0.75) {
@@ -228,8 +232,12 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public Command rotateToSpeaker() {
         return run(() -> {
             var target = getRobotToTarget(getSpeakerTarget());
+            double targetAngle = target.getAngle().getDegrees();
+            if (Math.abs(getMap().gyro.getRotation2d().getDegrees() - targetAngle) > 180) {
+                targetAngle -= 360;
+            }
             double rotationSpeed = rotationPID.calculate(getMap().gyro.getRotation2d().getDegrees(),
-                    target.getAngle().getDegrees());
+                    targetAngle);
             rotationSpeed += Math.copySign(rotationKs, rotationSpeed);
             // need to ensure we move at a fast enough speed for gyro to keep up
             if (Math.abs(rotationSpeed) > 0.2 && Math.abs(rotationPID.getPositionError()) > 0.75) {
