@@ -144,9 +144,6 @@ public class Robot extends CommandRobot {
                 }));
 
         driveController.y().whileTrue(drive.rotateToSpeaker());
-        driveController.a().whileTrue(drive.rotateToAngle(90));
-        driveController.b().whileTrue(drive.rotateToAngle(180));
-        driveController.x().whileTrue(drive.rotateToAngle(270));
 
         copilotController.back().onTrue(intake.safeStateCmd().andThen(armRotate.safeStateCmd()));
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
