@@ -110,10 +110,13 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
                 kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, kRobotToCam);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
+        rotationPID.enableContinuousInput(-180, 180);
     }
 
     public void setPose(Pose2d pose) {
         estimator.resetPosition(getMap().gyro.getRotation2d(),
+                getData().getModulePositions(), pose);
+        visionEstimator.resetPosition(getMap().gyro.getRotation2d(),
                 getData().getModulePositions(), pose);
     }
 
@@ -233,10 +236,10 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return run(() -> {
             var target = getRobotToTarget(getSpeakerTarget());
             double targetAngle = target.getAngle().getDegrees();
-            if (Math.abs(getMap().gyro.getRotation2d().getDegrees() - targetAngle) > 180) {
-                targetAngle -= 360;
-            }
-            double rotationSpeed = rotationPID.calculate(getMap().gyro.getRotation2d().getDegrees(),
+            double estimatorAngle = estimator.getEstimatedPosition().getRotation().getDegrees();
+            Logger.recordOutput("Estimator Angle", estimatorAngle);
+            Logger.recordOutput("adjustedTargetAngle", targetAngle);
+            double rotationSpeed = rotationPID.calculate(estimatorAngle,
                     targetAngle);
             rotationSpeed += Math.copySign(rotationKs, rotationSpeed);
             // need to ensure we move at a fast enough speed for gyro to keep up
@@ -263,9 +266,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         var visionEst = photonEstimator.update();
         double latestTimestamp = camera.getLatestResult().getTimestampSeconds();
         boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
-        if (newResult)
+        if (newResult) {
             lastEstTimestamp = latestTimestamp;
-        return visionEst;
+            return visionEst;
+        }
+        return Optional.empty();
     }
 
     public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
@@ -313,6 +318,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
         estimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
         visionEstimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
+        var target = getRobotToTarget(getSpeakerTarget());
+        double targetAngle = target.getAngle().getDegrees();
 
         // Correct pose estimate with vision measurements
         var visionEst = getEstimatedGlobalPose();
@@ -330,6 +337,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         Logger.recordOutput("visionEstimatorPose", visionEstimator.getEstimatedPosition());
         Logger.recordOutput("poseAngle", estimator.getEstimatedPosition().getRotation());
         Logger.recordOutput("robotRotationGyro", getMap().gyro.getRotation2d());
+        Logger.recordOutput("targetAngle", targetAngle);
 
     }
 
