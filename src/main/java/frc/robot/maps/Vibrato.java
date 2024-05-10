@@ -98,9 +98,17 @@ public class Vibrato extends RobotMap {
         rearRightSteer.getMotorController().setInverted(true);
 
         frontLeftDrive.setInverted(true);
+        frontLeftDrive.getEncoder().getRaw().setMeasurementPeriod(8);
+        frontLeftDrive.getEncoder().getRaw().setAverageDepth(2);
         frontRightDrive.setInverted(false);
+        frontRightDrive.getEncoder().getRaw().setMeasurementPeriod(8);
+        frontRightDrive.getEncoder().getRaw().setAverageDepth(2);
         rearLeftDrive.setInverted(true);
+        rearLeftDrive.getEncoder().getRaw().setMeasurementPeriod(8);
+        rearLeftDrive.getEncoder().getRaw().setAverageDepth(2);
         rearRightDrive.setInverted(false);
+        rearRightDrive.getEncoder().getRaw().setMeasurementPeriod(8);
+        rearRightDrive.getEncoder().getRaw().setAverageDepth(2);
 
         frontLeftSteer.getMotorController().setSmartCurrentLimit(30);
         frontRightSteer.getMotorController().setSmartCurrentLimit(30);
@@ -203,8 +211,8 @@ public class Vibrato extends RobotMap {
                 new ValueRange(-14, 87),
                 // Soft limits
                 new ValueRange(0, 73),
-                new ArmRotateMap.ArmPresetValues(-13, 87, 23, 13.5, -3,
-                        -13));
+                new ArmRotateMap.ArmPresetValues(-13, 87, 23, 15, -5,
+                        -13, 11));
     }
 
     @Override
@@ -230,14 +238,14 @@ public class Vibrato extends RobotMap {
         leftWheels.getMotorController().setSmartCurrentLimit(50);
 
         rightWheels.setControlType(ControlType.kVelocity);
-        rightWheels.getPidController().setP(0.001);
+        rightWheels.getPidController().setP(0.003);
         rightWheels.getPidController().setI(0);
         rightWheels.getPidController().setD(0.0);
         rightWheels.getPidController().setFF(0.000182);
         rightWheels.getEncoder().getRaw().setMeasurementPeriod(10);
 
         leftWheels.setControlType(ControlType.kVelocity);
-        leftWheels.getPidController().setP(0.001);
+        leftWheels.getPidController().setP(0.0015);
         leftWheels.getPidController().setI(0);
         leftWheels.getPidController().setD(0.0);
         leftWheels.getPidController().setFF(0.000174);

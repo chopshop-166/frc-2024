@@ -51,10 +51,8 @@ public class CommandSequences {
     }
 
     public Command moveAndIntake() {
-        return this.intake().deadlineWith(
-                this.armRotatePreset(ArmPresets.INTAKE),
-                undertaker.spinIn()).andThen(
-                        led.grabbedPiece());
+        return this.armRotatePreset(ArmPresets.INTAKE)
+                .andThen(this.intake().deadlineWith(undertaker.spinIn())).andThen(led.grabbedPiece());
     }
 
     public Command moveAndIntakeContingency() {
@@ -62,7 +60,7 @@ public class CommandSequences {
     }
 
     public Command moveAndIntakeContingencyTwo() {
-        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()))
+        return led.toPreset().andThen(this.intake().deadlineWith(undertaker.spinIn()).withTimeout(1))
                 .andThen(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
     }
 
@@ -99,37 +97,9 @@ public class CommandSequences {
         return led.toPreset().andThen(armRotate.moveTo(ArmPresets.SCORE_SPEAKER_SUBWOOFER), led.atPreset());
     }
 
-    public Command chargeAmp() {
-        return this.armRotatePreset(ArmPresets.SCORE_AMP).withTimeout(0.75)
-                .andThen(this.shooterSpeed(Speeds.AMP_SPEED));
-    }
-
     public Command releaseAmp() {
         return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), this.armRotatePreset(ArmPresets.INTAKE),
                 led.colorAlliance());
-    }
-
-    public Command scoreSpeakerCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
-        return this.shooterSpeed(Speeds.SUBWOOFER_SHOT).alongWith(
-                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER)).andThen(
-                        setRumble(controller1, 1), setRumble(controller2, 1));
-    }
-
-    public Command scoreSpeakerRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
-        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), setRumble(controller1, 0),
-                setRumble(controller2, 0), this.armRotatePreset(ArmPresets.INTAKE), led.colorAlliance());
-    }
-
-    public Command scoreSpeakerCenterlineCharge(ButtonXboxController controller2, ButtonXboxController controller1) {
-        return this.shooterSpeed(Speeds.FULL_SPEED).alongWith(
-                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_CENTERLINE)).andThen(
-                        setRumble(controller1, 1), setRumble(controller2, 1));
-    }
-
-    public Command scoreSpeakerCenterlineRelease(ButtonXboxController controller2, ButtonXboxController controller1) {
-        return intake.feedShooter().andThen(shooter.setSpeed(Speeds.OFF), this.armRotatePreset(ArmPresets.INTAKE),
-                setRumble(controller1, 0),
-                setRumble(controller2, 0), led.colorAlliance());
     }
 
     public Command scoreSpeakerAuto() {
@@ -139,6 +109,10 @@ public class CommandSequences {
                         led.colorAlliance());
     }
 
+    public Command rotateToIntake() {
+        return this.armRotatePreset(ArmPresets.INTAKE);
+    }
+
     public Command scoreSpeakerPodiumAuto() {
         return this.shooterSpeed(Speeds.PODIUM_SHOT).alongWith(
                 this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM)).andThen(
@@ -146,13 +120,12 @@ public class CommandSequences {
                         led.colorAlliance());
     }
 
-    public Command podiumShotCharge() {
-        return this.shooterSpeed(Speeds.PODIUM_SHOT)
-                .alongWith(this.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
+    public Command charge(Speeds speed, ArmPresets angle) {
+        return this.shooterSpeed(speed).alongWith(armRotatePreset(angle));
     }
 
-    public Command podiumShotRelease() {
-        return this.intake.feedShooter().andThen(this.shooterSpeed(Speeds.OFF));
+    public Command release() {
+        return this.intake.feedShooter().andThen(this.shooterSpeed(Speeds.OFF), armRotatePreset(ArmPresets.INTAKE));
     }
 
     public Command setRumble(ButtonXboxController controller, int rumbleAmount) {

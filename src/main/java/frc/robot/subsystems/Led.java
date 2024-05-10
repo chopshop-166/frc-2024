@@ -17,7 +17,6 @@ public class Led extends LEDSubsystem {
     public Led(LedMap map) {
         super(map);
         // This one is length / 2 because the buffer has a mirrored other half
-        ledBuffer.setPattern("Fire", new ColdFirePattern(ledBuffer.getLength() / 2));
 
     }
 
@@ -46,7 +45,7 @@ public class Led extends LEDSubsystem {
     }
 
     public Command shooterAtSpeed() {
-        return setPattern("Shooter", new FlashPattern(new Color(57, 32, 144), .5), "At Speed");
+        return setPattern("Shooter", new FlashPattern(new Color(57, 32, 144), .125), "At Speed");
     }
 
     public Command grabbedPiece() {

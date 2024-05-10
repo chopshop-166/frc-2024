@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot Game Piece - Subwoofer"
@@ -49,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 8 - BS"
+                  "pathName": "Podium from 8 - BS"
                 }
               },
               {
@@ -64,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -99,7 +105,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 7 - BS"
+                  "pathName": "Podium from 7 - BS"
                 }
               },
               {
@@ -114,7 +120,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {

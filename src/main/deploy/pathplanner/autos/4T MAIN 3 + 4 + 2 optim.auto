@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3,
-      "y": 5.55
+      "x": 0.74,
+      "y": 6.74
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 1 - CS"
+                  "pathName": "Pickup 3 - TS"
                 }
               },
               {
@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -49,13 +49,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 1 - CS"
+                  "pathName": "Podium at 3"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Intake Contingency Two"
                 }
               }
             ]
@@ -64,7 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 2 - CS"
+                  "pathName": "Pickup 4 - TS"
                 }
               },
               {
@@ -89,7 +89,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -99,13 +99,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker from 2 - CS"
+                  "pathName": "4 to 3"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake While Leaving"
+                  "name": "Intake Contingency Two"
                 }
               }
             ]
@@ -114,7 +114,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -124,7 +124,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 3 - CS"
+                  "pathName": "3 to 2"
                 }
               },
               {
@@ -139,32 +139,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker from 3 - CS"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake While Leaving"
-                }
-              }
-            ]
+            "name": "Intake Contingency"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -176,6 +157,6 @@
       ]
     }
   },
-  "folder": "4 Piece - Center Start",
+  "folder": "4 Piece - Top Start",
   "choreoAuto": false
 }

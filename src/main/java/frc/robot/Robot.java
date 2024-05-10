@@ -18,6 +18,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -61,7 +62,6 @@ public class Robot extends CommandRobot {
         NamedCommands.registerCommand("Intake Contingency", commandSequences.moveAndIntakeContingency());
         NamedCommands.registerCommand("Shoot Game Piece - Subwoofer", commandSequences.scoreSpeakerAuto());
         NamedCommands.registerCommand("Shoot Game Piece - Podium", commandSequences.scoreSpeakerPodiumAuto());
-        NamedCommands.registerCommand("Shoot Game Piece In Amp", commandSequences.chargeAmp());
         NamedCommands.registerCommand("Rotate Arm Sub",
                 commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
         NamedCommands.registerCommand("Stop Shooter", shooter.setSpeed(Speeds.OFF));
@@ -71,6 +71,7 @@ public class Robot extends CommandRobot {
                 commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_PODIUM));
         NamedCommands.registerCommand("Has Game Piece? Rotate.",
                 commandSequences.autoGamePieceDetected());
+        NamedCommands.registerCommand("Rotate to Intake", commandSequences.rotateToIntake());
     }
 
     @Autonomous(name = "No Auto", defaultAuto = true)
@@ -118,6 +119,7 @@ public class Robot extends CommandRobot {
         Logger.start();
 
         led.colorAlliance().schedule();
+        DriverStation.silenceJoystickConnectionWarning(true);
 
     }
 
@@ -131,7 +133,7 @@ public class Robot extends CommandRobot {
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing
-        driveController.start().onTrue(drive.setPoseCommand(new Pose2d(2, 7, Rotation2d.fromDegrees(0))));
+        driveController.start().onTrue(drive.setPoseCommand(() -> drive.visionEstimator.getEstimatedPosition()));
         driveController.leftBumper()
                 .whileTrue(drive.robotCentricDrive(() -> {
                     return driveScaler.applyAsDouble(-driveController.getLeftX());
@@ -141,28 +143,25 @@ public class Robot extends CommandRobot {
                     return driveScaler.applyAsDouble(-driveController.getRightX());
                 }));
 
-        driveController.y().onTrue(led.awesome());
-        driveController.rightBumper().onTrue(commandSequences.chargeAmp());
-        driveController.a().onTrue(drive.rotateToSpeakerTarget());
+        driveController.y().whileTrue(drive.rotateToSpeaker());
 
-        copilotController.back().onTrue(intake.safeStateCmd());
+        copilotController.back().onTrue(intake.safeStateCmd().andThen(armRotate.safeStateCmd()));
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
         copilotController.a().onTrue(commandSequences.moveAndIntake());
-        // copilotController.b().onTrue(undertaker.safeStateCmd());
-        copilotController.b().whileTrue(commandSequences.scoreSpeakerCharge(copilotController, driveController));
-        copilotController.b().onFalse(commandSequences.scoreSpeakerRelease(copilotController, driveController));
-        copilotController.y().onTrue(commandSequences.scoreSpeakerCenterlineCharge(copilotController, driveController));
-        copilotController.y()
-                .onFalse(commandSequences.scoreSpeakerCenterlineRelease(copilotController, driveController));
+        copilotController.b()
+                .whileTrue(commandSequences.charge(Speeds.SUBWOOFER_SHOT, ArmPresets.SCORE_SPEAKER_SUBWOOFER))
+                .onFalse(commandSequences.release());
+        copilotController.y().whileTrue(commandSequences.charge(Speeds.SHUTTLE_SHOT, ArmPresets.SHUTTLE))
+                .onFalse(commandSequences.release());
         copilotController.x().whileTrue(intake.spinOut().alongWith(undertaker.spinOut()));
         copilotController.rightStick().whileTrue(intake.feedShooter());
-        copilotController.rightBumper().onTrue(commandSequences.chargeAmp());
-        copilotController.rightBumper().onFalse(commandSequences.releaseAmp());
-        copilotController.leftBumper().onTrue(commandSequences.podiumShotCharge());
-        copilotController.leftBumper().onFalse(commandSequences.podiumShotRelease());
+        copilotController.rightBumper().whileTrue(commandSequences.charge(Speeds.AMP_SPEED, ArmPresets.SCORE_AMP))
+                .onFalse(commandSequences.release());
+        copilotController.leftBumper()
+                .whileTrue(commandSequences.charge(Speeds.PODIUM_SHOT, ArmPresets.SCORE_SPEAKER_PODIUM))
+                .onFalse(commandSequences.release());
         copilotController.povUp().onTrue(commandSequences.moveToAmp());
-        // copilotController.povDown().whileTrue(commandSequences.shooterSpeed(Speeds.SUBWOOFER_SHOT));
-        copilotController.povDown().onTrue(commandSequences.shooterSpeed(Speeds.HALF_SPEED));
+        copilotController.povDown().onTrue(commandSequences.shooterSpeed(Speeds.FULL_SPEED));
         copilotController.povRight().onTrue(commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
         copilotController.povLeft().onTrue(commandSequences.stow());
     }

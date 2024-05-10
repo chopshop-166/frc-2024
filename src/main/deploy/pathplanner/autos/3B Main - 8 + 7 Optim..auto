@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3,
-      "y": 5.55
+      "x": 0.65,
+      "y": 4.35
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pickup 3 - CS"
+                  "pathName": "Pickup 8 - BS"
                 }
               },
               {
@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -49,13 +49,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3 halfway to 2 P1"
+                  "pathName": "Podium from 8 - BS"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Arm Sub"
+                  "name": "Intake Contingency Two"
                 }
               }
             ]
@@ -64,7 +64,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Game Piece - Subwoofer"
+            "name": "Shoot Game Piece - Podium"
           }
         },
         {
@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3 halfway to 2 P2"
+                  "pathName": "Pickup 7 - BS"
                 }
               },
               {
@@ -89,7 +89,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Definitely Intakes"
+            "name": "Intake Contingency"
           }
         },
         {
@@ -99,38 +99,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2 Halfway to 1 P1"
+                  "pathName": "Podium from 7 - BS"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Rotate Arm Sub"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot Game Piece - Subwoofer"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "2 Halfway to 1 P2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Game Piece"
+                  "name": "Intake Contingency Two"
                 }
               }
             ]
@@ -151,6 +126,6 @@
       ]
     }
   },
-  "folder": "4 Piece - Center Start",
+  "folder": "3 Piece - Bottom Start",
   "choreoAuto": false
 }
