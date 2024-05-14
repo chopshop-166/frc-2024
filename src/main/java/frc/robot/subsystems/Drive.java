@@ -51,7 +51,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     double rotationCoef = 1;
     double rotationKp = 0.05;
     double rotationKs = 0.19;
-    ProfiledPIDController rotationPID = new ProfiledPIDController(0.09, 0.0, 0.0, new Constraints(240, 270));
+    ProfiledPIDController rotationPID = new ProfiledPIDController(0.065, 0.0, 0.0, new Constraints(240, 270));
     double visionMaxError = 1;
     Optional<PhotonTrackedTarget> tgt = Optional.empty();
 
