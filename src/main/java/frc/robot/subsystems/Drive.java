@@ -67,7 +67,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     // from center.
     public static final Transform3d kRobotToCam = new Transform3d(
             new Translation3d(Units.inchesToMeters(3.029), Units.inchesToMeters(-6.9965), Units.inchesToMeters(12.445)),
-            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-4.5 - 180)));
+            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-6.5)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
@@ -218,8 +218,10 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public Translation2d getSpeakerTarget() {
         Optional<Pose3d> pose;
         if (isBlue) {
+            Logger.recordOutput("Alliance Speaker", "Blue");
             pose = photonEstimator.getFieldTags().getTagPose(7);
         } else {
+            Logger.recordOutput("Alliance Speaker", "Red/Other");
             pose = photonEstimator.getFieldTags().getTagPose(4);
         }
         if (pose.isEmpty()) {
@@ -236,7 +238,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return run(() -> {
             var target = getRobotToTarget(getSpeakerTarget());
             double targetAngle = target.getAngle().getDegrees();
-            double estimatorAngle = estimator.getEstimatedPosition().getRotation().getDegrees();
+            double estimatorAngle = visionEstimator.getEstimatedPosition().getRotation().getDegrees();
             Logger.recordOutput("Estimator Angle", estimatorAngle);
             Logger.recordOutput("adjustedTargetAngle", targetAngle);
             double rotationSpeed = rotationPID.calculate(estimatorAngle,
