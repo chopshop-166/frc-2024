@@ -219,15 +219,15 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         Optional<Pose3d> pose;
         if (isBlue) {
             Logger.recordOutput("Alliance Speaker", "Blue");
-            pose = photonEstimator.getFieldTags().getTagPose(7);
+            pose = kTagLayout.getTagPose(7);
         } else {
             Logger.recordOutput("Alliance Speaker", "Red/Other");
-            pose = photonEstimator.getFieldTags().getTagPose(4);
+            pose = kTagLayout.getTagPose(4);
         }
         if (pose.isEmpty()) {
             return new Translation2d();
         }
-        return new Translation2d(pose.get().getTranslation().getX(), pose.get().getTranslation().getY());
+        return pose.get().getTranslation().toTranslation2d();
     }
 
     public Translation2d getRobotToTarget(Translation2d target) {
@@ -281,7 +281,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         int numTags = 0;
         double avgDist = 0;
         for (var tgt : targets) {
-            var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+            var tagPose = kTagLayout.getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty())
                 continue;
             numTags++;
@@ -325,15 +325,14 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
         // Correct pose estimate with vision measurements
         var visionEst = getEstimatedGlobalPose();
-        visionEst.ifPresent(
-                est -> {
-                    var estPose = est.estimatedPose.toPose2d();
-                    // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = getEstimationStdDevs(estPose);
-                    Logger.recordOutput("Vision Pose", est.estimatedPose);
-                    visionEstimator.addVisionMeasurement(
-                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                });
+        visionEst.ifPresent(est -> {
+            var estPose = est.estimatedPose.toPose2d();
+            // Change our trust in the measurement based on the tags we can see
+            var estStdDevs = getEstimationStdDevs(estPose);
+            Logger.recordOutput("Vision Pose", est.estimatedPose);
+            visionEstimator.addVisionMeasurement(
+                    est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+        });
 
         Logger.recordOutput("estimatorPose", estimator.getEstimatedPosition());
         Logger.recordOutput("visionEstimatorPose", visionEstimator.getEstimatedPosition());
