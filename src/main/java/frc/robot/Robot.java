@@ -15,11 +15,8 @@ import com.chopshop166.chopshoplib.controls.ButtonXboxController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,8 +28,8 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Undertaker;
 import frc.robot.subsystems.Shooter.Speeds;
+import frc.robot.subsystems.Undertaker;
 
 public class Robot extends CommandRobot {
 
@@ -133,7 +130,7 @@ public class Robot extends CommandRobot {
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetGyroCommand());
         // Magic numbers for auto testing
-        driveController.start().onTrue(drive.setPoseCommand(() -> drive.visionEstimator.getEstimatedPosition()));
+        driveController.start().onTrue(drive.setPoseToEstimate());
         driveController.leftBumper()
                 .whileTrue(drive.robotCentricDrive(() -> {
                     return driveScaler.applyAsDouble(-driveController.getLeftX());
