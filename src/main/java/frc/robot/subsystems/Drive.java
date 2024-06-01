@@ -137,16 +137,15 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         double xInput = deadband.applyAsDouble(xSpeed);
         double yInput = deadband.applyAsDouble(ySpeed);
 
-        final double translateXSpeed = xInput
-                * maxDriveSpeedMetersPerSecond * speedCoef;
-        final double translateYSpeed = yInput
-                * maxDriveSpeedMetersPerSecond * speedCoef;
-        double rotationSpeed = rotationInput
-                * maxRotationRadiansPerSecond * rotationCoef;
+        double r = Math.hypot(xInput, yInput) * maxDriveSpeedMetersPerSecond * speedCoef;
+        double angle = Math.atan2(yInput, xInput);
+
+        final double translateXSpeed = r * Math.cos(angle);
+        final double translateYSpeed = r * Math.sin(angle);
+        double rotationSpeed = rotationInput * maxRotationRadiansPerSecond * rotationCoef;
         if (aimAtSpeaker) {
             rotationSpeed = calculateRotateSpeedToTarget(this::getSpeakerTarget);
         }
-
         move(translateXSpeed, translateYSpeed, rotationSpeed, isRobotCentric);
     }
 
@@ -236,7 +235,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return run(() -> {
             double rotationSpeed = calculateRotateSpeedToTarget(target);
             move(0, 0, rotationSpeed, false);
-
         });
     }
 
