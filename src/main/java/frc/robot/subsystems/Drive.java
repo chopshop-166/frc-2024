@@ -125,7 +125,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     private void deadbandMove(final double xSpeed, final double ySpeed,
             final double rotation, boolean isRobotCentric) {
 
-        var deadband = Modifier.scalingDeadband(DriverStation.isFMSAttached() ? 0.05 : 0.15);
+        var deadband = Modifier.scalingDeadband(0.05);
         double rotationInput = deadband.applyAsDouble(rotation);
         double xInput = deadband.applyAsDouble(xSpeed);
         double yInput = deadband.applyAsDouble(ySpeed);
