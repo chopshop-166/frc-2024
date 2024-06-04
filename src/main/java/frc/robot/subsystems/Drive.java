@@ -316,5 +316,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         Logger.recordOutput("Estimator Angle", estimatorAngle);
         Logger.recordOutput("Rotation Speed", rotationSpeed);
         Logger.recordOutput("Target Velocity", rotationPID.getSetpoint().velocity);
+        Logger.recordOutput("Position Error", rotationPID.getPositionError());
     }
 }
