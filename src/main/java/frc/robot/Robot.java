@@ -129,8 +129,6 @@ public class Robot extends CommandRobot {
     @Override
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetCmd());
-        // Magic numbers for auto testing
-        driveController.start().onTrue(drive.setPoseToEstimate());
         driveController.leftBumper()
                 .whileTrue(drive.robotCentricDrive(() -> {
                     return driveScaler.applyAsDouble(-driveController.getLeftX());

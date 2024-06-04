@@ -9,7 +9,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 import com.chopshop166.chopshoplib.logging.data.SwerveDriveData;
@@ -53,9 +52,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     double rotationKs = 0.19;
     ProfiledPIDController rotationPID = new ProfiledPIDController(0.065, 0.0, 0.0, new Constraints(240, 270));
     double visionMaxError = 1;
-    Optional<PhotonTrackedTarget> tgt = Optional.empty();
 
-    public SwerveDrivePoseEstimator estimator;
+    SwerveDrivePoseEstimator estimator;
 
     // Vision objects
     private PhotonCamera camera = null;
@@ -116,10 +114,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return runOnce(() -> {
             setPose(pose.get());
         });
-    }
-
-    public Command setPoseToEstimate() {
-        return setPoseCommand(() -> estimator.getEstimatedPosition());
     }
 
     private void deadbandMove(final double xSpeed, final double ySpeed,
