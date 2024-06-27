@@ -9,7 +9,6 @@ import com.chopshop166.chopshoplib.logging.LoggedSubsystem;
 import com.chopshop166.chopshoplib.motors.Modifier;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,11 +18,7 @@ import frc.robot.maps.subsystems.ArmRotateMap.Data;
 
 public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
 
-    // Intake Position: 0 degrees <- base everything else off of it
-
     final ProfiledPIDController pid;
-    // Set to zero until able to test
-    private boolean useAbsolute = true;
     final double RAISE_SPEED = .85;
     final double MANUAL_LOWER_SPEED_COEF = 0.5;
     final double SLOW_DOWN_COEF = 0.5;
@@ -32,7 +27,6 @@ public class ArmRotate extends LoggedSubsystem<Data, ArmRotateMap> {
     final double INTAKE_TOLERANCE = 4;
     double holdAngle = 0;
 
-    private Constraints rotateConstraints = new Constraints(150, 200);
     ArmPresets level = ArmPresets.OFF;
 
     public ArmRotate(ArmRotateMap armRotateMap) {
