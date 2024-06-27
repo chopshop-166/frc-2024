@@ -63,7 +63,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
     public static final Transform3d kRobotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(3.029), Units.inchesToMeters(-6.9965), Units.inchesToMeters(12.445)),
+            new Translation3d(Units.inchesToMeters(-6.9965), Units.inchesToMeters(-3.029), Units.inchesToMeters(12.445)),
             new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-6.5)));
 
     // The layout of the AprilTags on the field
