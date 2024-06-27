@@ -13,7 +13,7 @@ public class Shooter extends LoggedSubsystem<Data, ShooterMap> {
     private final double MAX_VELOCITY_OFFSET = 100;
 
     public enum Speeds {
-        FULL_SPEED(3000, 5500, 4500),
+        FULL_SPEED(5500, 6500, 4500),
 
         // 2500, 2500, 3000
         SUBWOOFER_SHOT(2700, 2700, 3000),
