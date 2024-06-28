@@ -53,6 +53,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     ProfiledPIDController rotationPID = new ProfiledPIDController(0.065, 0.0, 0.0, new Constraints(240, 270));
     double visionMaxError = 1;
 
+    DoubleSupplier xSpeed;
+    DoubleSupplier ySpeed;
+    DoubleSupplier rotation;
+    boolean isRobotCentric = false;
+
     SwerveDrivePoseEstimator estimator;
 
     // Vision objects
@@ -63,7 +68,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
     public static final Transform3d kRobotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-6.9965), Units.inchesToMeters(-3.029), Units.inchesToMeters(12.445)),
+            new Translation3d(Units.inchesToMeters(-6.9965), Units.inchesToMeters(-3.029),
+                    Units.inchesToMeters(12.445)),
             new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-6.5)));
 
     // The layout of the AprilTags on the field
@@ -75,7 +81,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
-    public Drive(SwerveDriveMap map) {
+    public Drive(SwerveDriveMap map, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rotation) {
 
         super(new SwerveDriveData(), map);
 
@@ -103,6 +109,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         rotationPID.enableContinuousInput(-180, 180);
+
+        this.xSpeed = xSpeed;
+        this.ySpeed = ySpeed;
+        this.rotation = rotation;
+
     }
 
     public void setPose(Pose2d pose) {
@@ -170,9 +181,12 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     }
 
     // Yes! Remap?
-    public Command robotCentricDrive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rotation) {
-        return run(() -> deadbandMove(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rotation.getAsDouble(), true))
-                .withName("Robot Centric Drive");
+    public Command robotCentricDrive() {
+        return startEnd(() -> {
+            isRobotCentric = true;
+        }, () -> {
+            isRobotCentric = false;
+        });
     }
 
     public Command moveInDirection(double xSpeed, double ySpeed, double seconds) {
@@ -296,6 +310,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
             Logger.recordOutput("Vision Pose", est.estimatedPose);
             estimator.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
         });
+
+        deadbandMove(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rotation.getAsDouble(), isRobotCentric);
 
         Logger.recordOutput("Estimator Pose", estimator.getEstimatedPosition());
         Logger.recordOutput("Pose Angle", estimator.getEstimatedPosition().getRotation());
