@@ -234,10 +234,9 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
     public Command rotateTo(Supplier<Translation2d> target) {
         return run(() -> {
-            var robotToTarget = getRobotToTarget(target.get());
-            double rotationSpeed = rotateToAngleImpl(robotToTarget.getAngle().getDegrees());
+            double rotationSpeed = calculateRotateSpeedToTarget(target);
             move(0, 0, rotationSpeed, false);
-            Logger.recordOutput("Target Pose", robotToTarget);
+            
         });
     }
 
