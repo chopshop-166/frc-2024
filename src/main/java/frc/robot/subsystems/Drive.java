@@ -72,7 +72,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public static final Transform3d kRobotToCam = new Transform3d(
             new Translation3d(Units.inchesToMeters(-6.9965), Units.inchesToMeters(-3.029),
                     Units.inchesToMeters(12.445)),
-            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-6.5)));
+            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-6.5 + 180)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
@@ -159,8 +159,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
             speeds = new ChassisSpeeds(ySpeed, xSpeed, rotation);
         } else {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed,
-                    rotation,
-                    getData().gyroYawPosition);
+                    rotation, estimator.getEstimatedPosition().getRotation());
         }
 
         move(speeds);
@@ -327,7 +326,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
             var estStdDevs = getEstimationStdDevs(estPose);
             Logger.recordOutput("Vision Pose", est.estimatedPose);
             estimator.addVisionMeasurement(est.estimatedPose.toPose2d(),
-            est.timestampSeconds, estStdDevs);
+                    est.timestampSeconds, estStdDevs);
         });
 
         periodicMove(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rotation.getAsDouble(), isRobotCentric, aimAtSpeaker);
@@ -337,9 +336,10 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         Logger.recordOutput("Robot Rotation Gyro", getMap().gyro.getRotation2d());
     }
 
-    private double rotateToAngleImpl(double targetAngle) {
+    private double rotateToAngleImpl(double targetAngleDegrees) {
+        targetAngleDegrees += 180;
         double estimatorAngle = estimator.getEstimatedPosition().getRotation().getDegrees();
-        double rotationSpeed = rotationPID.calculate(estimatorAngle, targetAngle);
+        double rotationSpeed = rotationPID.calculate(estimatorAngle, targetAngleDegrees);
         rotationSpeed += Math.copySign(rotationKs, rotationSpeed);
         // need to ensure we move at a fast enough speed for gyro to keep up
         if (Math.abs(rotationSpeed) > 0.02 && Math.abs(rotationPID.getPositionError()) > 0.75) {
@@ -348,7 +348,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         } else {
             rotationSpeed = 0;
         }
-        Logger.recordOutput("Target Angle", targetAngle);
+        Logger.recordOutput("Target Angle", targetAngleDegrees);
         Logger.recordOutput("Estimator Angle", estimatorAngle);
         Logger.recordOutput("Rotation Speed", rotationSpeed);
         Logger.recordOutput("Target Velocity", rotationPID.getSetpoint().velocity);
