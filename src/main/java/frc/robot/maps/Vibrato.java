@@ -3,6 +3,7 @@ package frc.robot.maps;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.photonvision.PhotonCamera;
 
 import com.chopshop166.chopshoplib.ValueRange;
 import com.chopshop166.chopshoplib.digital.CSDigitalInput;
@@ -35,18 +36,27 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.maps.subsystems.ArmRotateMap;
+import frc.robot.maps.subsystems.CameraSwerveDriveMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 import frc.robot.maps.subsystems.UndertakerMap;
 
 @RobotMapFor("00:80:2F:36:7C:49")
 public class Vibrato extends RobotMap {
+
+    public static final Transform3d kRobotToCam = new Transform3d(
+            new Translation3d(Units.inchesToMeters(-6.9965), Units.inchesToMeters(-3.029),
+                    Units.inchesToMeters(12.445)),
+            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-6.5 + 180)));
 
     private static void setStatusPeriods(CSSpark motor, int status0, int status1, int status2) {
         motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus0, status0);
@@ -55,7 +65,7 @@ public class Vibrato extends RobotMap {
     }
 
     @Override
-    public SwerveDriveMap getDriveMap() {
+    public CameraSwerveDriveMap getDriveMap() {
 
         // Remember to divide by 360
         // CAN ID 2
@@ -173,10 +183,12 @@ public class Vibrato extends RobotMap {
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
         );
 
-        return new SwerveDriveMap(frontLeft, frontRight, rearLeft, rearRight,
+        var driveMap = new SwerveDriveMap(frontLeft, frontRight, rearLeft, rearRight,
                 maxDriveSpeedMetersPerSecond,
                 maxRotationRadianPerSecond, pigeonGyro2,
                 config);
+
+        return new CameraSwerveDriveMap(driveMap, new PhotonCamera("Arducam_OV9782_USB_Camera"), kRobotToCam);
     }
 
     @Override
