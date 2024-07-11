@@ -24,6 +24,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -53,6 +54,12 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     ProfiledPIDController rotationPID = new ProfiledPIDController(0.065, 0.0, 0.0, new Constraints(240, 270));
     double visionMaxError = 1;
 
+    DoubleSupplier xSpeed;
+    DoubleSupplier ySpeed;
+    DoubleSupplier rotation;
+    boolean isRobotCentric = false;
+    boolean aimAtSpeaker = false;
+
     SwerveDrivePoseEstimator estimator;
 
     // Vision objects
@@ -63,8 +70,9 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
     public static final Transform3d kRobotToCam = new Transform3d(
-            new Translation3d(Units.inchesToMeters(-6.9965), Units.inchesToMeters(-3.029), Units.inchesToMeters(12.445)),
-            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-6.5)));
+            new Translation3d(Units.inchesToMeters(-6.9965), Units.inchesToMeters(-3.029),
+                    Units.inchesToMeters(12.445)),
+            new Rotation3d(0, Units.degreesToRadians(-16.875), Units.degreesToRadians(-6.5 + 180)));
 
     // The layout of the AprilTags on the field
     public static final AprilTagFieldLayout kTagLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
@@ -75,7 +83,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
-    public Drive(SwerveDriveMap map) {
+    public Drive(SwerveDriveMap map, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rotation) {
 
         super(new SwerveDriveData(), map);
 
@@ -103,6 +111,11 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         rotationPID.enableContinuousInput(-180, 180);
+
+        this.xSpeed = xSpeed;
+        this.ySpeed = ySpeed;
+        this.rotation = rotation;
+
     }
 
     public void setPose(Pose2d pose) {
@@ -116,8 +129,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         });
     }
 
-    private void deadbandMove(final double xSpeed, final double ySpeed,
-            final double rotation, boolean isRobotCentric) {
+    private void periodicMove(final double xSpeed, final double ySpeed,
+            final double rotation, boolean isRobotCentric, boolean aimAtSpeaker) {
 
         var deadband = Modifier.scalingDeadband(0.05);
         double rotationInput = deadband.applyAsDouble(rotation);
@@ -128,8 +141,12 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
                 * maxDriveSpeedMetersPerSecond * speedCoef;
         final double translateYSpeed = yInput
                 * maxDriveSpeedMetersPerSecond * speedCoef;
-        final double rotationSpeed = rotationInput
+        double rotationSpeed = rotationInput
                 * maxRotationRadiansPerSecond * rotationCoef;
+        if (aimAtSpeaker) {
+            rotationSpeed = calculateRotateSpeedToTarget(this::getSpeakerTarget);
+        }
+
         move(translateXSpeed, translateYSpeed, rotationSpeed, isRobotCentric);
     }
 
@@ -142,8 +159,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
             speeds = new ChassisSpeeds(ySpeed, xSpeed, rotation);
         } else {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed,
-                    rotation,
-                    getData().gyroYawPosition);
+                    rotation, estimator.getEstimatedPosition().getRotation());
         }
 
         move(speeds);
@@ -164,15 +180,21 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return kinematics.toChassisSpeeds(getData().getModuleStates());
     }
 
-    // Yes! Actual manual drive
-    public Command drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rotation) {
-        return run(() -> deadbandMove(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rotation.getAsDouble(), false));
+    // Yes! Remap?
+    public Command robotCentricDrive() {
+        return startEnd(() -> {
+            isRobotCentric = true;
+        }, () -> {
+            isRobotCentric = false;
+        });
     }
 
-    // Yes! Remap?
-    public Command robotCentricDrive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rotation) {
-        return run(() -> deadbandMove(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rotation.getAsDouble(), true))
-                .withName("Robot Centric Drive");
+    public Command aimAtSpeaker() {
+        return startEnd(() -> {
+            aimAtSpeaker = true;
+        }, () -> {
+            aimAtSpeaker = false;
+        });
     }
 
     public Command moveInDirection(double xSpeed, double ySpeed, double seconds) {
@@ -212,10 +234,16 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
     public Command rotateTo(Supplier<Translation2d> target) {
         return run(() -> {
-            var robotToTarget = getRobotToTarget(target.get());
-            rotateToAngleImpl(robotToTarget.getAngle().getDegrees());
-            Logger.recordOutput("Target Pose", robotToTarget);
+            double rotationSpeed = calculateRotateSpeedToTarget(target);
+            move(0, 0, rotationSpeed, false);
+            
         });
+    }
+
+    public double calculateRotateSpeedToTarget(Supplier<Translation2d> target) {
+        var robotToTarget = getRobotToTarget(target.get());
+        Logger.recordOutput("Target Pose", robotToTarget);
+        return rotateToAngleImpl(robotToTarget.getAngle().getDegrees());
     }
 
     public Command rotateTo(Translation2d target) {
@@ -271,7 +299,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
     @Override
     public void reset() {
-        getMap().gyro.reset();
+        Rotation2d heading = isBlue ? new Rotation2d() : new Rotation2d(Math.PI);
+        setPose(new Pose2d(estimator.getEstimatedPosition().getX(), estimator.getEstimatedPosition().getY(), heading));
     }
 
     @Override
@@ -294,28 +323,31 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
             // Change our trust in the measurement based on the tags we can see
             var estStdDevs = getEstimationStdDevs(estPose);
             Logger.recordOutput("Vision Pose", est.estimatedPose);
-            estimator.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+            estimator.addVisionMeasurement(est.estimatedPose.toPose2d(),
+                    est.timestampSeconds, estStdDevs);
         });
+
+        periodicMove(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rotation.getAsDouble(), isRobotCentric, aimAtSpeaker);
 
         Logger.recordOutput("Estimator Pose", estimator.getEstimatedPosition());
         Logger.recordOutput("Pose Angle", estimator.getEstimatedPosition().getRotation());
         Logger.recordOutput("Robot Rotation Gyro", getMap().gyro.getRotation2d());
     }
 
-    private void rotateToAngleImpl(double targetAngle) {
+    private double rotateToAngleImpl(double targetAngleDegrees) {
+        targetAngleDegrees += 180;
         double estimatorAngle = estimator.getEstimatedPosition().getRotation().getDegrees();
-        double rotationSpeed = rotationPID.calculate(estimatorAngle, targetAngle);
+        double rotationSpeed = rotationPID.calculate(estimatorAngle, targetAngleDegrees);
         rotationSpeed += Math.copySign(rotationKs, rotationSpeed);
         // need to ensure we move at a fast enough speed for gyro to keep up
-        if (Math.abs(rotationSpeed) > 0.2 && Math.abs(rotationPID.getPositionError()) > 0.75) {
-            move(0, 0, rotationSpeed, false);
-        } else {
-            safeState();
+        if (Math.abs(rotationSpeed) < 0.02 || Math.abs(rotationPID.getPositionError()) < 0.75) {
+            rotationSpeed = 0;
         }
-        Logger.recordOutput("Target Angle", targetAngle);
+        Logger.recordOutput("Target Angle", targetAngleDegrees);
         Logger.recordOutput("Estimator Angle", estimatorAngle);
         Logger.recordOutput("Rotation Speed", rotationSpeed);
         Logger.recordOutput("Target Velocity", rotationPID.getSetpoint().velocity);
         Logger.recordOutput("Position Error", rotationPID.getPositionError());
+        return rotationSpeed;
     }
 }

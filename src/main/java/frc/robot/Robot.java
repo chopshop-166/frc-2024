@@ -37,7 +37,16 @@ public class Robot extends CommandRobot {
     private ButtonXboxController driveController = new ButtonXboxController(0);
     private ButtonXboxController copilotController = new ButtonXboxController(1);
 
-    private Drive drive = new Drive(map.getDriveMap());
+    // Helpers
+    final DoubleUnaryOperator driveScaler = getScaler(0.45, 0.25);
+
+    private Drive drive = new Drive(map.getDriveMap(), () -> {
+        return driveScaler.applyAsDouble(-driveController.getLeftX());
+    }, () -> {
+        return driveScaler.applyAsDouble(-driveController.getLeftY());
+    }, () -> {
+        return driveScaler.applyAsDouble(-driveController.getRightX());
+    });
     private Intake intake = new Intake(map.getIntakeMap());
     private Shooter shooter = new Shooter(map.getShooterMap());
     private Led led = new Led(map.getLedMap());
@@ -81,9 +90,6 @@ public class Robot extends CommandRobot {
         registerNamedCommands();
         autoChooser = AutoBuilder.buildAutoChooser();
     }
-
-    // Helpers
-    final DoubleUnaryOperator driveScaler = getScaler(0.45, 0.25);
 
     @Override
     public void robotInit() {
@@ -130,15 +136,10 @@ public class Robot extends CommandRobot {
     public void configureButtonBindings() {
         driveController.back().onTrue(drive.resetCmd());
         driveController.leftBumper()
-                .whileTrue(drive.robotCentricDrive(() -> {
-                    return driveScaler.applyAsDouble(-driveController.getLeftX());
-                }, () -> {
-                    return driveScaler.applyAsDouble(-driveController.getLeftY());
-                }, () -> {
-                    return driveScaler.applyAsDouble(-driveController.getRightX());
-                }));
+                .whileTrue(drive.robotCentricDrive());
 
         driveController.y().whileTrue(drive.rotateToSpeaker());
+        driveController.a().whileTrue(drive.aimAtSpeaker());
 
         copilotController.back().onTrue(intake.safeStateCmd().andThen(armRotate.safeStateCmd()));
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));
@@ -190,14 +191,6 @@ public class Robot extends CommandRobot {
 
     @Override
     public void setDefaultCommands() {
-        drive.setDefaultCommand(
-                drive.drive(() -> {
-                    return driveScaler.applyAsDouble(-driveController.getLeftX());
-                }, () -> {
-                    return driveScaler.applyAsDouble(-driveController.getLeftY());
-                }, () -> {
-                    return driveScaler.applyAsDouble(-driveController.getRightX());
-                }));
         armRotate.setDefaultCommand(armRotate.move(RobotUtils.deadbandAxis(.1, () -> -copilotController.getLeftY())));
     }
 
