@@ -302,7 +302,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public void reset() {
         Rotation2d heading = isBlue ? new Rotation2d() : new Rotation2d(Math.PI);
         setPose(new Pose2d(estimator.getEstimatedPosition().getX(), estimator.getEstimatedPosition().getY(), heading));
-        // getMap().gyro.reset();
     }
 
     @Override
@@ -342,10 +341,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         double rotationSpeed = rotationPID.calculate(estimatorAngle, targetAngleDegrees);
         rotationSpeed += Math.copySign(rotationKs, rotationSpeed);
         // need to ensure we move at a fast enough speed for gyro to keep up
-        if (Math.abs(rotationSpeed) > 0.02 && Math.abs(rotationPID.getPositionError()) > 0.75) {
-
-            // move(0, 0, rotationSpeed, false);
-        } else {
+        if (Math.abs(rotationSpeed) < 0.02 || Math.abs(rotationPID.getPositionError()) < 0.75) {
             rotationSpeed = 0;
         }
         Logger.recordOutput("Target Angle", targetAngleDegrees);
