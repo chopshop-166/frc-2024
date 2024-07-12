@@ -52,7 +52,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     double rotationKp = 0.05;
     double rotationKs = 0.19;
     ProfiledPIDController rotationPID = new ProfiledPIDController(0.065, 0.0, 0.0, new Constraints(240, 270));
-    double visionMaxError = 1;
+    final double VISION_MAX_ANGLE = 1;
+    final double ANGLE_MAX_ERROR = 5;
 
     DoubleSupplier xSpeed;
     DoubleSupplier ySpeed;
@@ -206,6 +207,18 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public Command rotateToAngle(double targetAngle) {
         return run(() -> {
             rotateToAngleImpl(targetAngle);
+        });
+    }
+
+    public Command driveTillReadyToShoot() {
+        return runOnce(() -> {
+            aimAtSpeaker = true;
+        }).until(() -> (calculateRotateSpeedToTarget(this::getSpeakerTarget) < ANGLE_MAX_ERROR && getRobotToTarget(getSpeakerTarget()).getNorm() < VISION_MAX_ANGLE));
+    }
+
+    public Command endAimAtSpeaker() {
+        return runOnce(() -> {
+            aimAtSpeaker = false;
         });
     }
 
