@@ -133,4 +133,10 @@ public class CommandSequences {
             controller.getHID().setRumble(RumbleType.kBothRumble, rumbleAmount);
         });
     }
+
+    public Command autoShoot() {
+        return this.drive.driveTillReadyToShoot().alongWith(this.charge(Speeds.PODIUM_SHOT, ArmPresets.SCORE_SPEAKER_PODIUM)).andThen(this.release(), this.drive.endAimAtSpeaker() );
+
+
+    }
 }
