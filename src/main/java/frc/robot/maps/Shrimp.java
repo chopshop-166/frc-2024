@@ -4,22 +4,13 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-import com.chopshop166.chopshoplib.ValueRange;
-import com.chopshop166.chopshoplib.digital.CSDigitalInput;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule;
 import com.chopshop166.chopshoplib.drive.SDSSwerveModule.Configuration;
-import com.chopshop166.chopshoplib.leds.ColorFormat;
-import com.chopshop166.chopshoplib.leds.SegmentConfig;
-import com.chopshop166.chopshoplib.maps.LedMap;
 import com.chopshop166.chopshoplib.maps.RobotMapFor;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 import com.chopshop166.chopshoplib.motors.CSSpark;
 import com.chopshop166.chopshoplib.motors.CSSparkFlex;
 import com.chopshop166.chopshoplib.motors.CSSparkMax;
-import com.chopshop166.chopshoplib.motors.SmartMotorControllerGroup;
-import com.chopshop166.chopshoplib.sensors.CSDutyCycleEncoderLocal;
-import com.chopshop166.chopshoplib.sensors.CSEncoder;
-import com.chopshop166.chopshoplib.sensors.CSFusedEncoder;
 import com.chopshop166.chopshoplib.sensors.CtreEncoder;
 import com.chopshop166.chopshoplib.sensors.gyro.PigeonGyro2;
 import com.chopshop166.chopshoplib.states.PIDValues;
@@ -29,24 +20,15 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import frc.robot.maps.subsystems.ArmRotateMap;
-import frc.robot.maps.subsystems.IntakeMap;
-import frc.robot.maps.subsystems.ShooterMap;
-import frc.robot.maps.subsystems.UndertakerMap;
 
-@RobotMapFor("00:80:2F:36:7C:49")
-public class Vibrato extends RobotMap {
+@RobotMapFor("Shrimp")
+public class Shrimp extends RobotMap {
 
     private static void setStatusPeriods(CSSpark motor, int status0, int status1, int status2) {
         motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus0, status0);
@@ -59,17 +41,17 @@ public class Vibrato extends RobotMap {
 
         // Remember to divide by 360
         // CAN ID 2
-        final double FLOFFSET = 0.571;
+        final double FLOFFSET = 0;
         // CAN ID 4
-        final double FROFFSET = 0.099;
+        final double FROFFSET = 0;
         // CAN ID 1
-        final double RLOFFSET = -0.226;
+        final double RLOFFSET = 0;
         // CAN ID 3
-        final double RROFFSET = -0.529;
+        final double RROFFSET = 0;
 
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
-        final double MODULE_OFFSET_XY = Units.inchesToMeters(10.875);
+        final double MODULE_OFFSET_XY = Units.inchesToMeters(6.00015);
         final PigeonGyro2 pigeonGyro2 = new PigeonGyro2(1);
 
         final CSSparkMax frontLeftSteer = new CSSparkMax(4);
@@ -77,10 +59,10 @@ public class Vibrato extends RobotMap {
         final CSSparkMax rearLeftSteer = new CSSparkMax(2);
         final CSSparkMax rearRightSteer = new CSSparkMax(6);
 
-        CSSparkFlex frontLeftDrive = new CSSparkFlex(3);
-        CSSparkFlex frontRightDrive = new CSSparkFlex(7);
-        CSSparkFlex rearLeftDrive = new CSSparkFlex(1);
-        CSSparkFlex rearRightDrive = new CSSparkFlex(5);
+        CSSparkMax frontLeftDrive = new CSSparkMax(3);
+        CSSparkMax frontRightDrive = new CSSparkMax(7);
+        CSSparkMax rearLeftDrive = new CSSparkMax(1);
+        CSSparkMax rearRightDrive = new CSSparkMax(5);
 
         setStatusPeriods(frontLeftSteer, 100, 100, 100);
         setStatusPeriods(frontRightSteer, 100, 100, 100);
@@ -92,10 +74,10 @@ public class Vibrato extends RobotMap {
         setStatusPeriods(rearLeftDrive, 100, 10, 10);
         setStatusPeriods(rearRightDrive, 100, 10, 10);
 
-        frontLeftSteer.getMotorController().setInverted(true);
-        frontRightSteer.getMotorController().setInverted(true);
-        rearLeftSteer.getMotorController().setInverted(true);
-        rearRightSteer.getMotorController().setInverted(true);
+        frontLeftSteer.getMotorController().setInverted(false);
+        frontRightSteer.getMotorController().setInverted(false);
+        rearLeftSteer.getMotorController().setInverted(false);
+        rearRightSteer.getMotorController().setInverted(false);
 
         frontLeftDrive.setInverted(true);
         frontLeftDrive.getEncoder().getRaw().setMeasurementPeriod(8);
@@ -117,8 +99,8 @@ public class Vibrato extends RobotMap {
 
         // Configuration for MK4i with L2 speeds
         Configuration MK4i_L2 = new Configuration(SDSSwerveModule.MK4_V2.gearRatio,
-                SDSSwerveModule.MK4_V2.wheelDiameter, new PIDValues(0.011, 0.00, 0.0002),
-                new PIDValues(0.05, 0.0, 0.0, 0.21));
+                SDSSwerveModule.MK4_V2.wheelDiameter, new PIDValues(0, 0, 0),
+                new PIDValues(0, 0, 0, 0));
 
         // All Distances are in Meters
         // Front Left Module
@@ -164,10 +146,10 @@ public class Vibrato extends RobotMap {
         final HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(
                 // HolonomicPathFollowerConfig, this should likely live in your
                 // Constants class
-                new PIDConstants(2, 0.0, 0.05), // Translation PID constants (OFF_AXIS)
-                new PIDConstants(1, 0.0, 0.0), // Rotation PID constants (OFF_AXIS)
+                new PIDConstants(0, 0, 0), // Translation PID constants (OFF_AXIS)
+                new PIDConstants(0, 0.0, 0.0), // Rotation PID constants (OFF_AXIS)
                 2.0, // Max module speed, in m/s
-                0.3429,
+                0.2155317,
                 // Drive base radius (OFF_AXIS) in meters. Distance from robot center to
                 // furthest module.
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -177,110 +159,6 @@ public class Vibrato extends RobotMap {
                 maxDriveSpeedMetersPerSecond,
                 maxRotationRadianPerSecond, pigeonGyro2,
                 config);
-    }
-
-    @Override
-    public ArmRotateMap getArmRotateMap() {
-        CSSparkMax leftMotor = new CSSparkMax(13);
-        CSSparkMax rightMotor = new CSSparkMax(14);
-        setStatusPeriods(leftMotor, 10, 100, 100);
-        setStatusPeriods(rightMotor, 10, 100, 100);
-
-        rightMotor.getMotorController().follow(leftMotor.getMotorController(), true);
-        leftMotor.getMotorController().setInverted(false);
-        leftMotor.getMotorController().setIdleMode(IdleMode.kBrake);
-        leftMotor.getMotorController().setSmartCurrentLimit(40);
-        rightMotor.getMotorController().setIdleMode(IdleMode.kBrake);
-        rightMotor.getMotorController().setSmartCurrentLimit(40);
-        CSEncoder encoder = new CSEncoder(2, 3, false);
-        encoder.setDistancePerPulse(360.0 / 2048.0);
-        CSDutyCycleEncoderLocal absEncoder = new CSDutyCycleEncoderLocal(1);
-        absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
-        absEncoder.setDistancePerRotation(360);
-        // Adjust this to fix absolute encoder angle. If at your zero angle,
-        // just put in that number, no need to make it negative
-        absEncoder.setPositionOffset(60.2);
-        CSFusedEncoder fusedEncoder = new CSFusedEncoder(encoder, absEncoder);
-        ProfiledPIDController pid = new ProfiledPIDController(0.02, 0.0, 0.0, new Constraints(120, 500));
-        pid.setTolerance(2);
-        ArmFeedforward feedForward = new ArmFeedforward(0, 0.03, 0.35, 0);
-
-        return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor),
-                pid, feedForward, fusedEncoder,
-                // Hard limits
-                new ValueRange(-14, 87),
-                // Soft limits
-                new ValueRange(0, 73),
-                new ArmRotateMap.ArmPresetValues(-13, 87, 23, 15, -5,
-                        -13, 11));
-    }
-
-    @Override
-    public IntakeMap getIntakeMap() {
-        CSSparkMax topRoller = new CSSparkMax(12);
-        setStatusPeriods(topRoller, 100, 100, 100);
-        topRoller.getMotorController().setInverted(true);
-        topRoller.getMotorController().setIdleMode(IdleMode.kBrake);
-        topRoller.getMotorController().setSmartCurrentLimit(30);
-        CSDigitalInput sensor = new CSDigitalInput(0);
-        return new IntakeMap(topRoller, sensor::get, 0.3);
-    }
-
-    @Override
-    public ShooterMap getShooterMap() {
-        CSSparkFlex rightWheels = new CSSparkFlex(11);
-        CSSparkFlex leftWheels = new CSSparkFlex(10);
-
-        setStatusPeriods(rightWheels, 100, 100, 100);
-        setStatusPeriods(leftWheels, 100, 100, 100);
-
-        rightWheels.getMotorController().setSmartCurrentLimit(50);
-        leftWheels.getMotorController().setSmartCurrentLimit(50);
-
-        rightWheels.setControlType(ControlType.kVelocity);
-        rightWheels.getPidController().setP(0.003);
-        rightWheels.getPidController().setI(0);
-        rightWheels.getPidController().setD(0.0);
-        rightWheels.getPidController().setFF(0.000182);
-        rightWheels.getEncoder().getRaw().setMeasurementPeriod(10);
-
-        leftWheels.setControlType(ControlType.kVelocity);
-        leftWheels.getPidController().setP(0.0015);
-        leftWheels.getPidController().setI(0);
-        leftWheels.getPidController().setD(0.0);
-        leftWheels.getPidController().setFF(0.000174);
-        leftWheels.getEncoder().getRaw().setMeasurementPeriod(10);
-        leftWheels.getMotorController().setInverted(true);
-        return new ShooterMap(rightWheels, leftWheels, true);
-    }
-
-    @Override
-    public LedMap getLedMap() {
-        var result = new LedMap(0, 34);
-        var leds = result.ledBuffer;
-
-        SegmentConfig backBottom = leds.segment(10).tags("Shooter", "Intake", "Alliance");
-        SegmentConfig backTop = leds.segment(11).tags("Arm Rotate", "Vision", "Auto", "Alliance");
-        SegmentConfig slants = leds.segment(10, ColorFormat.GRB).tags("Shooter", "Intake", "Alliance");
-        return result;
-    }
-
-    @Override
-    public UndertakerMap getUndertakerMap() {
-        CSSparkFlex topRoller = new CSSparkFlex(16);
-        CSSparkFlex bottomRoller = new CSSparkFlex(15);
-
-        setStatusPeriods(topRoller, 10, 100, 100);
-        setStatusPeriods(bottomRoller, 100, 100, 100);
-
-        topRoller.getMotorController().setInverted(false);
-        topRoller.getMotorController().setIdleMode(IdleMode.kCoast);
-        topRoller.getMotorController().setSmartCurrentLimit(50);
-        bottomRoller.getMotorController().setSmartCurrentLimit(40);
-        bottomRoller.getMotorController().follow(topRoller.getMotorController(),
-                false);
-        return new UndertakerMap(new SmartMotorControllerGroup(topRoller,
-                bottomRoller));
     }
 
     @Override

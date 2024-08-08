@@ -41,7 +41,7 @@ import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 
 @RobotMapFor("00:80:2F:17:F7:AF")
-public class Henry extends RobotMap {
+public class ColdStart extends RobotMap {
 
     private static void setStatusPeriods(CSSparkMax motor) {
         motor.getMotorController().setPeriodicFramePeriod(PeriodicFrame.kStatus3, 1000);
