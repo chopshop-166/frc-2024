@@ -213,11 +213,10 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public Command driveTillReadyToShoot() {
         return runOnce(() -> {
             aimAtSpeaker = true;
-        }).until(() -> {
+        }).andThen(run(() -> {})).until(() -> {
             double distanceToTarget = getRobotToTarget(getSpeakerTarget()).getNorm();
-            return calculateRotateSpeedToTarget(() -> getSpeakerTarget()) < ANGLE_MAX_ERROR
-                    && distanceToTarget < VISION_MAX_ANGLE
-                    && distanceToTarget > 15;
+            Logger.recordOutput("Distance to target", distanceToTarget);
+            return calculateRotateSpeedToTarget(() -> getSpeakerTarget()) < ANGLE_MAX_ERROR && distanceToTarget > 2.4 && distanceToTarget < 2.9;
         });
     }
 
@@ -254,7 +253,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return run(() -> {
             double rotationSpeed = calculateRotateSpeedToTarget(target);
             move(0, 0, rotationSpeed, false);
-            
+
         });
     }
 
@@ -333,8 +332,6 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         super.periodic();
         isBlue = DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue;
         estimator.update(getMap().gyro.getRotation2d(), getData().getModulePositions());
-
-
 
         // Correct pose estimate with vision measurements
         var visionEst = getEstimatedGlobalPose();

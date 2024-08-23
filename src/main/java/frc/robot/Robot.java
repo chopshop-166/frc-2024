@@ -154,9 +154,10 @@ public class Robot extends CommandRobot {
         copilotController.rightBumper().whileTrue(commandSequences.charge(Speeds.AMP_SPEED, ArmPresets.SCORE_AMP))
                 .onFalse(commandSequences.release());
         // copilotController.leftBumper()
-        //         .whileTrue(commandSequences.charge(Speeds.PODIUM_SHOT, ArmPresets.SCORE_SPEAKER_PODIUM))
-        //         .onFalse(commandSequences.release());
-        copilotController.leftBumper().whileTrue(commandSequences.autoShoot()).onFalse(commandSequences.release());
+        // .whileTrue(commandSequences.charge(Speeds.PODIUM_SHOT,
+        // ArmPresets.SCORE_SPEAKER_PODIUM))
+        // .onFalse(commandSequences.release());
+        copilotController.leftBumper().whileTrue(commandSequences.autoShoot());
         copilotController.povUp().onTrue(commandSequences.moveToAmp());
         copilotController.povDown().onTrue(commandSequences.shooterSpeed(Speeds.FULL_SPEED));
         copilotController.povRight().onTrue(commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
