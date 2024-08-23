@@ -198,11 +198,10 @@ public class Robot extends CommandRobot {
 
     public DoubleUnaryOperator getScaler(double leftRange, double rightRange) {
         return speed -> {
-            double leftTrigger = () -> {
-                if (copilotController.leftBumper().isheld()) {
-                    return 1;
-                } else {
-                driveController.getLeftTriggerAxis();}};
+            double leftTrigger = driveController.getLeftTriggerAxis();
+            if(copilotController.leftBumper().getAsBoolean()) {
+                leftTrigger = 1;
+            }
             double rightTrigger = driveController.getRightTriggerAxis();
             double modifier = (rightRange * rightTrigger) - (leftRange * leftTrigger) + 0.75;
             return modifier * speed;
