@@ -213,10 +213,12 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
     public Command driveTillReadyToShoot() {
         return runOnce(() -> {
             aimAtSpeaker = true;
-        }).andThen(run(() -> {})).until(() -> {
+        }).andThen(run(() -> {
+        })).until(() -> {
             double distanceToTarget = getRobotToTarget(getSpeakerTarget()).getNorm();
             Logger.recordOutput("Distance to target", distanceToTarget);
-            return calculateRotateSpeedToTarget(() -> getSpeakerTarget()) < ANGLE_MAX_ERROR && distanceToTarget > 2.4 && distanceToTarget < 2.9;
+            return calculateRotateSpeedToTarget(() -> getSpeakerTarget()) < ANGLE_MAX_ERROR && distanceToTarget > 2.7
+                    && distanceToTarget < 3.1;
         });
     }
 

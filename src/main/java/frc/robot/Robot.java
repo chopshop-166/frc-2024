@@ -157,7 +157,7 @@ public class Robot extends CommandRobot {
         // .whileTrue(commandSequences.charge(Speeds.PODIUM_SHOT,
         // ArmPresets.SCORE_SPEAKER_PODIUM))
         // .onFalse(commandSequences.release());
-        copilotController.leftBumper().whileTrue(commandSequences.autoShoot());
+        copilotController.leftBumper().whileTrue(commandSequences.autoShoot()).onFalse(drive.endAimAtSpeaker());
         copilotController.povUp().onTrue(commandSequences.moveToAmp());
         copilotController.povDown().onTrue(commandSequences.shooterSpeed(Speeds.FULL_SPEED));
         copilotController.povRight().onTrue(commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
@@ -199,7 +199,7 @@ public class Robot extends CommandRobot {
     public DoubleUnaryOperator getScaler(double leftRange, double rightRange) {
         return speed -> {
             double leftTrigger = driveController.getLeftTriggerAxis();
-            if(copilotController.leftBumper().getAsBoolean()) {
+            if (copilotController.leftBumper().getAsBoolean()) {
                 leftTrigger = 1;
             }
             double rightTrigger = driveController.getRightTriggerAxis();
