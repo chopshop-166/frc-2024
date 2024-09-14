@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "GET OUTTA THE WAY!",
+    "More Optimization",
     "Optimization",
     "Pickups - Bottom Speaker",
     "Pickups - Center Speaker",
@@ -23,7 +24,7 @@
     "5 Piece - Center Start",
     "Score and leave"
   ],
-  "defaultMaxVel": 3.0,
+  "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

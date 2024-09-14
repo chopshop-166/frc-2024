@@ -29,6 +29,8 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
 
         SCORE_SPEAKER_SUBWOOFER,
 
+        SCORE_SPEAKER_FAR_AUTO,
+
         // Probs not correct
         SCORE_SPEAKER_CENTERLINE,
 
@@ -40,9 +42,10 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
     }
 
     public record ArmPresetValues(double intake, double amp, double scoreSpeakerCenterline,
-            double scoreSpeakerPodium, double scoreSpeakerSubwoofer, double stow, double shuttle) {
+            double scoreSpeakerPodium, double scoreSpeakerSubwoofer, double scoreSpeakerFarAuto, double stow,
+            double shuttle) {
         public ArmPresetValues() {
-            this(0, 0, 0, 0, 0, 0, 0);
+            this(0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         public double getValue(ArmPresets preset) {

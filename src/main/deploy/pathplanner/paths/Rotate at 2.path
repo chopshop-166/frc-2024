@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.947171529405671,
-        "y": 7.4309552554704394
+        "x": 2.97,
+        "y": 5.61
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.59035536443166,
-        "y": 7.961223709925059
+        "x": 3.03399726214375,
+        "y": 5.61
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.65,
-        "y": 6.7
+        "x": 2.97,
+        "y": 5.61
       },
       "prevControl": {
-        "x": 1.4707856249343993,
-        "y": 7.827468678193171
+        "x": 2.9365670484115913,
+        "y": 5.61
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.0,
-    "rotateFast": false
+    "rotation": 0.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Scoring Locations - Top Speaker",
-  "previewStartingState": null,
+  "folder": "More Optimization",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

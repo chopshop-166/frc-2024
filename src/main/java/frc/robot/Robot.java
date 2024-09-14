@@ -78,6 +78,8 @@ public class Robot extends CommandRobot {
         NamedCommands.registerCommand("Has Game Piece? Rotate.",
                 commandSequences.autoGamePieceDetected());
         NamedCommands.registerCommand("Rotate to Intake", commandSequences.rotateToIntake());
+        NamedCommands.registerCommand("Rotate Speaker Far Shot",
+                commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_FAR_AUTO));
     }
 
     @Autonomous(name = "No Auto", defaultAuto = true)
@@ -153,13 +155,13 @@ public class Robot extends CommandRobot {
         copilotController.rightStick().whileTrue(intake.feedShooter());
         copilotController.rightBumper().whileTrue(commandSequences.charge(Speeds.AMP_SPEED, ArmPresets.SCORE_AMP))
                 .onFalse(commandSequences.release());
-        // copilotController.leftBumper()
-        // .whileTrue(commandSequences.charge(Speeds.PODIUM_SHOT,
-        // ArmPresets.SCORE_SPEAKER_PODIUM))
-        // .onFalse(commandSequences.release());
-        copilotController.leftBumper().whileTrue(commandSequences.autoShoot()).onFalse(drive.endAimAtSpeaker());
+        copilotController.leftBumper()
+                .whileTrue(commandSequences.charge(Speeds.PODIUM_SHOT,
+                        ArmPresets.SCORE_SPEAKER_PODIUM))
+                .onFalse(commandSequences.release());
+        copilotController.povDown().whileTrue(commandSequences.autoShoot()).onFalse(drive.endAimAtSpeaker());
         copilotController.povUp().onTrue(commandSequences.moveToAmp());
-        copilotController.povDown().onTrue(commandSequences.shooterSpeed(Speeds.FULL_SPEED));
+        // copilotController.povDown().onTrue(commandSequences.shooterSpeed(Speeds.FULL_SPEED));
         copilotController.povRight().onTrue(commandSequences.armRotatePreset(ArmPresets.SCORE_SPEAKER_SUBWOOFER));
         copilotController.povLeft().onTrue(commandSequences.stow());
     }
@@ -199,7 +201,7 @@ public class Robot extends CommandRobot {
     public DoubleUnaryOperator getScaler(double leftRange, double rightRange) {
         return speed -> {
             double leftTrigger = driveController.getLeftTriggerAxis();
-            if (copilotController.leftBumper().getAsBoolean()) {
+            if (copilotController.povDown().getAsBoolean()) {
                 leftTrigger = 1;
             }
             double rightTrigger = driveController.getRightTriggerAxis();
