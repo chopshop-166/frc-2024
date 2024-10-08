@@ -46,33 +46,17 @@ public class ArmRotateMap implements LoggableMap<ArmRotateMap.Data> {
         }
 
         public double getValue(ArmPresets preset) {
-            switch (preset) {
-                case INTAKE:
-                    return intake;
-
-                case SCORE_AMP:
-                    return amp;
-
-                case OFF:
-                    return Double.NaN;
-
-                case SCORE_SPEAKER_CENTERLINE:
-                    return scoreSpeakerCenterline;
-
-                case SCORE_SPEAKER_PODIUM:
-                    return scoreSpeakerPodium;
-
-                case SCORE_SPEAKER_SUBWOOFER:
-                    return scoreSpeakerSubwoofer;
-
-                case STOW:
-                    return stow;
-
-                case SHUTTLE:
-                    return shuttle;
-                default:
-                    return 0;
-            }
+            return switch (preset) {
+                case INTAKE -> intake;
+                case SCORE_AMP -> amp;
+                case OFF -> Double.NaN;
+                case SCORE_SPEAKER_CENTERLINE -> scoreSpeakerCenterline;
+                case SCORE_SPEAKER_PODIUM -> scoreSpeakerPodium;
+                case SCORE_SPEAKER_SUBWOOFER -> scoreSpeakerSubwoofer;
+                case STOW -> stow;
+                case SHUTTLE -> shuttle;
+                default -> 0;
+            };
 
         }
     }
