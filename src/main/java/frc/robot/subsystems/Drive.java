@@ -236,7 +236,7 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
         return run(() -> {
             double rotationSpeed = calculateRotateSpeedToTarget(target);
             move(0, 0, rotationSpeed, false);
-            
+
         });
     }
 
@@ -318,6 +318,8 @@ public class Drive extends LoggedSubsystem<SwerveDriveData, SwerveDriveMap> {
 
         // Correct pose estimate with vision measurements
         var visionEst = getEstimatedGlobalPose();
+        // TODO: Remove this if vision actually works properly
+        visionEst = Optional.empty();
         visionEst.ifPresent(est -> {
             var estPose = est.estimatedPose.toPose2d();
             // Change our trust in the measurement based on the tags we can see
