@@ -120,6 +120,13 @@ public class CommandSequences {
                         led.colorAlliance());
     }
 
+    public Command scoreSpeakerFarAuto() {
+        return this.shooterSpeed(Speeds.PODIUM_SHOT).alongWith(
+                this.armRotatePreset(ArmPresets.SCORE_SPEAKER_FAR_AUTO)).andThen(
+                        intake.feedShooter(),
+                        led.colorAlliance());
+    }
+
     public Command charge(Speeds speed, ArmPresets angle) {
         return this.shooterSpeed(speed).alongWith(armRotatePreset(angle));
     }
@@ -132,5 +139,12 @@ public class CommandSequences {
         return runOnce(() -> {
             controller.getHID().setRumble(RumbleType.kBothRumble, rumbleAmount);
         });
+    }
+
+    public Command autoShoot() {
+        return this.drive.driveTillReadyToShoot()
+                .alongWith(this.charge(Speeds.PODIUM_SHOT, ArmPresets.SCORE_SPEAKER_PODIUM))
+                .andThen(this.release(), armRotatePreset(ArmPresets.INTAKE));
+
     }
 }

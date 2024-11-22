@@ -211,7 +211,7 @@ public class Vibrato extends RobotMap {
                 new ValueRange(-14, 87),
                 // Soft limits
                 new ValueRange(0, 73),
-                new ArmRotateMap.ArmPresetValues(-13, 87, 23, 15, -5,
+                new ArmRotateMap.ArmPresetValues(-13, 87, 23, 15, -5, 19,
                         -13, 11));
     }
 
