@@ -52,6 +52,7 @@ public class Robot extends CommandRobot {
     private Led led = new Led(map.getLedMap());
     private ArmRotate armRotate = new ArmRotate(map.getArmRotateMap());
     private Undertaker undertaker = new Undertaker(map.getUndertakerMap());
+    private Claw claw = new Claw();
     private CommandSequences commandSequences = new CommandSequences(drive, intake, shooter, led, armRotate,
             undertaker);
 

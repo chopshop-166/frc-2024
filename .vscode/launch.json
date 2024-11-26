@@ -3,6 +3,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Rocket2",
+      "request": "launch",
+      "mainClass": "Rocket2",
+      "projectName": "frc-2024"
+    },
+    {
+      "type": "java",
+      "name": "Grades",
+      "request": "launch",
+      "mainClass": "Grades",
+      "projectName": "frc-2024"
+    },
+    {
+      "type": "java",
       "name": "Launch Main",
       "request": "launch",
       "mainClass": "frc.robot.Main",

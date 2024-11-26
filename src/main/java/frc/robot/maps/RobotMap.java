@@ -40,6 +40,10 @@ public class RobotMap {
         return new UndertakerMap();
     }
 
+    public ClawMap getClawMap() {
+        return new ClawMap();
+    }
+
     public void setupLogging() {
         // Pull the replay log from AdvantageScope (or prompt the user)
         String logPath = LogFileUtil.findReplayLog();
