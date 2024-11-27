@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.maps.RobotMap;
 import frc.robot.maps.subsystems.ArmRotateMap.ArmPresets;
 import frc.robot.subsystems.ArmRotate;
+import frc.robot.subsystems.BetterShooter;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Led;
@@ -52,7 +53,8 @@ public class Robot extends CommandRobot {
     private Led led = new Led(map.getLedMap());
     private ArmRotate armRotate = new ArmRotate(map.getArmRotateMap());
     private Undertaker undertaker = new Undertaker(map.getUndertakerMap());
-    private Claw claw = new Claw();
+    private Claw claw = new Claw(map.getClawMap());
+    private BetterShooter BetterShooter = new BetterShooter(map.getBetterShooterMap());
     private CommandSequences commandSequences = new CommandSequences(drive, intake, shooter, led, armRotate,
             undertaker);
 
@@ -141,6 +143,8 @@ public class Robot extends CommandRobot {
 
         driveController.y().whileTrue(drive.rotateToSpeaker());
         driveController.a().whileTrue(drive.aimAtSpeaker());
+
+        driveController.b().onTrue(claw.open()).onFalse(claw.close());
 
         copilotController.back().onTrue(intake.safeStateCmd().andThen(armRotate.safeStateCmd()));
         copilotController.start().onTrue(shooter.setSpeed(Speeds.OFF));

@@ -7,13 +7,22 @@ public class Claw extends SmartSubsystemBase {
 
     RevDSolenoid piston;
 
-    public Claw() {
-       piston = new RevDSolenoid(0, 1)
+    public Claw(ClawMap map) {
+       piston = map.piston;
     }
 
     public Command open() {
-
+        return runOnce(() -> {
+            piston.set(DoubleSolenoid.Value.kForward);
+        });
     }
+
+    public Command close() {
+        return runOnce(() -> {
+            piston.set(DoubleSolenoid.Value.kReverse);
+        });
+    }
+
 
     @Override
     public void safeState() {

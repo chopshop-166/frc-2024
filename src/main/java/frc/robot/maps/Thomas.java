@@ -7,7 +7,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.chopshop166.chopshoplib.leds.SegmentConfig;
 import com.chopshop166.chopshoplib.maps.LedMap;
 import com.chopshop166.chopshoplib.maps.RobotMapFor;
-    
+import com.chopshop166.chopshoplib.pneumatics.RevDSolenoid;
+
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
@@ -22,6 +23,12 @@ public class Thomas extends RobotMap {
         SegmentConfig underglow = leds.segment(150).tags("underglow", "Shooter", "Arm Rotate", "Intake", "HP signal",
                 "Vision", "Fire", "Auto", "Alliance");
         return result;
+    }
+
+    @Override
+    public ClawMap get ClawMap() {
+        RevDSolenoid piston = new RevDSolenoid(0, 1);
+        return new ClawMap(piston);
     }
 
     @Override
