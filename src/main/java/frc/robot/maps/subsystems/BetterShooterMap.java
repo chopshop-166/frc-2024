@@ -9,9 +9,9 @@ public class BetterShooterMap {
     public SmartMotorController RearMotor;
     public BooleanSupplier sensor;
 
-public BetterShooterMap() {
-    this(new SmartMotorController(),new SmartMotorController(), () -> false);
-}
+    public BetterShooterMap() {
+        this(new SmartMotorController(), new SmartMotorController(), () -> false);
+    }
 
     public BetterShooterMap(SmartMotorController FrontMotor, SmartMotorController RearMotor, BooleanSupplier sensor) {
         this.FrontMotor = FrontMotor;

@@ -5,11 +5,12 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.chopshop166.chopshoplib.maps.LedMap;
 import com.chopshop166.chopshoplib.maps.SwerveDriveMap;
 
 import frc.robot.maps.subsystems.ArmRotateMap;
-import com.chopshop166.chopshoplib.maps.LedMap;
-
+import frc.robot.maps.subsystems.BetterShooterMap;
+import frc.robot.maps.subsystems.ClawMap;
 import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 import frc.robot.maps.subsystems.UndertakerMap;
@@ -18,6 +19,10 @@ public class RobotMap {
 
     public SwerveDriveMap getDriveMap() {
         return new SwerveDriveMap();
+    }
+
+    public BetterShooterMap getBetterShooterMap() {
+        return new BetterShooterMap();
     }
 
     public ArmRotateMap getArmRotateMap() {
