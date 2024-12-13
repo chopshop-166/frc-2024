@@ -238,17 +238,17 @@ public class Vibrato extends RobotMap {
         leftWheels.getMotorController().setSmartCurrentLimit(50);
 
         rightWheels.setControlType(ControlType.kVelocity);
-        rightWheels.getPidController().setP(0.003);
+        rightWheels.getPidController().setP(0.0019);
         rightWheels.getPidController().setI(0);
-        rightWheels.getPidController().setD(0.0);
-        rightWheels.getPidController().setFF(0.000182);
+        rightWheels.getPidController().setD(0.005);
+        rightWheels.getPidController().setFF(0.0001538);
         rightWheels.getEncoder().getRaw().setMeasurementPeriod(10);
 
         leftWheels.setControlType(ControlType.kVelocity);
-        leftWheels.getPidController().setP(0.0015);
+        leftWheels.getPidController().setP(0.0019);
         leftWheels.getPidController().setI(0);
-        leftWheels.getPidController().setD(0.0);
-        leftWheels.getPidController().setFF(0.000174);
+        leftWheels.getPidController().setD(0.005);
+        leftWheels.getPidController().setFF(0.0001538);
         leftWheels.getEncoder().getRaw().setMeasurementPeriod(10);
         leftWheels.getMotorController().setInverted(true);
         return new ShooterMap(rightWheels, leftWheels, true);
