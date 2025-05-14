@@ -45,7 +45,7 @@ import frc.robot.maps.subsystems.IntakeMap;
 import frc.robot.maps.subsystems.ShooterMap;
 import frc.robot.maps.subsystems.UndertakerMap;
 
-@RobotMapFor("00:80:2F:36:7C:49")
+@RobotMapFor("00:80:2f:19:78:a9")
 public class Vibrato extends RobotMap {
 
     private static void setStatusPeriods(CSSpark motor, int status0, int status1, int status2) {
@@ -285,7 +285,7 @@ public class Vibrato extends RobotMap {
 
     @Override
     public void setupLogging() {
-        Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+        // Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
         Logger.recordMetadata("RobotMap", this.getClass().getSimpleName());
         new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
