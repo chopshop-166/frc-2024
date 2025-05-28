@@ -57,15 +57,15 @@ public class Vibrato extends RobotMap {
     @Override
     public SwerveDriveMap getDriveMap() {
 
-        // Remember to divide by 360
+        // Use Phoenix tuner
         // CAN ID 2
-        final double FLOFFSET = 0.571;
+        final double FLOFFSET = -0.48;
         // CAN ID 4
-        final double FROFFSET = 0.099;
+        final double FROFFSET = -0.26;
         // CAN ID 1
-        final double RLOFFSET = -0.226;
+        final double RLOFFSET = -0.36;
         // CAN ID 3
-        final double RROFFSET = -0.529;
+        final double RROFFSET = -0.959;
 
         // Value taken from CAD as offset from center of module base pulley to center
         // of the robot
@@ -208,7 +208,7 @@ public class Vibrato extends RobotMap {
         return new ArmRotateMap(new SmartMotorControllerGroup(leftMotor, rightMotor),
                 pid, feedForward, fusedEncoder,
                 // Hard limits
-                new ValueRange(-14, 87),
+                new ValueRange(-13.75, 87),
                 // Soft limits
                 new ValueRange(0, 73),
                 new ArmRotateMap.ArmPresetValues(-13, 87, 23, 15, -5,
@@ -285,7 +285,8 @@ public class Vibrato extends RobotMap {
 
     @Override
     public void setupLogging() {
-        // Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+        // Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB
+        // stick
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
         Logger.recordMetadata("RobotMap", this.getClass().getSimpleName());
         new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
